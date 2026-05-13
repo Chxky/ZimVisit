@@ -1,0 +1,36 @@
+node_modules/
+dist/
+.env
+.env.local
+*.log
+logs/
+.DS_Store
+coverage/
+.nyc_output/
+*.tsbuildinfo
+
+# Flutter
+apps/traveler-app/.dart_tool/
+apps/traveler-app/.packages
+apps/traveler-app/build/
+apps/traveler-app/.flutter-plugins
+apps/traveler-app/.flutter-plugins-dependencies
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+*.egg-info/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Data
+data/
+
+# Docker
+docker-data/

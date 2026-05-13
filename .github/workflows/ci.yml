@@ -1,0 +1,116 @@
+name: ZimVisit CI/CD
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+env:
+  NODE_VERSION: '20'
+  PYTHON_VERSION: '3.11'
+
+jobs:
+  lint-and-test-backend:
+    name: Backend - Lint & Test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/backend/nestjs
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: apps/backend/nestjs/package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test -- --passWithNoTests
+
+  test-ai-service:
+    name: AI Service - Test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/backend/ai-service
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+      - run: pip install -r requirements.txt
+      - run: pip install pytest
+      - run: pytest tests/ -v
+
+  lint-operator-dashboard:
+    name: Operator Dashboard - Lint & Build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/operator-dashboard
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: apps/operator-dashboard/package-lock.json
+      - run: npm ci
+      - run: npm run build
+
+  lint-government-portal:
+    name: Government Portal - Lint & Build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/government-portal
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: apps/government-portal/package-lock.json
+      - run: npm ci
+      - run: npm run build
+
+  docker-build:
+    name: Build Docker Images
+    if: github.ref == 'refs/heads/main'
+    needs: [lint-and-test-backend, test-ai-service]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build API image
+        run: docker build -t zimvisit/api:latest apps/backend/nestjs
+      - name: Build AI Service image
+        run: docker build -t zimvisit/ai-service:latest apps/backend/ai-service
+      - name: Build Operator Dashboard image
+        run: docker build -t zimvisit/operator-dashboard:latest apps/operator-dashboard
+      - name: Build Government Portal image
+        run: docker build -t zimvisit/government-portal:latest apps/government-portal
+
+  deploy-staging:
+    name: Deploy to Staging
+    if: github.ref == 'refs/heads/develop'
+    needs: [docker-build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to staging cluster
+        run: |
+          echo "Deploying to staging environment..."
+          # kubectl apply -f kubernetes/ --namespace=zimvisit-staging
+
+  deploy-production:
+    name: Deploy to Production
+    if: github.ref == 'refs/heads/main'
+    needs: [docker-build]
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Deploy to production cluster
+        run: |
+          echo "Deploying to production environment..."
+          # kubectl apply -f kubernetes/ --namespace=zimvisit

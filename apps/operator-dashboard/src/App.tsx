@@ -1,0 +1,47 @@
+import React from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { AppLayout } from './components/Layout';
+import { Dashboard } from './pages/Dashboard';
+import { Bookings } from './pages/Bookings';
+import { BookingDetail } from './pages/BookingDetail';
+import { Inventory } from './pages/Inventory';
+import { InventoryEditor } from './pages/InventoryEditor';
+import { Compliance } from './pages/Compliance';
+import { AgentFingerprinting } from './pages/AgentFingerprinting';
+import { Staff } from './pages/Staff';
+import { Settings } from './pages/Settings';
+import { Login } from './pages/Login';
+import { useAuthStore } from './store/authStore';
+
+const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const token = useAuthStore((s) => s.token);
+  if (!token) return <Navigate to="/login" replace />;
+  return <>{children}</>;
+};
+
+export default function App() {
+  return (
+    <Routes>
+      <Route path="/login" element={<Login />} />
+      <Route
+        path="/"
+        element={
+          <ProtectedRoute>
+            <AppLayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<Dashboard />} />
+        <Route path="bookings" element={<Bookings />} />
+        <Route path="bookings/:id" element={<BookingDetail />} />
+        <Route path="inventory" element={<Inventory />} />
+        <Route path="inventory/new" element={<InventoryEditor />} />
+        <Route path="inventory/:id/edit" element={<InventoryEditor />} />
+        <Route path="compliance" element={<Compliance />} />
+        <Route path="fingerprinting" element={<AgentFingerprinting />} />
+        <Route path="staff" element={<Staff />} />
+        <Route path="settings" element={<Settings />} />
+      </Route>
+    </Routes>
+  );
+}

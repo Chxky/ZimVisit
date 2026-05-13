@@ -1,0 +1,115 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: zimvisit-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: zimvisit
+      POSTGRES_USER: zimvisit
+      POSTGRES_PASSWORD: zimvisit_secret
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U zimvisit"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: zimvisit-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: ./apps/backend/nestjs
+      dockerfile: Dockerfile
+    container_name: zimvisit-api
+    restart: unless-stopped
+    ports:
+      - "3005:3000"
+    environment:
+      NODE_ENV: production
+      DB_DRIVER: postgres
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USERNAME: zimvisit
+      DB_PASSWORD: zimvisit_secret
+      DB_DATABASE: zimvisit
+      REDIS_HOST: redis
+      AI_SERVICE_URL: http://ai-service:8000
+      JWT_SECRET: ${JWT_SECRET:-change-in-production}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - api_logs:/app/logs
+
+  ai-service:
+    build:
+      context: ./apps/backend/ai-service
+      dockerfile: Dockerfile
+    container_name: zimvisit-ai
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      PYTHONUNBUFFERED: 1
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  operator-dashboard:
+    build:
+      context: ./apps/operator-dashboard
+      dockerfile: Dockerfile
+    container_name: zimvisit-operator
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    depends_on:
+      - api
+
+  government-portal:
+    build:
+      context: ./apps/government-portal
+      dockerfile: Dockerfile
+    container_name: zimvisit-gov
+    restart: unless-stopped
+    ports:
+      - "3002:3002"
+    depends_on:
+      - api
+
+  nginx:
+    image: nginx:alpine
+    container_name: zimvisit-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - api
+      - operator-dashboard
+      - government-portal
+
+volumes:
+  postgres_data:
+  api_logs:
