@@ -12,7 +12,7 @@ api.interceptors.request.use((config) => {
 });
 
 api.interceptors.response.use(
-  (response) => response.data,
+  (response) => response.data?.data ?? response.data,
   (error) => {
     if (error.response?.status === 401) {
       localStorage.removeItem('zimvisit_gov_token');
