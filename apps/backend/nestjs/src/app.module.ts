@@ -1,11 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
+import { ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { ScheduleModule } from '@nestjs/schedule';
-// import { WinstonModule } from 'nest-winston';
-// import * as winston from 'winston';
 
 import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
@@ -19,18 +17,21 @@ import { OperatorsModule } from './modules/operators/operators.module';
 import { HealthController } from './common/health.controller';
 import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
 import { RolesGuard } from './common/guards/roles.guard';
+import { validateEnv } from './config/env.validation';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: ['.env', '.env.local', '.env.production'],
+      validate: validateEnv,
     }),
-    ThrottlerModule.forRoot([{
-      ttl: 60000,
-      limit: 100,
-    }]),
-    // WinstonModule removed for local dev
+    ThrottlerModule.forRoot([
+      {
+        ttl: 60000,
+        limit: 100,
+      },
+    ]),
     ScheduleModule.forRoot(),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -46,8 +47,8 @@ import { RolesGuard } from './common/guards/roles.guard';
             password: config.get('DB_PASSWORD', 'zimvisit_secret'),
             database: config.get('DB_DATABASE', 'zimvisit'),
             entities: [__dirname + '/**/*.entity{.ts,.js}'],
-            synchronize: true,
-            logging: true,
+            synchronize: config.get('NODE_ENV') !== 'production',
+            logging: config.get('NODE_ENV') === 'development',
           };
         }
         return {
@@ -55,8 +56,9 @@ import { RolesGuard } from './common/guards/roles.guard';
           location: config.get('SQLITE_PATH', 'data/zimvisit.db'),
           entities: [__dirname + '/**/*.entity{.ts,.js}'],
           synchronize: true,
-          logging: true,
+          logging: config.get('NODE_ENV') === 'development',
           autoSave: true,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } as any;
       },
     }),

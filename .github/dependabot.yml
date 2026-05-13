@@ -1,0 +1,118 @@
+version: 2
+updates:
+  - package-ecosystem: 'npm'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+    commit-message:
+      prefix: 'chore'
+      include: 'scope'
+    open-pull-requests-limit: 5
+    labels:
+      - 'dependencies'
+    groups:
+      nestjs:
+        patterns:
+          - '@nestjs/*'
+      react:
+        patterns:
+          - 'react'
+          - 'react-dom'
+          - '@types/react*'
+      antd:
+        patterns:
+          - 'antd'
+          - '@ant-design/*'
+
+  - package-ecosystem: 'npm'
+    directory: '/apps/backend/nestjs'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+    commit-message:
+      prefix: 'chore'
+      include: 'scope'
+    open-pull-requests-limit: 5
+    labels:
+      - 'dependencies'
+      - 'backend'
+
+  - package-ecosystem: 'npm'
+    directory: '/apps/operator-dashboard'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+    commit-message:
+      prefix: 'chore'
+      include: 'scope'
+    open-pull-requests-limit: 5
+    labels:
+      - 'dependencies'
+      - 'frontend'
+
+  - package-ecosystem: 'npm'
+    directory: '/apps/government-portal'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+    commit-message:
+      prefix: 'chore'
+      include: 'scope'
+    open-pull-requests-limit: 5
+    labels:
+      - 'dependencies'
+      - 'frontend'
+
+  - package-ecosystem: 'pip'
+    directory: '/apps/backend/ai-service'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+    commit-message:
+      prefix: 'chore'
+      include: 'scope'
+    open-pull-requests-limit: 5
+    labels:
+      - 'dependencies'
+      - 'ai-service'
+
+  - package-ecosystem: 'docker'
+    directory: '/apps/backend/nestjs'
+    schedule:
+      interval: 'monthly'
+    labels:
+      - 'dependencies'
+      - 'docker'
+
+  - package-ecosystem: 'docker'
+    directory: '/apps/backend/ai-service'
+    schedule:
+      interval: 'monthly'
+    labels:
+      - 'dependencies'
+      - 'docker'
+
+  - package-ecosystem: 'docker'
+    directory: '/apps/operator-dashboard'
+    schedule:
+      interval: 'monthly'
+    labels:
+      - 'dependencies'
+      - 'docker'
+
+  - package-ecosystem: 'docker'
+    directory: '/apps/government-portal'
+    schedule:
+      interval: 'monthly'
+    labels:
+      - 'dependencies'
+      - 'docker'
+
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'monthly'
+    labels:
+      - 'dependencies'
+      - 'ci'

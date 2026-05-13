@@ -1,18 +1,26 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import helmet from 'helmet';
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
 import { TimeoutInterceptor } from './common/interceptors/timeout.interceptor';
+import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import { setupSwagger } from './config/swagger.config';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    bufferLogs: true,
+  });
   const configService = app.get(ConfigService);
   const logger = new Logger('Bootstrap');
 
-  app.setGlobalPrefix(configService.get('API_PREFIX', 'api/v1'));
+  app.use(helmet());
+
+  app.setGlobalPrefix(configService.get('API_PREFIX', 'api/v1'), {
+    exclude: ['health', 'health/liveness', 'health/readiness'],
+  });
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -24,7 +32,7 @@ async function bootstrap() {
   );
 
   app.useGlobalFilters(new HttpExceptionFilter());
-  app.useGlobalInterceptors(new TransformInterceptor(), new TimeoutInterceptor());
+  app.useGlobalInterceptors(new LoggingInterceptor(), new TransformInterceptor(), new TimeoutInterceptor());
 
   app.enableCors({
     origin: [
@@ -40,11 +48,14 @@ async function bootstrap() {
     allowedHeaders: ['Content-Type', 'Authorization', 'X-API-Key'],
   });
 
+  app.enableShutdownHooks();
+
   setupSwagger(app);
 
   const port = configService.get('PORT', 3000);
   await app.listen(port);
   logger.log(`ZimVisit API running on port ${port}`);
   logger.log(`Environment: ${configService.get('NODE_ENV')}`);
+  logger.log(`API Docs: http://localhost:${port}/api/docs`);
 }
 bootstrap();

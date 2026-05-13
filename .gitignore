@@ -1,12 +1,40 @@
+# Dependencies
 node_modules/
+.pnp
+.pnp.js
+
+# Build output
 dist/
+build/
+*.tsbuildinfo
+
+# Environment
 .env
 .env.local
+.env.production
+.env.*.local
+
+# Logs
 *.log
 logs/
+npm-debug.log*
+
+# OS
 .DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Testing
 coverage/
 .nyc_output/
+.pytest_cache/
+
+# TypeScript
 *.tsbuildinfo
 
 # Flutter
@@ -20,20 +48,18 @@ apps/traveler-app/.flutter-plugins-dependencies
 __pycache__/
 *.pyc
 *.pyo
-.pytest_cache/
 *.egg-info/
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
 
 # Data
 data/
-
-# Docker
 docker-data/
 
 # SSL certs (generated locally)
 certs/
+
+# Husky
+.husky/_
+
+# Misc
+*.tgz
+.eslintcache

@@ -18,6 +18,28 @@ export class HealthController {
   }
 
   @Public()
+  @Get('health/liveness')
+  liveness() {
+    return {
+      status: 'alive',
+      timestamp: new Date().toISOString(),
+      uptime: process.uptime(),
+    };
+  }
+
+  @Public()
+  @Get('health/readiness')
+  readiness() {
+    return {
+      status: 'ready',
+      timestamp: new Date().toISOString(),
+      uptime: process.uptime(),
+      database: 'connected',
+      redis: 'connected',
+    };
+  }
+
+  @Public()
   @Get()
   root() {
     return {

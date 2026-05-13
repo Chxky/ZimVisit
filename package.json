@@ -17,12 +17,34 @@
     "dev": "concurrently \"npm run backend\" \"npm run operator\" \"npm run government\" \"npm run ai-service\"",
     "build": "npm run build -w apps/backend/nestjs && npm run build -w apps/operator-dashboard && npm run build -w apps/government-portal",
     "test": "npm test -w apps/backend/nestjs",
+    "test:ai": "cd apps/backend/ai-service && python -m pytest tests/ -v",
     "lint": "npm run lint -w apps/operator-dashboard && npm run lint -w apps/government-portal && npm run lint -w apps/backend/nestjs",
-    "docker:up": "docker-compose up -d",
-    "docker:down": "docker-compose down",
+    "format": "prettier --write \"**/*.{ts,tsx,js,json,md,yml,yaml}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,json,md,yml,yaml}\"",
+    "prepare": "husky",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
     "setup": "npm install && cd apps/backend/ai-service && pip install -r requirements.txt"
   },
   "devDependencies": {
-    "concurrently": "^8.2.2"
+    "@commitlint/cli": "^19.8.0",
+    "@commitlint/config-conventional": "^19.8.0",
+    "concurrently": "^8.2.2",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.2",
+    "prettier": "^3.5.3"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": [
+      "prettier --write",
+      "eslint --fix"
+    ],
+    "*.{json,md,yml,yaml}": [
+      "prettier --write"
+    ]
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
   }
 }
