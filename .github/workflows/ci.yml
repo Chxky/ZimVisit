@@ -24,7 +24,7 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
           cache-dependency-path: apps/backend/nestjs/package-lock.json
-      - run: npm ci
+      - run: npm install
       - run: npm run lint
       - run: npm test -- --passWithNoTests
 
@@ -57,7 +57,7 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
           cache-dependency-path: apps/operator-dashboard/package-lock.json
-      - run: npm ci
+      - run: npm install
       - run: npm run build
 
   lint-government-portal:
@@ -73,7 +73,7 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
           cache-dependency-path: apps/government-portal/package-lock.json
-      - run: npm ci
+      - run: npm install
       - run: npm run build
 
   docker-build:

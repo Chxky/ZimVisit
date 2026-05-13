@@ -10,6 +10,13 @@ if ($Stop -or $Restart -or $Reset) {
     if ($Stop) { Write-Host "Services stopped." -ForegroundColor Yellow; return }
 }
 
+# Ensure SSL certs exist
+$certsDir = Join-Path $PSScriptRoot "certs"
+if (-not (Test-Path (Join-Path $certsDir "zimvisit.crt"))) {
+    Write-Host "=== Generating SSL certificates ===" -ForegroundColor Cyan
+    & "$PSScriptRoot\scripts\gen-certs.ps1"
+}
+
 Write-Host "=== Starting ZimVisit ===" -ForegroundColor Cyan
 
 if ((docker compose ps -q 2>$null).Length -eq 0) {
@@ -17,6 +24,8 @@ if ((docker compose ps -q 2>$null).Length -eq 0) {
     Start-Sleep -Seconds 3
     docker compose up -d ai-service api
     Start-Sleep -Seconds 10
+    docker compose up -d nginx
+    Start-Sleep -Seconds 2
     docker compose up -d operator-dashboard government-portal
 }
 
@@ -44,6 +53,9 @@ Write-Host "  API (NestJS):    http://localhost:3005"
 Write-Host "  AI Service:      http://localhost:8000"
 Write-Host "  Operator Dash:   http://localhost:3001"
 Write-Host "  Gov Portal:      http://localhost:3002"
+Write-Host ""
+Write-Host "  Gateway:         http://localhost"
+Write-Host "  Gateway (SSL):   https://localhost"
 Write-Host ""
 Write-Host "  Login:    admin@zimvisit.com"
 Write-Host "  Password: Test@1234"

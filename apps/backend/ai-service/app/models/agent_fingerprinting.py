@@ -85,10 +85,11 @@ class AgentFingerprintingEngine:
 
     def _check_velocity_anomaly(self, profile: dict, data: dict) -> float:
         history = profile["velocity_history"]
-        if len(history) < 3:
-            return 0.0
-
         current = data.get("booking_velocity", 0)
+
+        if len(history) < 3:
+            return 0.8 if current > 20 else 0.0
+
         mean = np.mean(history[:-1])
         std = np.std(history[:-1]) + 0.001
 
@@ -99,12 +100,13 @@ class AgentFingerprintingEngine:
         known = profile["destinations"]
         current = set(data.get("destinations", []))
 
-        if not known or not current:
+        if not current:
             return 0.0
 
+        if not known:
+            return min(1.0, len(current) / 5.0)
+
         unknown = current - known
-        if len(current) == 0:
-            return 0.0
         return min(1.0, len(unknown) / len(current))
 
     def _check_timing_anomaly(self, profile: dict, data: dict) -> float:
@@ -117,10 +119,11 @@ class AgentFingerprintingEngine:
 
     def _check_value_anomaly(self, profile: dict, data: dict) -> float:
         history = profile["value_history"]
-        if len(history) < 3:
-            return 0.0
-
         current = data.get("avg_booking_value", 0)
+
+        if len(history) < 3:
+            return 0.7 if current > 5000 else 0.0
+
         mean = np.mean(history[:-1])
         std = np.std(history[:-1]) + 0.001
 

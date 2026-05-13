@@ -34,3 +34,6 @@ data/
 
 # Docker
 docker-data/
+
+# SSL certs (generated locally)
+certs/

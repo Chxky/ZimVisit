@@ -19,6 +19,7 @@ Wait ~30 seconds for all services to initialize.
 | **AI Service** | http://localhost:8000 | 8000 |
 | **Operator Dashboard** | http://localhost:3001 | 3001 |
 | **Government Portal** | http://localhost:3002 | 3002 |
+| **Nginx Gateway** | http://localhost → https://localhost | 80/443 |
 | **PostgreSQL** | localhost:5432 | 5432 |
 | **Redis** | localhost:6379 | 6379 |
 
@@ -110,9 +111,8 @@ Browser ──► Frontend (Nginx) ──proxy──► API (NestJS :3000)
 
 | Issue | Cause | Workaround |
 |-------|-------|------------|
-| Nginx gateway won't start | Missing SSL cert files (`zimvisit.crt`/`.key`) | Not needed — access frontends directly on :3001 / :3002 |
-| AI service shows "unhealthy" | Docker health check config issue | Service responds 200 on `/health`, works fine |
 | Port 3000 conflict | Local Node process uses 3000 | Already remapped to 3005 |
+| Self-signed cert warning | Dev certs not trusted by browser | Click "Advanced" → "Proceed" in browser, or trust the CA |
 
 ---
 
@@ -123,7 +123,10 @@ zimvisit/
 ├── demo.ps1              # One-command demo script
 ├── docker-compose.yml    # All service definitions
 ├── docker-compose.yml    # All service definitions
-├── nginx.conf            # Main gateway config (needs SSL)
+├── nginx.conf            # Main gateway config (SSL, uses self-signed certs)
+├── certs/                # Generated SSL certificates (gitignored)
+├── scripts/
+│   └── gen-certs.ps1     # Self-signed certificate generator
 ├── .env.example          # Environment template
 ├── database/
 │   └── schema.sql        # PostgreSQL schema (not used — TypeORM handles it)
@@ -149,6 +152,7 @@ zimvisit/
 | ai-service | zimvisit-ai | zimvisit-ai-service (custom) | — |
 | operator-dashboard | zimvisit-operator | zimvisit-operator-dashboard (custom) | api |
 | government-portal | zimvisit-gov | zimvisit-government-portal (custom) | api |
+| nginx | zimvisit-nginx | nginx:alpine | api, operator-dashboard, government-portal |
 
 ---
 
