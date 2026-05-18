@@ -106,11 +106,11 @@ const recentAlerts = [
 ];
 
 /* ── Sparkline Component ──────────────────────────────────── */
-const MiniSparkline: React.FC<{ data: number[]; color: string; height?: number }> = ({ data, color, height = 32 }) => {
+const MiniSparkline: React.FC<{ data: number[]; color: string; height?: number; label?: string }> = ({ data, color, height = 32, label }) => {
   const chartData = data.map((v, i) => ({ x: i, y: v }));
   return (
     <ResponsiveContainer width="100%" height={height}>
-      <AreaChart data={chartData} margin={{ top: 2, right: 2, bottom: 2, left: 2 }}>
+      <AreaChart data={chartData} margin={{ top: 2, right: 2, bottom: 2, left: 2 }} role="img" aria-label={label || 'Sparkline trend chart'}>
         <defs>
           <linearGradient id={`spark-${color.replace('#', '')}`} x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor={color} stopOpacity={0.3} />
@@ -139,7 +139,7 @@ const ComplianceRing: React.FC<{ percent: number; size?: number }> = ({ percent,
   const offset = circumference - (percent / 100) * circumference;
 
   return (
-    <div className="score-ring-container" style={{ width: size, height: size }}>
+    <div className="score-ring-container" style={{ width: size, height: size }} role="img" aria-label={`Compliance score: ${percent}%`}>
       <svg width={size} height={size}>
         <circle
           cx={size / 2}
@@ -372,7 +372,11 @@ export const Dashboard: React.FC = () => {
           },
         ].map((kpi, idx) => (
           <Col xs={24} sm={12} lg={6} key={idx}>
-            <div className={`kpi-card animate-fade-in-up stagger-${idx + 1}`}>
+            <div
+              className={`kpi-card animate-fade-in-up stagger-${idx + 1}`}
+              role="region"
+              aria-label={`${kpi.label}: ${kpi.value}, ${kpi.change} vs last period`}
+            >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                 <div>
                   <div className="kpi-label">{kpi.label}</div>
@@ -387,7 +391,7 @@ export const Dashboard: React.FC = () => {
                 </div>
               </div>
               <div style={{ marginTop: 12 }}>
-                <MiniSparkline data={kpi.sparkData} color={kpi.sparkColor} height={36} />
+                <MiniSparkline data={kpi.sparkData} color={kpi.sparkColor} height={36} label={`${kpi.label} trend`} />
               </div>
             </div>
           </Col>
@@ -467,7 +471,7 @@ export const Dashboard: React.FC = () => {
               <Tag>7 days</Tag>
             </div>
             <ResponsiveContainer width="100%" height={260}>
-              <BarChart data={weeklyData} barGap={4}>
+              <BarChart data={weeklyData} barGap={4} role="img" aria-label="Weekly revenue versus BSP revenue bar chart for the last 7 days">
                 <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
                 <XAxis dataKey="day" tick={{ fontSize: 12, fill: '#64748b' }} axisLine={false} tickLine={false} />
                 <YAxis tick={{ fontSize: 12, fill: '#64748b' }} axisLine={false} tickLine={false} tickFormatter={(v) => `$${(v / 1000).toFixed(0)}k`} />
@@ -493,7 +497,7 @@ export const Dashboard: React.FC = () => {
               <Tag>6 months</Tag>
             </div>
             <ResponsiveContainer width="100%" height={260}>
-              <AreaChart data={monthlyTrend}>
+              <AreaChart data={monthlyTrend} role="img" aria-label="Monthly revenue and leakage trend area chart for the last 6 months">
                 <defs>
                   <linearGradient id="revenueGrad" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="0%" stopColor="#1e1b4b" stopOpacity={0.2} />
@@ -617,6 +621,8 @@ export const Dashboard: React.FC = () => {
                 return (
                   <div
                     key={alert.id}
+                    role="alert"
+                    aria-label={`${alert.severity} alert: ${alert.message}`}
                     style={{
                       padding: '12px 20px',
                       borderBottom: '1px solid #f8fafc',

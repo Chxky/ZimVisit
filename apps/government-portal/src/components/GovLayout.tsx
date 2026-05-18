@@ -1,15 +1,45 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import {
-  Layout, Menu, Avatar, Dropdown, Typography, Space, Button, Badge, Divider,
+  Layout, Menu, Avatar, Dropdown, Typography, Space, Button, Badge, Divider, Modal, message,
 } from 'antd';
 import {
   DashboardOutlined, TeamOutlined, DollarOutlined, SafetyOutlined,
   BarChartOutlined, LogoutOutlined, UserOutlined,
   MenuFoldOutlined, MenuUnfoldOutlined, BellOutlined,
   SettingOutlined, SafetyCertificateOutlined,
+  WarningOutlined,
 } from '@ant-design/icons';
 import { useAuthStore } from '../store/authStore';
+
+/* ── Zimbabwe Coat of Arms SVG ─────────────────────────────── */
+const ZimbabweCoatOfArms: React.FC<{ size?: number }> = ({ size = 48 }) => (
+  <svg width={size} height={size} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    {/* Shield */}
+    <path d="M50 15 L75 30 L75 60 Q75 80 50 90 Q25 80 25 60 L25 30 Z" fill="#166534" stroke="#f59e0b" strokeWidth="2"/>
+    {/* Inner shield pattern */}
+    <path d="M50 22 L68 33 L68 57 Q68 73 50 82 Q32 73 32 57 L32 33 Z" fill="#052e16" stroke="#f59e0b" strokeWidth="1"/>
+    {/* Zimbabwe Bird silhouette */}
+    <path d="M44 35 Q42 30 44 28 Q46 26 48 28 L50 25 Q52 23 54 25 L56 28 Q58 26 60 28 Q62 30 60 35 L58 38 L62 42 L58 44 L56 40 L54 44 L52 40 L50 44 L48 40 L46 44 L44 42 L48 38 Z" fill="#f59e0b"/>
+    {/* Bird legs */}
+    <path d="M48 44 L46 52 M52 44 L54 52" stroke="#f59e0b" strokeWidth="1.5" strokeLinecap="round"/>
+    {/* Kudu left */}
+    <path d="M20 40 Q15 35 18 28 Q20 22 22 25 L24 30 L22 35 L25 40 Z" fill="#92400e" opacity="0.7"/>
+    <path d="M18 28 Q14 22 16 18 Q18 14 20 16" stroke="#92400e" strokeWidth="1" fill="none" opacity="0.7"/>
+    {/* Kudu right */}
+    <path d="M80 40 Q85 35 82 28 Q80 22 78 25 L76 30 L78 35 L75 40 Z" fill="#92400e" opacity="0.7"/>
+    <path d="M82 28 Q86 22 84 18 Q82 14 80 16" stroke="#92400e" strokeWidth="1" fill="none" opacity="0.7"/>
+    {/* Banner */}
+    <path d="M25 82 L15 78 L15 88 L25 84 Z" fill="#f59e0b"/>
+    <path d="M75 82 L85 78 L85 88 L75 84 Z" fill="#f59e0b"/>
+    <rect x="25" y="78" width="50" height="10" rx="2" fill="#f59e0b"/>
+    <text x="50" y="86" textAnchor="middle" fill="#166534" fontSize="7" fontWeight="800" fontFamily="serif">ZIMBABWE</text>
+    {/* Stars */}
+    <circle cx="35" cy="75" r="1.5" fill="#f59e0b"/>
+    <circle cx="50" cy="73" r="1.5" fill="#f59e0b"/>
+    <circle cx="65" cy="75" r="1.5" fill="#f59e0b"/>
+  </svg>
+);
 
 const { Sider, Content } = Layout;
 const { Text } = Typography;
@@ -81,10 +111,77 @@ const LiveClock: React.FC = () => {
 
 export const GovLayout: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
+  const [sessionWarning, setSessionWarning] = useState(false);
+  const [connectionStatus, setConnectionStatus] = useState<'connected' | 'disconnected'>('connected');
+  const [sessionCountdown, setSessionCountdown] = useState(300); // 5 minutes
   const navigate = useNavigate();
   const location = useLocation();
   const user = useAuthStore((s) => s.user);
   const logout = useAuthStore((s) => s.logout);
+  const inactivityTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const countdownTimer = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // ── Connection Status Polling ──────────────────────────────
+  useEffect(() => {
+    const checkConnection = async () => {
+      try {
+        const res = await fetch('/health', { signal: AbortSignal.timeout(5000) });
+        setConnectionStatus(res.ok ? 'connected' : 'disconnected');
+      } catch {
+        setConnectionStatus('disconnected');
+      }
+    };
+    checkConnection();
+    const interval = setInterval(checkConnection, 30000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // ── Session Timeout (25 min inactivity → 5 min warning) ──
+  const resetInactivityTimer = useCallback(() => {
+    if (inactivityTimer.current) clearTimeout(inactivityTimer.current);
+    if (countdownTimer.current) clearInterval(countdownTimer.current);
+    setSessionWarning(false);
+    setSessionCountdown(300);
+    inactivityTimer.current = setTimeout(() => {
+      setSessionWarning(true);
+      setSessionCountdown(300);
+      countdownTimer.current = setInterval(() => {
+        setSessionCountdown((prev) => {
+          if (prev <= 1) {
+            if (countdownTimer.current) clearInterval(countdownTimer.current);
+            logout();
+            navigate('/login');
+            message.error('Session expired due to inactivity');
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }, 25 * 60 * 1000); // 25 minutes
+  }, [logout, navigate]);
+
+  useEffect(() => {
+    const events = ['mousedown', 'keydown', 'scroll', 'touchstart'];
+    const handler = () => resetInactivityTimer();
+    events.forEach((e) => document.addEventListener(e, handler));
+    resetInactivityTimer();
+    return () => {
+      events.forEach((e) => document.removeEventListener(e, handler));
+      if (inactivityTimer.current) clearTimeout(inactivityTimer.current);
+      if (countdownTimer.current) clearInterval(countdownTimer.current);
+    };
+  }, [resetInactivityTimer]);
+
+  const handleContinueSession = () => {
+    resetInactivityTimer();
+    message.success('Session extended');
+  };
+
+  const formatCountdown = (seconds: number) => {
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${m}:${s.toString().padStart(2, '0')}`;
+  };
 
   const userMenu = {
     items: [
@@ -176,12 +273,12 @@ export const GovLayout: React.FC = () => {
       >
         {/* Logo */}
         <div className="sidebar-logo" onClick={() => navigate('/')}>
-          <img src="/logo.svg" alt="ZimVisit" />
+          <ZimbabweCoatOfArms size={collapsed ? 36 : 48} />
           {!collapsed && (
             <div style={{ display: 'flex', flexDirection: 'column' }}>
               <span className="logo-text">ZimVisit</span>
               <span style={{ fontSize: 10, color: '#94a3b8', fontWeight: 500, letterSpacing: '1px', textTransform: 'uppercase' }}>
-                Government Portal
+                Government Oversight Portal
               </span>
             </div>
           )}
@@ -205,6 +302,19 @@ export const GovLayout: React.FC = () => {
         {/* Sidebar Footer */}
         {!collapsed && (
           <div className="sidebar-footer">
+            {/* Data Classification */}
+            <div style={{
+              padding: '6px 12px',
+              background: 'rgba(220,38,38,0.12)',
+              border: '1px solid rgba(220,38,38,0.3)',
+              borderRadius: 6,
+              marginBottom: 12,
+              textAlign: 'center',
+            }}>
+              <Text style={{ fontSize: 10, color: '#fca5a5', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase' }}>
+                OFFICIAL — SENSITIVE
+              </Text>
+            </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
               <SafetyCertificateOutlined style={{ color: '#f59e0b', fontSize: 14 }} />
               <Text style={{ fontSize: 11, color: '#94a3b8', fontWeight: 500 }}>
@@ -255,6 +365,23 @@ export const GovLayout: React.FC = () => {
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
+            {/* Connection Status */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <div style={{
+                width: 8,
+                height: 8,
+                borderRadius: '50%',
+                background: connectionStatus === 'connected' ? '#22c55e' : '#ef4444',
+                boxShadow: connectionStatus === 'connected' ? '0 0 6px rgba(34,197,94,0.5)' : '0 0 6px rgba(239,68,68,0.5)',
+                transition: 'all 0.3s',
+              }} />
+              <Text style={{ fontSize: 11, color: connectionStatus === 'connected' ? '#22c55e' : '#ef4444', fontWeight: 600 }}>
+                {connectionStatus === 'connected' ? 'Connected' : 'Disconnected'}
+              </Text>
+            </div>
+
+            <Divider type="vertical" style={{ height: 32, borderColor: '#e2e8f0' }} />
+
             <LiveClock />
 
             <Divider type="vertical" style={{ height: 32, borderColor: '#e2e8f0' }} />
@@ -304,6 +431,38 @@ export const GovLayout: React.FC = () => {
           </div>
         </Content>
       </Layout>
+
+      {/* Session Timeout Warning Modal */}
+      <Modal
+        open={sessionWarning}
+        title={
+          <Space>
+            <WarningOutlined style={{ color: '#f59e0b' }} />
+            <span>Session Expiring</span>
+          </Space>
+        }
+        centered
+        closable={false}
+        maskClosable={false}
+        footer={[
+          <Button key="logout" danger onClick={() => { logout(); navigate('/login'); }}>
+            Sign Out
+          </Button>,
+          <Button key="continue" type="primary" onClick={handleContinueSession}>
+            Continue Session
+          </Button>,
+        ]}
+        styles={{ body: { textAlign: 'center', padding: '24px 16px' } }}
+      >
+        <div style={{ fontSize: 48, fontWeight: 800, color: '#f59e0b', fontFamily: "'Inter', monospace" }}>
+          {formatCountdown(sessionCountdown)}
+        </div>
+        <Text style={{ fontSize: 14, color: '#64748b', display: 'block', marginTop: 8 }}>
+          Your session will expire due to inactivity.
+          <br />
+          Click "Continue Session" to stay signed in.
+        </Text>
+      </Modal>
     </Layout>
   );
 };
