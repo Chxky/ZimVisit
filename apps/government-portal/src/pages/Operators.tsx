@@ -121,7 +121,7 @@ export const Operators: React.FC = () => {
             >
               {v}
             </a>
-            <div style={{ fontSize: 11, color: '#94a3b8' }}>{r.id} | {r.region}</div>
+            <div style={{ fontSize: 11, color: '#64748b' }}>{r.id} | {r.region}</div>
           </div>
         </div>
       ),
@@ -230,7 +230,7 @@ export const Operators: React.FC = () => {
             </Title>
             <span className="badge-live">LIVE</span>
           </Space>
-          <Text style={{ fontSize: 12, color: '#94a3b8', display: 'block', marginTop: 2 }}>
+          <Text style={{ fontSize: 12, color: '#64748b', display: 'block', marginTop: 2 }}>
             {allOperators.length} registered tourism operators across Zimbabwe
           </Text>
         </div>
@@ -326,7 +326,7 @@ export const Operators: React.FC = () => {
                     <Text strong style={{ fontSize: 12, display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                       {op.name}
                     </Text>
-                    <Text style={{ fontSize: 10, color: '#94a3b8' }}>{op.id}</Text>
+                    <Text style={{ fontSize: 10, color: '#64748b' }}>{op.id}</Text>
                   </div>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -355,7 +355,7 @@ export const Operators: React.FC = () => {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
             <Space wrap>
               <Input
-                prefix={<SearchOutlined style={{ color: '#94a3b8' }} />}
+                prefix={<SearchOutlined style={{ color: '#64748b' }} />}
                 placeholder="Search by name or ID..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
@@ -387,7 +387,7 @@ export const Operators: React.FC = () => {
                 </Button>
               )}
             </Space>
-            <Text style={{ fontSize: 12, color: '#94a3b8' }}>
+            <Text style={{ fontSize: 12, color: '#64748b' }}>
               Showing {filtered.length} of {allOperators.length} operators
             </Text>
           </div>

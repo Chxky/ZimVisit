@@ -77,7 +77,7 @@ export default class ErrorBoundary extends React.Component<Props, State> {
               <Title level={3} style={{ color: '#f8fafc', marginBottom: 4, fontWeight: 800 }}>
                 System Error Detected
               </Title>
-              <Text style={{ color: '#94a3b8', fontSize: 14 }}>
+              <Text style={{ color: '#64748b', fontSize: 14 }}>
                 Republic of Zimbabwe &mdash; Tourism Authority System
               </Text>
             </div>
@@ -96,7 +96,7 @@ export default class ErrorBoundary extends React.Component<Props, State> {
                 Error Reference: {this.state.errorId}
               </Text>
               <br />
-              <Text style={{ color: '#94a3b8', fontSize: 11, marginTop: 4, display: 'block' }}>
+              <Text style={{ color: '#64748b', fontSize: 11, marginTop: 4, display: 'block' }}>
                 This incident has been logged. Please reference this ID when contacting technical support.
               </Text>
             </div>

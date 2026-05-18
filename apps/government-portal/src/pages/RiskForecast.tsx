@@ -85,7 +85,7 @@ export const RiskForecast: React.FC = () => {
       render: (v: string, r: any) => (
         <div>
           <Text strong style={{ fontSize: 13, display: 'block' }}>{v}</Text>
-          <Text style={{ fontSize: 11, color: '#94a3b8' }}>{r.operatorId}</Text>
+          <Text style={{ fontSize: 11, color: '#64748b' }}>{r.operatorId}</Text>
         </div>
       ),
     },
@@ -164,7 +164,7 @@ export const RiskForecast: React.FC = () => {
       render: (v: string) => {
         if (v === 'up') return <ArrowUpOutlined style={{ color: '#dc2626', fontSize: 14 }} />;
         if (v === 'down') return <ArrowDownOutlined style={{ color: '#059669', fontSize: 14 }} />;
-        return <MinusOutlined style={{ color: '#94a3b8', fontSize: 14 }} />;
+        return <MinusOutlined style={{ color: '#64748b', fontSize: 14 }} />;
       },
     },
     {
@@ -218,7 +218,7 @@ export const RiskForecast: React.FC = () => {
             <span className="badge-ai">AI-POWERED</span>
             <span className="badge-live">LIVE</span>
           </Space>
-          <Text style={{ fontSize: 12, color: '#94a3b8', display: 'block', marginTop: 2 }}>
+          <Text style={{ fontSize: 12, color: '#64748b', display: 'block', marginTop: 2 }}>
             Machine learning-driven risk assessment and revenue leakage prediction
           </Text>
         </div>
@@ -429,7 +429,7 @@ export const RiskForecast: React.FC = () => {
                       }} />
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 2 }}>
-                      <Text style={{ fontSize: 10, color: '#94a3b8' }}>
+                      <Text style={{ fontSize: 10, color: '#64748b' }}>
                         {factor.trend === 'up' ? 'Trending up' : factor.trend === 'down' ? 'Trending down' : 'Stable'}
                         {factor.trend === 'up' && <ArrowUpOutlined style={{ fontSize: 10, color: '#dc2626', marginLeft: 4 }} />}
                         {factor.trend === 'down' && <ArrowDownOutlined style={{ fontSize: 10, color: '#059669', marginLeft: 4 }} />}
@@ -491,8 +491,8 @@ export const RiskForecast: React.FC = () => {
               <span className="badge-ai">AI-POWERED</span>
             </Space>
             <Space>
-              <ClockCircleOutlined style={{ color: '#94a3b8', fontSize: 12 }} />
-              <Text style={{ fontSize: 12, color: '#94a3b8' }}>Model updated: 1 hour ago</Text>
+              <ClockCircleOutlined style={{ color: '#64748b', fontSize: 12 }} />
+              <Text style={{ fontSize: 12, color: '#64748b' }}>Model updated: 1 hour ago</Text>
             </Space>
           </div>
         </div>

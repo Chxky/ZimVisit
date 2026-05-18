@@ -32,7 +32,7 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #94a3b8;
+  background: #64748b;
   border-radius: 3px;
   transition: background 0.2s;
 }
@@ -342,7 +342,7 @@ body {
 
 .section-header .section-meta {
   font-size: 12px;
-  color: #94a3b8;
+  color: #64748b;
 }
 
 /* ── Chart Container ──────────────────────────────────────── */
@@ -594,6 +594,41 @@ body {
     align-items: flex-start;
     gap: 8px;
   }
+}
+
+/* ── Focus Styles (Keyboard Navigation) ────────────────────── */
+*:focus-visible {
+  outline: 2px solid #f59e0b;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+button:focus-visible,
+a:focus-visible,
+.ant-btn:focus-visible,
+.ant-menu-item:focus-visible {
+  outline: 2px solid #f59e0b;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.2);
+}
+
+/* ── Skip to Content Link ──────────────────────────────────── */
+.skip-to-content {
+  position: absolute;
+  top: -100px;
+  left: 16px;
+  z-index: 10000;
+  padding: 12px 24px;
+  background: #1e1b4b;
+  color: #ffffff;
+  font-weight: 600;
+  border-radius: 0 0 8px 8px;
+  text-decoration: none;
+  transition: top 0.2s ease;
+}
+
+.skip-to-content:focus {
+  top: 0;
 }
 
 /* ── Print Styles ─────────────────────────────────────────── */

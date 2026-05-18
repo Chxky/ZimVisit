@@ -445,7 +445,7 @@ export const GovLayout: React.FC = () => {
         </header>
 
         {/* Page Content */}
-        <Content style={{
+        <Content id="main-content" tabIndex={-1} style={{
           margin: 24,
           minHeight: 'calc(100vh - 64px - 48px)',
         }}>

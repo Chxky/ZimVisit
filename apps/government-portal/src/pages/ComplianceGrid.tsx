@@ -96,7 +96,7 @@ const AuditTimeline: React.FC<{ operator: any; visible: boolean; onClose: () => 
                   {audit.result}
                 </Tag>
               </div>
-              <Text style={{ fontSize: 11, color: '#94a3b8', display: 'block' }}>{audit.date}</Text>
+              <Text style={{ fontSize: 11, color: '#64748b', display: 'block' }}>{audit.date}</Text>
               <Text style={{ fontSize: 12, color: '#475569', marginTop: 4, display: 'block' }}>{audit.notes}</Text>
             </div>
           ),
@@ -137,7 +137,7 @@ export const ComplianceGrid: React.FC = () => {
           <Badge status={r.status === 'compliant' ? 'success' : r.status === 'amber' ? 'warning' : 'error'} />
           <div>
             <Text strong style={{ fontSize: 13, display: 'block' }}>{v}</Text>
-            <Text style={{ fontSize: 11, color: '#94a3b8' }}>{r.id}</Text>
+            <Text style={{ fontSize: 11, color: '#64748b' }}>{r.id}</Text>
           </div>
         </div>
       ),
@@ -238,7 +238,7 @@ export const ComplianceGrid: React.FC = () => {
       width: 110,
       render: (v: string) => (
         <Space size={4}>
-          <ClockCircleOutlined style={{ color: '#94a3b8', fontSize: 12 }} />
+          <ClockCircleOutlined style={{ color: '#64748b', fontSize: 12 }} />
           <Text style={{ fontSize: 12, color: '#64748b' }}>{v}</Text>
         </Space>
       ),
@@ -275,7 +275,7 @@ export const ComplianceGrid: React.FC = () => {
             </Title>
             <span className="badge-live">LIVE</span>
           </Space>
-          <Text style={{ fontSize: 12, color: '#94a3b8', display: 'block', marginTop: 2 }}>
+          <Text style={{ fontSize: 12, color: '#64748b', display: 'block', marginTop: 2 }}>
             Real-time compliance monitoring across all registered operators
           </Text>
         </div>
@@ -363,7 +363,7 @@ export const ComplianceGrid: React.FC = () => {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
             <Space>
               <Input
-                prefix={<SearchOutlined style={{ color: '#94a3b8' }} />}
+                prefix={<SearchOutlined style={{ color: '#64748b' }} />}
                 placeholder="Search by name or ID..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}

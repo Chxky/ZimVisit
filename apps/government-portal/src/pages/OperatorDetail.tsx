@@ -116,7 +116,7 @@ const ComplianceRing: React.FC<{ percent: number; size?: number; label?: string 
         transform: 'translate(-50%, -50%)', textAlign: 'center',
       }}>
         <div style={{ fontSize: 28, fontWeight: 800, color, lineHeight: 1 }}>{percent}%</div>
-        {label && <div style={{ fontSize: 10, color: '#94a3b8', marginTop: 2 }}>{label}</div>}
+        {label && <div style={{ fontSize: 10, color: '#64748b', marginTop: 2 }}>{label}</div>}
       </div>
     </div>
   );
@@ -195,7 +195,7 @@ export const OperatorDetail: React.FC = () => {
       render: (v: string, r: any) => (
         <div>
           <Text strong style={{ fontSize: 13, display: 'block' }}>{v}</Text>
-          <Text style={{ fontSize: 11, color: '#94a3b8' }}>{r.id}</Text>
+          <Text style={{ fontSize: 11, color: '#64748b' }}>{r.id}</Text>
         </div>
       ),
     },
@@ -204,7 +204,7 @@ export const OperatorDetail: React.FC = () => {
       dataIndex: 'status',
       key: 'status',
       render: (s: string) => {
-        const colors: Record<string, string> = { active: '#059669', flagged: '#dc2626', inactive: '#94a3b8' };
+        const colors: Record<string, string> = { active: '#059669', flagged: '#dc2626', inactive: '#64748b' };
         return (
           <Badge status={s === 'active' ? 'success' : s === 'flagged' ? 'error' : 'default'} text={
             <Text style={{ fontSize: 12, color: colors[s], fontWeight: 600 }}>{s.toUpperCase()}</Text>
@@ -276,7 +276,7 @@ export const OperatorDetail: React.FC = () => {
                 {c?.label}
               </Tag>
             </Space>
-            <Text style={{ fontSize: 12, color: '#94a3b8', display: 'block', marginTop: 2 }}>
+            <Text style={{ fontSize: 12, color: '#64748b', display: 'block', marginTop: 2 }}>
               {operator.id} | License: {operator.licenseNumber}
             </Text>
           </div>
@@ -425,25 +425,25 @@ export const OperatorDetail: React.FC = () => {
                         Operator Information
                       </Text>
                       <Descriptions column={{ xs: 1, sm: 2 }} size="small" bordered>
-                        <Descriptions.Item label={<Space><KeyOutlined style={{ color: '#94a3b8' }} /> License</Space>}>
+                        <Descriptions.Item label={<Space><KeyOutlined style={{ color: '#64748b' }} /> License</Space>}>
                           {operator.licenseNumber}
                         </Descriptions.Item>
-                        <Descriptions.Item label={<Space><CalendarOutlined style={{ color: '#94a3b8' }} /> Registered</Space>}>
+                        <Descriptions.Item label={<Space><CalendarOutlined style={{ color: '#64748b' }} /> Registered</Space>}>
                           {operator.registrationDate}
                         </Descriptions.Item>
-                        <Descriptions.Item label={<Space><AuditOutlined style={{ color: '#94a3b8' }} /> Last Audit</Space>}>
+                        <Descriptions.Item label={<Space><AuditOutlined style={{ color: '#64748b' }} /> Last Audit</Space>}>
                           {operator.lastAudit}
                         </Descriptions.Item>
-                        <Descriptions.Item label={<Space><BankOutlined style={{ color: '#94a3b8' }} /> BSP Status</Space>}>
+                        <Descriptions.Item label={<Space><BankOutlined style={{ color: '#64748b' }} /> BSP Status</Space>}>
                           <Badge status={operator.bspConnected ? 'success' : 'error'} text={operator.bspConnected ? 'Connected' : 'Disconnected'} />
                         </Descriptions.Item>
-                        <Descriptions.Item label={<Space><MailOutlined style={{ color: '#94a3b8' }} /> Email</Space>}>
+                        <Descriptions.Item label={<Space><MailOutlined style={{ color: '#64748b' }} /> Email</Space>}>
                           <a href={`mailto:${operator.email}`}>{operator.email}</a>
                         </Descriptions.Item>
-                        <Descriptions.Item label={<Space><PhoneOutlined style={{ color: '#94a3b8' }} /> Phone</Space>}>
+                        <Descriptions.Item label={<Space><PhoneOutlined style={{ color: '#64748b' }} /> Phone</Space>}>
                           {operator.phone}
                         </Descriptions.Item>
-                        <Descriptions.Item label={<Space><EnvironmentOutlined style={{ color: '#94a3b8' }} /> Address</Space>} span={2}>
+                        <Descriptions.Item label={<Space><EnvironmentOutlined style={{ color: '#64748b' }} /> Address</Space>} span={2}>
                           {operator.address}
                         </Descriptions.Item>
                       </Descriptions>
@@ -471,7 +471,7 @@ export const OperatorDetail: React.FC = () => {
                     }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
                         <Text strong style={{ fontSize: 14, color: '#1e1b4b' }}>Recent Bookings</Text>
-                        <Text style={{ fontSize: 12, color: '#94a3b8' }}>Last 30 days</Text>
+                        <Text style={{ fontSize: 12, color: '#64748b' }}>Last 30 days</Text>
                       </div>
                       <Table
                         dataSource={recentBookings}
@@ -568,7 +568,7 @@ export const OperatorDetail: React.FC = () => {
                                     {audit.result.toUpperCase()}
                                   </Tag>
                                 </Space>
-                                <Text style={{ fontSize: 11, color: '#94a3b8' }}>{audit.date}</Text>
+                                <Text style={{ fontSize: 11, color: '#64748b' }}>{audit.date}</Text>
                               </div>
                               <Text style={{ fontSize: 13, color: '#1e293b', display: 'block', marginBottom: 6 }}>
                                 {audit.notes}

@@ -161,7 +161,7 @@ export const Revenue: React.FC = () => {
             </Title>
             <span className="badge-live">LIVE</span>
           </Space>
-          <Text style={{ fontSize: 12, color: '#94a3b8', display: 'block', marginTop: 2 }}>
+          <Text style={{ fontSize: 12, color: '#64748b', display: 'block', marginTop: 2 }}>
             Comprehensive tourism revenue tracking and tax collection analysis
           </Text>
         </div>
@@ -275,7 +275,7 @@ export const Revenue: React.FC = () => {
                     <div className="chart-title" style={{ marginBottom: 16 }}>
                       <div>
                         <Text strong style={{ color: '#1e1b4b' }}>Revenue Capture Rate Trend</Text>
-                        <div style={{ fontSize: 11, color: '#94a3b8' }}>Official vs Estimated Total Market</div>
+                        <div style={{ fontSize: 11, color: '#64748b' }}>Official vs Estimated Total Market</div>
                       </div>
                       <span className="badge-ai">AI ANALYZED</span>
                     </div>
@@ -340,7 +340,7 @@ export const Revenue: React.FC = () => {
                   <div className="chart-title" style={{ marginBottom: 16 }}>
                     <div>
                       <Text strong style={{ color: '#1e1b4b' }}>Revenue Waterfall: Gross to Net</Text>
-                      <div style={{ fontSize: 11, color: '#94a3b8' }}>Shows how gross revenue flows through deductions to net operator revenue</div>
+                      <div style={{ fontSize: 11, color: '#64748b' }}>Shows how gross revenue flows through deductions to net operator revenue</div>
                     </div>
                     <span className="badge-ai">AI-POWERED</span>
                   </div>
@@ -377,7 +377,7 @@ export const Revenue: React.FC = () => {
                     <div className="chart-title" style={{ marginBottom: 16 }}>
                       <div>
                         <Text strong style={{ color: '#1e1b4b' }}>Monthly Revenue Leakage Trend</Text>
-                        <div style={{ fontSize: 11, color: '#94a3b8' }}>Estimated unreported revenue across all operators</div>
+                        <div style={{ fontSize: 11, color: '#64748b' }}>Estimated unreported revenue across all operators</div>
                       </div>
                     </div>
                     <ResponsiveContainer width="100%" height={300}>
@@ -420,7 +420,7 @@ export const Revenue: React.FC = () => {
                           <div style={{ height: 8, background: '#f1f5f9', borderRadius: 4, overflow: 'hidden' }}>
                             <div style={{ width: `${item.pct}%`, height: '100%', background: item.color, borderRadius: 4, transition: 'width 0.8s ease' }} />
                           </div>
-                          <Text style={{ fontSize: 10, color: '#94a3b8' }}>{item.pct}% of total leakage</Text>
+                          <Text style={{ fontSize: 10, color: '#64748b' }}>{item.pct}% of total leakage</Text>
                         </div>
                       ))}
                     </div>
@@ -441,8 +441,8 @@ export const Revenue: React.FC = () => {
               <Text strong style={{ fontSize: 14, color: '#1e1b4b' }}>Tax & Levy Collection Gap Analysis</Text>
             </Space>
             <Space>
-              <ClockCircleOutlined style={{ color: '#94a3b8', fontSize: 12 }} />
-              <Text style={{ fontSize: 12, color: '#94a3b8' }}>Last updated: 15 minutes ago</Text>
+              <ClockCircleOutlined style={{ color: '#64748b', fontSize: 12 }} />
+              <Text style={{ fontSize: 12, color: '#64748b' }}>Last updated: 15 minutes ago</Text>
             </Space>
           </div>
         </div>
