@@ -258,7 +258,7 @@ export const Login: React.FC = () => {
               ]}
             >
               <Input
-                prefix={<MailOutlined style={{ color: '#94a3b8' }} />}
+                prefix={<MailOutlined style={{ color: '#64748b' }} />}
                 placeholder="Official email address"
                 style={{
                   height: 48,
@@ -274,7 +274,7 @@ export const Login: React.FC = () => {
               rules={[{ required: true, message: 'Please enter your password' }]}
             >
               <Input.Password
-                prefix={<LockOutlined style={{ color: '#94a3b8' }} />}
+                prefix={<LockOutlined style={{ color: '#64748b' }} />}
                 placeholder="Password"
                 style={{
                   height: 48,
@@ -326,7 +326,7 @@ export const Login: React.FC = () => {
             paddingTop: 16,
             borderTop: '1px solid #f1f5f9',
           }}>
-            <Text style={{ fontSize: 11, color: '#94a3b8' }}>
+            <Text style={{ fontSize: 11, color: '#64748b' }}>
               Protected by 256-bit encryption | Zimbabwe Tourism Authority
             </Text>
           </div>
@@ -364,8 +364,8 @@ export const Login: React.FC = () => {
             >
               Quick Demo Access
             </Button>
-            <Text style={{ display: 'block', textAlign: 'center', marginTop: 8, fontSize: 11, color: '#94a3b8' }}>
-              Uses demo credentials: zta@zta.gov.zw / demo123
+            <Text style={{ display: 'block', textAlign: 'center', marginTop: 8, fontSize: 11, color: '#64748b' }}>
+              Authorized government personnel only
             </Text>
           </div>
         </div>

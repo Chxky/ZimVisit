@@ -270,7 +270,7 @@ export const Dashboard: React.FC = () => {
       render: (v: string) => {
         if (v === 'up') return <ArrowUpOutlined style={{ color: '#059669', fontSize: 14 }} />;
         if (v === 'down') return <ArrowDownOutlined style={{ color: '#dc2626', fontSize: 14 }} />;
-        return <span style={{ color: '#94a3b8' }}>--</span>;
+        return <span style={{ color: '#64748b' }}>--</span>;
       },
     },
   ];
@@ -286,13 +286,34 @@ export const Dashboard: React.FC = () => {
             </Title>
             <span className="badge-live">LIVE</span>
           </Space>
-          <Text style={{ fontSize: 12, color: '#94a3b8', display: 'block', marginTop: 2 }}>
+          <Text style={{ fontSize: 12, color: '#64748b', display: 'block', marginTop: 2 }}>
             Real-time tourism revenue and compliance monitoring
           </Text>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <ClockCircleOutlined style={{ color: '#94a3b8', fontSize: 12 }} />
-          <Text style={{ fontSize: 12, color: '#94a3b8' }}>Last updated: {timeAgo}</Text>
+          <ClockCircleOutlined style={{ color: '#64748b', fontSize: 12 }} />
+          <Text style={{ fontSize: 12, color: '#64748b' }}>Last updated: {timeAgo}</Text>
+          {(() => {
+            const mins = Math.floor((Date.now() - lastUpdated.getTime()) / 60000);
+            const color = mins < 5 ? '#22c55e' : mins < 15 ? '#f59e0b' : '#ef4444';
+            const label = mins < 5 ? 'Fresh' : mins < 15 ? 'Aging' : 'Stale';
+            return (
+              <span style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 4,
+                padding: '2px 8px',
+                background: `${color}15`,
+                borderRadius: 100,
+                fontSize: 10,
+                fontWeight: 600,
+                color,
+              }}>
+                <span style={{ width: 6, height: 6, borderRadius: '50%', background: color }} />
+                {label}
+              </span>
+            );
+          })()}
         </div>
       </div>
 
@@ -407,7 +428,7 @@ export const Dashboard: React.FC = () => {
                 <div className="kpi-label">Registered Operators</div>
                 <div style={{ fontSize: 22, fontWeight: 800, color: '#1e1b4b', marginTop: 4 }}>
                   {stats.operators}
-                  <Text style={{ fontSize: 13, color: '#94a3b8', fontWeight: 400 }}> / 480 total</Text>
+                  <Text style={{ fontSize: 13, color: '#64748b', fontWeight: 400 }}> / 480 total</Text>
                 </div>
               </div>
               <div style={{
@@ -576,7 +597,7 @@ export const Dashboard: React.FC = () => {
                             }}>
                               {insight.confidence}% conf.
                             </Tag>
-                            <Text style={{ fontSize: 11, color: '#94a3b8' }}>{insight.time}</Text>
+                            <Text style={{ fontSize: 11, color: '#64748b' }}>{insight.time}</Text>
                           </Space>
                         </div>
                         <Text style={{ fontSize: 12, color: '#64748b', lineHeight: 1.5 }}>
@@ -637,7 +658,7 @@ export const Dashboard: React.FC = () => {
                       <div style={{ flex: 1 }}>
                         <Text style={{ fontSize: 13, color: '#1e293b', display: 'block' }}>{alert.message}</Text>
                         <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 4 }}>
-                          <Text style={{ fontSize: 11, color: '#94a3b8' }}>{alert.time}</Text>
+                          <Text style={{ fontSize: 11, color: '#64748b' }}>{alert.time}</Text>
                           <Tag style={{
                             fontSize: 9,
                             color: statusColors[alert.status] || '#64748b',
@@ -723,6 +744,7 @@ export const Dashboard: React.FC = () => {
               rowClassName={(record) =>
                 record.status === 'red' ? 'ant-table-row-danger' : ''
               }
+              aria-label="Operator compliance status grid"
             />
           </div>
         </Col>

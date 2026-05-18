@@ -98,7 +98,7 @@ const LiveClock: React.FC = () => {
       </Text>
       <Text style={{
         fontSize: 11,
-        color: '#94a3b8',
+        color: '#64748b',
         fontWeight: 500,
         textTransform: 'uppercase',
         letterSpacing: '0.5px',
@@ -221,7 +221,7 @@ export const GovLayout: React.FC = () => {
             <div style={{ fontSize: 12, color: '#64748b', marginTop: 2 }}>
               Mana Pools Expeditions flagged for immediate audit
             </div>
-            <Text style={{ fontSize: 11, color: '#94a3b8' }}>2 minutes ago</Text>
+            <Text style={{ fontSize: 11, color: '#64748b' }}>2 minutes ago</Text>
           </div>
         ),
       },
@@ -233,7 +233,7 @@ export const GovLayout: React.FC = () => {
             <div style={{ fontSize: 12, color: '#64748b', marginTop: 2 }}>
               3 operators approaching amber threshold
             </div>
-            <Text style={{ fontSize: 11, color: '#94a3b8' }}>15 minutes ago</Text>
+            <Text style={{ fontSize: 11, color: '#64748b' }}>15 minutes ago</Text>
           </div>
         ),
       },
@@ -245,7 +245,7 @@ export const GovLayout: React.FC = () => {
             <div style={{ fontSize: 12, color: '#64748b', marginTop: 2 }}>
               Daily revenue exceeded $50,000 target
             </div>
-            <Text style={{ fontSize: 11, color: '#94a3b8' }}>1 hour ago</Text>
+            <Text style={{ fontSize: 11, color: '#64748b' }}>1 hour ago</Text>
           </div>
         ),
       },
@@ -254,6 +254,29 @@ export const GovLayout: React.FC = () => {
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
+      {/* Skip to Content - Accessibility */}
+      <a
+        href="#main-content"
+        style={{
+          position: 'absolute',
+          top: -100,
+          left: 16,
+          zIndex: 9999,
+          padding: '10px 20px',
+          background: '#1e1b4b',
+          color: '#f8fafc',
+          borderRadius: '0 0 8px 8px',
+          fontWeight: 600,
+          fontSize: 13,
+          textDecoration: 'none',
+          transition: 'top 0.2s ease',
+        }}
+        onFocus={(e) => { (e.target as HTMLElement).style.top = '0'; }}
+        onBlur={(e) => { (e.target as HTMLElement).style.top = '-100px'; }}
+      >
+        Skip to main content
+      </a>
+
       {/* Sidebar */}
       <Sider
         trigger={null}
@@ -277,7 +300,7 @@ export const GovLayout: React.FC = () => {
           {!collapsed && (
             <div style={{ display: 'flex', flexDirection: 'column' }}>
               <span className="logo-text">ZimVisit</span>
-              <span style={{ fontSize: 10, color: '#94a3b8', fontWeight: 500, letterSpacing: '1px', textTransform: 'uppercase' }}>
+              <span style={{ fontSize: 10, color: '#64748b', fontWeight: 500, letterSpacing: '1px', textTransform: 'uppercase' }}>
                 Government Oversight Portal
               </span>
             </div>
@@ -317,7 +340,7 @@ export const GovLayout: React.FC = () => {
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
               <SafetyCertificateOutlined style={{ color: '#f59e0b', fontSize: 14 }} />
-              <Text style={{ fontSize: 11, color: '#94a3b8', fontWeight: 500 }}>
+              <Text style={{ fontSize: 11, color: '#64748b', fontWeight: 500 }}>
                 ZTA Authorized Access
               </Text>
             </div>
@@ -358,7 +381,7 @@ export const GovLayout: React.FC = () => {
               <Text style={{ fontSize: 13, fontWeight: 700, color: '#1e1b4b' }}>
                 Republic of Zimbabwe
               </Text>
-              <Text style={{ fontSize: 10, color: '#94a3b8', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+              <Text style={{ fontSize: 10, color: '#64748b', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                 Tourism Authority Oversight
               </Text>
             </div>
@@ -412,7 +435,7 @@ export const GovLayout: React.FC = () => {
                   <Text style={{ fontSize: 13, fontWeight: 600, color: '#1e293b' }}>
                     {user?.fullName || 'Government Official'}
                   </Text>
-                  <Text style={{ fontSize: 10, color: '#94a3b8' }}>
+                  <Text style={{ fontSize: 10, color: '#64748b' }}>
                     {user?.role || 'Administrator'}
                   </Text>
                 </div>
