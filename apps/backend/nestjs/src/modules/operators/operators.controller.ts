@@ -17,6 +17,13 @@ export class OperatorsController {
     return this.operatorsService.findAll(page, limit);
   }
 
+  @Get('stats/compliance')
+  @Roles(UserRole.SYSTEM_ADMIN, UserRole.ZTA_OFFICIAL)
+  @ApiOperation({ summary: 'Get operator compliance stats' })
+  async getComplianceStats() {
+    return this.operatorsService.getComplianceStats();
+  }
+
   @Get(':id')
   @Roles(UserRole.SYSTEM_ADMIN, UserRole.ZTA_OFFICIAL, UserRole.ZIMRA_OFFICIAL)
   @ApiOperation({ summary: 'Get operator by ID' })
@@ -36,12 +43,5 @@ export class OperatorsController {
   @ApiOperation({ summary: 'Update operator' })
   async update(@Param('id', ParseUUIDPipe) id: string, @Body() body: any) {
     return this.operatorsService.update(id, body);
-  }
-
-  @Get('stats/compliance')
-  @Roles(UserRole.SYSTEM_ADMIN, UserRole.ZTA_OFFICIAL)
-  @ApiOperation({ summary: 'Get operator compliance stats' })
-  async getComplianceStats() {
-    return this.operatorsService.getComplianceStats();
   }
 }

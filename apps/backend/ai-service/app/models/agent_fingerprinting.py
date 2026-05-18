@@ -1,7 +1,7 @@
 import numpy as np
 import logging
 from typing import Dict, List, Optional, Tuple
-from datetime import datetime
+from datetime import datetime, timezone
 
 logger = logging.getLogger(__name__)
 
@@ -53,7 +53,7 @@ class AgentFingerprintingEngine:
             "risk_factors": risk_factors,
             "status": status,
             "confidence": round(95 - (anomaly_score * 20), 1),
-            "analyzed_at": datetime.utcnow().isoformat(),
+            "analyzed_at": datetime.now(timezone.utc).isoformat(),
         }
 
     def _get_or_create_profile(self, agent_id: str, data: dict) -> dict:
@@ -63,7 +63,7 @@ class AgentFingerprintingEngine:
                 "destinations": set(),
                 "value_history": [],
                 "hour_history": [],
-                "profile_since": datetime.utcnow().isoformat(),
+                "profile_since": datetime.now(timezone.utc).isoformat(),
             }
         profile = self.agent_profiles[agent_id]
 

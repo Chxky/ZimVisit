@@ -7,15 +7,17 @@
     "packages/*",
     "apps/backend/nestjs",
     "apps/operator-dashboard",
-    "apps/government-portal"
+    "apps/government-portal",
+    "apps/traveler-portal"
   ],
   "scripts": {
     "backend": "npm run start:dev -w apps/backend/nestjs",
     "operator": "npm run dev -w apps/operator-dashboard",
     "government": "npm run dev -w apps/government-portal",
+    "traveler": "npm run dev -w apps/traveler-portal",
     "ai-service": "cd apps/backend/ai-service && uvicorn app.main:app --reload --port 8000",
-    "dev": "concurrently \"npm run backend\" \"npm run operator\" \"npm run government\" \"npm run ai-service\"",
-    "build": "npm run build -w apps/backend/nestjs && npm run build -w apps/operator-dashboard && npm run build -w apps/government-portal",
+    "dev": "concurrently \"npm run backend\" \"npm run operator\" \"npm run government\" \"npm run traveler\" \"npm run ai-service\"",
+    "build": "npm run build -w apps/backend/nestjs && npm run build -w apps/operator-dashboard && npm run build -w apps/government-portal && npm run build -w apps/traveler-portal",
     "test": "npm test -w apps/backend/nestjs",
     "test:ai": "cd apps/backend/ai-service && python -m pytest tests/ -v",
     "lint": "npm run lint -w apps/operator-dashboard && npm run lint -w apps/government-portal && npm run lint -w apps/backend/nestjs",

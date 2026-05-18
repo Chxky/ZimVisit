@@ -52,6 +52,7 @@ class RevenueForecastResponse(BaseModel):
     forecasts: List[dict]
     predicted_leakage: float
     confidence_interval: dict
+    leakage_rate: float
     risk_operators: List[dict]
 
 

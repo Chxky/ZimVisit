@@ -14,18 +14,21 @@ A comprehensive three-sided marketplace capturing an estimated **US$150M+ in ann
 │  OPERATOR DASHBOARD   │    GOVERNMENT PORTAL                │
 │  (React + Ant Design) │    (React + Ant Design)             │
 │  · BSP Compliance     │    · Live Revenue Dashboard         │
-│  · Inventory Mgmt     │    · Operator Compliance Grid        │
-│  · Agent Fingerprint  │    · AI Revenue Forecaster           │
-│  · QR Code Gen        │    · Risk Analytics                  │
+│  · Inventory Mgmt     │    · Operator Compliance Grid       │
+│  · Agent Fingerprint  │    · AI Revenue Forecaster          │
+│  · Compliance Center  │    · Risk Heat Map & Analytics      │
+│  · QR Code Gen        │    · Audit Trail & CSV Export       │
 ├───────────────────────┴─────────────────────────────────────┤
 │                    API GATEWAY (NestJS)                       │
 │  Auth · Bookings · Payments · GDS · Compliance · Inventory   │
+│  Audit Trail · Reports · Operators · Notifications           │
 ├─────────────────────────────────────────────────────────────┤
 │              AI ENGINE (FastAPI / Python)                     │
 │  Agent Fingerprinting · Revenue Forecasting · Risk Scoring   │
+│  Compliance Scorer · Batch Analysis                          │
 ├─────────────────────────────────────────────────────────────┤
 │              DATA LAYER (PostgreSQL + Redis)                  │
-│  Users · Bookings · Payments · Compliance · Revenue Log      │
+│  Users · Bookings · Payments · Compliance · Audit Log        │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -214,7 +217,7 @@ See `.env.example` for all required variables. Key ones:
 | `JWT_SECRET` | JWT signing key |
 | `DB_HOST` | PostgreSQL host |
 | `PAYNOW_INTEGRATION_KEY` | Paynow payment key |
-| `ECOCHASH_MERCHANT_ID` | EcoCash merchant ID |
+| `ECOCASH_MERCHANT_ID` | EcoCash merchant ID |
 | `AMADEUS_API_KEY` | Amadeus flight API key |
 | `TOURISM_LEVY_RATE` | ZTA levy rate (default 2%) |
 | `VAT_RATE` | VAT rate (default 15%) |
@@ -261,17 +264,27 @@ See [docs/api.md](docs/api.md) for detailed endpoint reference.
 - **Offline-first** — Works in low-bandwidth areas (national parks)
 - **Local Payments** — EcoCash, Paynow + Visa/Mastercard
 
-### Pillar B: Operator Command Center (React)
+### Pillar B: Operator Command Center (React + Ant Design)
 - **BSP/Levy Compliance Engine** — Auto-calculates & remits taxes/levy at POS
-- **AI Agent Fingerprinting** — "Proof-of-Process" behavior analysis
+- **AI Agent Fingerprinting** — "Proof-of-Process" behavior analysis with trust scoring
+- **Compliance Risk Scoring** — AI-powered risk assessment with actionable recommendations
 - **Dynamic Inventory** — Tours, hotels, QR generation
 - **Staff Management** — Role-based access, activity monitoring
+- **Audit Trail** — Complete action logging for compliance accountability
 
-### Pillar C: Government Portal (React)
-- **Live Revenue Dashboard** — Real-time national tourism revenue
-- **Compliance Grid** — Color-coded operator compliance (Green/Amber/Red)
-- **AI Revenue Forecaster** — Predicts leakage & high-risk operators
-- **BSP Comparison** — Visualizes revenue capture rate vs official IATA data
+### Pillar C: Government Portal (React + Ant Design)
+- **Live Revenue Dashboard** — Real-time national revenue with drill-down analytics
+- **Compliance Grid** — Color-coded operator compliance (Green/Amber/Red) with export
+- **AI Revenue Forecaster** — Predicts leakage patterns with confidence intervals
+- **Risk Heat Map** — Visual operator risk distribution with AI scoring
+- **Audit Trail** — Government-grade action logging with CSV export
+- **BSP Comparison** — Revenue capture rate vs official IATA data visualization
+
+### AI Engine (FastAPI + Python)
+- **Agent Fingerprinting** — Isolation Forest anomaly detection for shell agencies
+- **Revenue Forecasting** — Polynomial regression with seasonal factors
+- **Compliance Risk Scoring** — Multi-factor weighted risk assessment
+- **Batch Processing** — Analyze all operators in a single API call
 
 ## Testing
 

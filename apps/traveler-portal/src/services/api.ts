@@ -71,13 +71,18 @@ export const authApi = {
     return response.data;
   },
 
+  demoLogin: async (role: string = 'traveler'): Promise<ApiResponse<AuthResponse>> => {
+    const response = await api.post('/auth/demo-login', { role });
+    return response.data;
+  },
+
   getProfile: async (): Promise<ApiResponse<User>> => {
-    const response = await api.get('/auth/profile');
+    const response = await api.get('/users/me');
     return response.data;
   },
 
   updateProfile: async (data: Partial<User>): Promise<ApiResponse<User>> => {
-    const response = await api.put('/auth/profile', data);
+    const response = await api.put('/users/me', data);
     return response.data;
   },
 

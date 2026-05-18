@@ -3,11 +3,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../services/auth_service.dart';
 import '../features/auth/login_screen.dart';
-import '../features/auth/register_screen.dart';
 import '../features/search/search_screen.dart';
 import '../features/bookings/my_bookings_screen.dart';
 import '../features/itinerary/zimpass_screen.dart';
-import '../features/payments/payment_screen.dart';
 
 class ZimVisitApp extends StatelessWidget {
   const ZimVisitApp({super.key});

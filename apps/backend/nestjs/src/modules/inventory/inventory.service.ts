@@ -24,7 +24,7 @@ export class InventoryService {
     const query = this.tourRepo.createQueryBuilder('tour').where('tour.isActive = true');
 
     if (filters.category) query.andWhere('tour.categories LIKE :category', { category: `%${filters.category}%` });
-    if (filters.location) query.andWhere('tour.location ILIKE :location', { location: `%${filters.location}%` });
+    if (filters.location) query.andWhere('tour.location LIKE :location', { location: `%${filters.location}%` });
     if (filters.minPrice) query.andWhere('tour.price >= :minPrice', { minPrice: filters.minPrice });
     if (filters.maxPrice) query.andWhere('tour.price <= :maxPrice', { maxPrice: filters.maxPrice });
 
@@ -54,7 +54,7 @@ export class InventoryService {
 
   async findHotels(filters: { city?: string } = {}) {
     const query = this.hotelRepo.createQueryBuilder('hotel').where('hotel.isActive = true');
-    if (filters.city) query.andWhere('hotel.city ILIKE :city', { city: `%${filters.city}%` });
+    if (filters.city) query.andWhere('hotel.city LIKE :city', { city: `%${filters.city}%` });
     return query.orderBy('hotel.rating', 'DESC').getMany();
   }
 

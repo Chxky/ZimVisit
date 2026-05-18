@@ -3,6 +3,7 @@ import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { ComplianceService } from './compliance.service';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { UserRole } from '../../common/interfaces/user-role.enum';
+import { CurrentUser } from '../../common/decorators/current-user.decorator';
 
 @ApiTags('Compliance')
 @ApiBearerAuth('access-token')
@@ -32,7 +33,7 @@ export class ComplianceController {
   @ApiOperation({ summary: 'Review a compliance report' })
   async reviewReport(
     @Param('id') id: string,
-    @Body('reviewerId') reviewerId: string,
+    @CurrentUser('id') reviewerId: string,
     @Body('notes') notes: string,
   ) {
     return this.complianceService.reviewReport(id, reviewerId, notes);

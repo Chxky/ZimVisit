@@ -1,4 +1,4 @@
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import { IsString, IsNumber, IsOptional, Min, Max, validateSync } from 'class-validator';
 
 class EnvironmentVariables {
@@ -75,7 +75,7 @@ class EnvironmentVariables {
 }
 
 export function validateEnv(config: Record<string, unknown>) {
-  const validated = plainToClass(EnvironmentVariables, config, {
+  const validated = plainToInstance(EnvironmentVariables, config, {
     enableImplicitConversion: true,
   });
 

@@ -43,6 +43,7 @@ import {
 } from '@ant-design/icons';
 import type { Tour } from '../types';
 import { toursApi } from '../services/api';
+import { CATEGORY_IMAGES } from '../constants/images';
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -135,9 +136,9 @@ const REVIEWS = [
 
 // ---- Similar Tours ----
 const SIMILAR_TOURS = [
-  { id: '7', name: 'Matobo Hills Rhino Tracking', location: 'Matobo Hills', price: 90, rating: 4.8, category: 'wildlife', icon: '🐘', duration: 'Full Day' },
-  { id: '5', name: 'Lake Kariba Houseboat Escape', location: 'Lake Kariba', price: 200, rating: 4.6, category: 'lake', icon: '⛵', duration: '2 Days' },
-  { id: '2', name: 'Hwange Big Five Safari', location: 'Hwange', price: 280, rating: 4.8, category: 'safari', icon: '🦁', duration: '3 Days' },
+  { id: '7', name: 'Matobo Hills Rhino Tracking', location: 'Matobo Hills', price: 90, rating: 4.8, category: 'wildlife', duration: 'Full Day' },
+  { id: '5', name: 'Lake Kariba Houseboat Escape', location: 'Lake Kariba', price: 200, rating: 4.6, category: 'lake', duration: '2 Days' },
+  { id: '2', name: 'Hwange Big Five Safari', location: 'Hwange', price: 280, rating: 4.8, category: 'safari', duration: '3 Days' },
 ];
 
 const TourDetail: React.FC = () => {
@@ -211,7 +212,9 @@ const TourDetail: React.FC = () => {
       <div
         style={{
           height: 360,
-          background: categoryGradient[tour.category] || categoryGradient.safari,
+          backgroundImage: `url(${CATEGORY_IMAGES[tour.category] || CATEGORY_IMAGES.safari})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
           position: 'relative',
           display: 'flex',
           alignItems: 'center',
@@ -219,18 +222,14 @@ const TourDetail: React.FC = () => {
           overflow: 'hidden',
         }}
       >
+        {/* Dark overlay for text readability */}
         <div
           style={{
             position: 'absolute',
             inset: 0,
-            backgroundImage:
-              'radial-gradient(circle at 30% 40%, rgba(255,255,255,0.12) 0%, transparent 50%), ' +
-              'radial-gradient(circle at 70% 60%, rgba(0,0,0,0.15) 0%, transparent 40%)',
+            background: 'linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.6) 100%)',
           }}
         />
-        <span style={{ fontSize: 100, position: 'relative', zIndex: 1, filter: 'drop-shadow(0 8px 16px rgba(0,0,0,0.3))' }}>
-          {categoryIcon[tour.category] || '🌍'}
-        </span>
 
         {/* Back button */}
         <Button
@@ -344,6 +343,37 @@ const TourDetail: React.FC = () => {
                 </Space>
               </Space>
             </div>
+
+            {/* Government Compliance Banner */}
+            <Card
+              style={{
+                borderRadius: 18,
+                marginBottom: 24,
+                border: '1px solid #bbf7d0',
+                background: 'linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)',
+              }}
+              styles={{ body: { padding: '16px 24px' } }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
+                <Space size={16}>
+                  <Space size={6}>
+                    <SafetyCertificateOutlined style={{ color: '#166534', fontSize: 16 }} />
+                    <Text style={{ color: '#166534', fontWeight: 700, fontSize: 13 }}>ZTA Licensed Operator</Text>
+                  </Space>
+                  <Space size={6}>
+                    <CheckCircleFilled style={{ color: '#166534', fontSize: 16 }} />
+                    <Text style={{ color: '#166534', fontWeight: 700, fontSize: 13 }}>ZIMRA Tax Compliant</Text>
+                  </Space>
+                  <Space size={6}>
+                    <QrcodeOutlined style={{ color: '#166534', fontSize: 16 }} />
+                    <Text style={{ color: '#166534', fontWeight: 700, fontSize: 13 }}>ZimPass QR Included</Text>
+                  </Space>
+                </Space>
+                <Tag color="success" style={{ borderRadius: 100, fontWeight: 600, fontSize: 11, padding: '2px 12px' }}>
+                  GOVERNMENT VERIFIED
+                </Tag>
+              </div>
+            </Card>
 
             {/* Description */}
             <Card style={{ borderRadius: 18, marginBottom: 24, border: '1px solid #f0f0f0' }} styles={{ body: { padding: 28 } }}>
@@ -521,14 +551,11 @@ const TourDetail: React.FC = () => {
                       <div
                         style={{
                           height: 120,
-                          background: 'linear-gradient(135deg, #166534 0%, #22c55e 100%)',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
+                          backgroundImage: `url(${CATEGORY_IMAGES[st.category] || CATEGORY_IMAGES.safari})`,
+                          backgroundSize: 'cover',
+                          backgroundPosition: 'center',
                         }}
-                      >
-                        <span style={{ fontSize: 44 }}>{st.icon}</span>
-                      </div>
+                      />
                       <div style={{ padding: '14px 16px' }}>
                         <Text strong style={{ display: 'block', fontSize: 14, marginBottom: 4 }}>{st.name}</Text>
                         <Space size={4} style={{ marginBottom: 8 }}>

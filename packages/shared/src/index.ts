@@ -176,3 +176,73 @@ export interface PaginatedResponse<T> {
   page: number;
   limit: number;
 }
+
+// Audit & Compliance Types
+export interface AuditEntry {
+  id: string;
+  action: string;
+  entityType: string;
+  entityId: string;
+  userId: string;
+  userEmail: string;
+  changes?: { before?: Record<string, unknown>; after?: Record<string, unknown> };
+  ipAddress?: string;
+  userAgent?: string;
+  timestamp: string;
+}
+
+export interface ComplianceMetrics {
+  operatorId: string;
+  complianceRate: number;
+  riskScore: number;
+  status: 'compliant' | 'amber' | 'red';
+  lastAuditDate: string;
+  levyPaidYTD: number;
+  vatPaidYTD: number;
+  bspFeesPaidYTD: number;
+  flaggedBookings: number;
+  totalBookings: number;
+}
+
+export interface RevenueReport {
+  period: { start: string; end: string };
+  totalRevenue: number;
+  bspRevenue: number;
+  levyCollected: number;
+  vatCollected: number;
+  platformFees: number;
+  estimatedLeakage: number;
+  captureRate: number;
+  breakdown: { month: string; revenue: number; levy: number; leakage: number }[];
+}
+
+export interface RiskAssessment {
+  operatorId: string;
+  operatorName: string;
+  riskScore: number;
+  riskLevel: 'low' | 'medium' | 'high' | 'critical';
+  predictedLeakage: number;
+  confidence: number;
+  topFactors: string[];
+  recommendedAction: string;
+}
+
+// Constants
+export const LEVY_RATE = 0.02;
+export const VAT_RATE = 0.15;
+export const BSP_FEE_RATE = 0.03;
+export const TOTAL_DEDUCTION_RATE = LEVY_RATE + VAT_RATE + BSP_FEE_RATE;
+
+export const RISK_THRESHOLDS = {
+  LOW: 30,
+  MEDIUM: 50,
+  HIGH: 70,
+  CRITICAL: 85,
+} as const;
+
+export const COMPLIANCE_THRESHOLDS = {
+  EXCELLENT: 90,
+  GOOD: 80,
+  WARNING: 60,
+  CRITICAL: 40,
+} as const;

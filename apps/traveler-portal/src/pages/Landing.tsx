@@ -25,6 +25,7 @@ import {
   SwapOutlined,
 } from '@ant-design/icons';
 import { useAuthStore } from '../store/authStore';
+import { DESTINATION_IMAGES, GOVERNMENT_BRANDING } from '../constants/images';
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -86,7 +87,7 @@ const Landing: React.FC = () => {
       name: 'Victoria Falls',
       province: 'Matabeleland North',
       description: 'The Smoke That Thunders — one of the Seven Natural Wonders of the World',
-      icon: '🌊',
+      image: DESTINATION_IMAGES['Victoria Falls'],
       color: '#0ea5e9',
       gradient: 'linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%)',
       tourCount: 42,
@@ -96,7 +97,7 @@ const Landing: React.FC = () => {
       name: 'Hwange National Park',
       province: 'Matabeleland North',
       description: "Zimbabwe's largest national park with over 40,000 elephants",
-      icon: '🐘',
+      image: DESTINATION_IMAGES['Hwange National Park'],
       color: '#84cc16',
       gradient: 'linear-gradient(135deg, #84cc16 0%, #65a30d 100%)',
       tourCount: 35,
@@ -106,7 +107,7 @@ const Landing: React.FC = () => {
       name: 'Mana Pools',
       province: 'Mashonaland West',
       description: 'UNESCO World Heritage Site — pristine wilderness along the Zambezi',
-      icon: '🦁',
+      image: DESTINATION_IMAGES['Mana Pools'],
       color: '#f59e0b',
       gradient: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
       tourCount: 28,
@@ -116,7 +117,7 @@ const Landing: React.FC = () => {
       name: 'Great Zimbabwe',
       province: 'Masvingo',
       description: 'Ancient stone city ruins — the largest stone structures in sub-Saharan Africa',
-      icon: '🏛️',
+      image: DESTINATION_IMAGES['Great Zimbabwe'],
       color: '#a855f7',
       gradient: 'linear-gradient(135deg, #a855f7 0%, #9333ea 100%)',
       tourCount: 18,
@@ -126,7 +127,7 @@ const Landing: React.FC = () => {
       name: 'Lake Kariba',
       province: 'Mashonaland West',
       description: "The world's largest man-made lake by volume — sunsets and houseboats",
-      icon: '⛵',
+      image: DESTINATION_IMAGES['Lake Kariba'],
       color: '#06b6d4',
       gradient: 'linear-gradient(135deg, #06b6d4 0%, #0891b2 100%)',
       tourCount: 22,
@@ -136,7 +137,7 @@ const Landing: React.FC = () => {
       name: 'Eastern Highlands',
       province: 'Manicaland',
       description: 'Misty mountains, tea estates, and the stunning Nyanga and Chimanimani ranges',
-      icon: '⛰️',
+      image: DESTINATION_IMAGES['Nyanga'],
       color: '#16a34a',
       gradient: 'linear-gradient(135deg, #16a34a 0%, #15803d 100%)',
       tourCount: 24,
@@ -208,6 +209,37 @@ const Landing: React.FC = () => {
   // ============================================================
   return (
     <div style={{ overflow: 'hidden' }}>
+      {/* ===================== GOVERNMENT BRANDING BAR ===================== */}
+      <div
+        style={{
+          background: 'linear-gradient(90deg, #052e16 0%, #14532d 50%, #052e16 100%)',
+          padding: '8px 24px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: 16,
+          borderBottom: '2px solid #f59e0b',
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <svg width="20" height="20" viewBox="0 0 64 64" fill="none">
+            <path d="M32 8C24 8 18 14 16 20C14 26 15 32 18 36C14 38 10 42 8 48C10 47 13 46 16 46C18 50 22 54 28 56C30 56 32 56 34 56C40 54 44 50 46 46C49 46 52 47 54 48C52 42 48 38 44 36C47 32 48 26 46 20C44 14 38 8 32 8Z" fill="#f59e0b" stroke="#92400e" strokeWidth="1.5"/>
+          </svg>
+          <Text style={{ color: 'rgba(255,255,255,0.9)', fontSize: 12, fontWeight: 600, letterSpacing: 1.5, textTransform: 'uppercase' }}>
+            {GOVERNMENT_BRANDING.authority}
+          </Text>
+        </div>
+        <div style={{ width: 1, height: 16, background: 'rgba(255,255,255,0.3)' }} />
+        <Text style={{ color: 'rgba(255,255,255,0.7)', fontSize: 11, letterSpacing: 0.5 }}>
+          {GOVERNMENT_BRANDING.ministry}
+        </Text>
+        <div style={{ width: 1, height: 16, background: 'rgba(255,255,255,0.3)' }} />
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#22c55e', animation: 'pulse 2s infinite' }} />
+          <Text style={{ color: '#22c55e', fontSize: 11, fontWeight: 600 }}>VERIFIED PLATFORM</Text>
+        </div>
+      </div>
+
       {/* ===================== HERO SECTION ===================== */}
       <section
         style={{
@@ -216,12 +248,22 @@ const Landing: React.FC = () => {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          background: 'linear-gradient(135deg, #052e16 0%, #14532d 25%, #166534 50%, #052e16 75%, #000000 100%)',
+          backgroundImage: `url(${DESTINATION_IMAGES['Victoria Falls']})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
           overflow: 'hidden',
-          marginTop: -72, // compensate for navbar spacer
-          paddingTop: 72,
+          marginTop: -100,
+          paddingTop: 100,
         }}
       >
+        {/* Dark overlay for text readability */}
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            background: 'linear-gradient(135deg, rgba(5,46,22,0.92) 0%, rgba(20,83,45,0.88) 25%, rgba(22,101,52,0.85) 50%, rgba(5,46,22,0.92) 75%, rgba(0,0,0,0.95) 100%)',
+          }}
+        />
         {/* Background decoration */}
         <div
           style={{
@@ -537,31 +579,25 @@ const Landing: React.FC = () => {
                   }}
                   className="card-hover"
                 >
-                  {/* Card Header with Gradient */}
+                  {/* Card Header with Real Image */}
                   <div
                     style={{
                       height: 180,
-                      background: dest.gradient,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
+                      backgroundImage: `url(${dest.image})`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
                       position: 'relative',
                       overflow: 'hidden',
                     }}
                   >
-                    {/* Pattern overlay */}
+                    {/* Dark overlay for text readability */}
                     <div
                       style={{
                         position: 'absolute',
                         inset: 0,
-                        backgroundImage:
-                          'radial-gradient(circle at 30% 40%, rgba(255,255,255,0.15) 0%, transparent 50%), ' +
-                          'radial-gradient(circle at 70% 60%, rgba(0,0,0,0.1) 0%, transparent 40%)',
+                        background: 'linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.5) 100%)',
                       }}
                     />
-                    <span style={{ fontSize: 64, position: 'relative', zIndex: 1, filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.2))' }}>
-                      {dest.icon}
-                    </span>
                     {/* Tour count badge */}
                     <div
                       style={{

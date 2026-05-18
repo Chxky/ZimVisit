@@ -67,6 +67,8 @@ const AuthRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
 const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <>
     <Navbar />
+    {/* Spacer for government bar (28px) + navbar (72px) */}
+    <div style={{ height: 100 }} />
     <Layout.Content style={{ minHeight: '100vh' }}>
       <Suspense fallback={<PageLoader />}>{children}</Suspense>
     </Layout.Content>

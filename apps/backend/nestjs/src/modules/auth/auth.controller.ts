@@ -30,6 +30,23 @@ export class AuthController {
   }
 
   @Public()
+  @Post('demo-login')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Quick demo login by role (admin, government, operator, traveler)' })
+  @ApiResponse({ status: 200, description: 'Demo login successful' })
+  @ApiResponse({ status: 401, description: 'Demo user not found' })
+  async demoLogin(@Body('role') role: string) {
+    const demoUsers: Record<string, string> = {
+      admin: 'admin@zimvisit.com',
+      government: 'zta@zta.gov.zw',
+      operator: 'operator@wildhorizons.co.zw',
+      traveler: 'traveler@gmail.com',
+    };
+    const email = demoUsers[role] || demoUsers['traveler'];
+    return this.authService.login({ email, password: 'demo123' });
+  }
+
+  @Public()
   @Post('refresh')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Refresh access token' })

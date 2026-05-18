@@ -190,8 +190,8 @@ const ZimPass: React.FC = () => {
     validFrom: booking.startDate,
     validTo: booking.endDate,
     status: booking.status === 'confirmed' ? 'active' as const : booking.status === 'cancelled' ? 'expired' as const : 'active' as const,
-    travelerName: booking.user?.fullName || 'Traveler',
-    travelerEmail: booking.user?.email || '',
+    travelerName: 'Traveler',
+    travelerEmail: '',
     items: booking.items.map((item, i) => ({
       id: `zi_${item.id}`,
       type: item.type === 'tour' ? 'tour' as const : 'hotel' as const,

@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <!-- Shield shape - government authority -->
+  <path d="M100 10 L185 50 L185 110 C185 155 145 185 100 195 C55 185 15 155 15 110 L15 50 Z" fill="#1e1b4b" stroke="#f59e0b" stroke-width="3"/>
+  <!-- Inner shield highlight -->
+  <path d="M100 22 L175 57 L175 108 C175 148 140 175 100 184 C60 175 25 148 25 108 L25 57 Z" fill="#312e81" opacity="0.6"/>
+  <!-- Zimbabwe Bird stylized -->
+  <g transform="translate(60, 45) scale(0.8)">
+    <!-- Bird body -->
+    <path d="M50 10 C30 10 15 25 15 45 C15 55 20 65 30 72 L25 95 L35 90 L40 100 L50 85 L60 100 L65 90 L75 95 L70 72 C80 65 85 55 85 45 C85 25 70 10 50 10 Z" fill="#f59e0b"/>
+    <!-- Bird head -->
+    <circle cx="50" cy="28" r="12" fill="#f59e0b"/>
+    <!-- Bird eye -->
+    <circle cx="50" cy="26" r="3" fill="#1e1b4b"/>
+    <!-- Bird crest -->
+    <path d="M45 16 L50 5 L55 16" fill="#dc2626" stroke="#dc2626" stroke-width="1"/>
+    <!-- Bird wing left -->
+    <path d="M30 45 L10 35 L15 55 Z" fill="#fbbf24"/>
+    <!-- Bird wing right -->
+    <path d="M70 45 L90 35 L85 55 Z" fill="#fbbf24"/>
+  </g>
+  <!-- Text -->
+  <text x="100" y="145" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-weight="700" font-size="18" fill="#f59e0b">ZIMVISIT</text>
+  <text x="100" y="162" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-weight="400" font-size="9" fill="#e2e8f0" letter-spacing="3">NATIONAL TOURISM PLATFORM</text>
+  <!-- Decorative stars -->
+  <circle cx="55" cy="148" r="2" fill="#f59e0b"/>
+  <circle cx="145" cy="148" r="2" fill="#f59e0b"/>
+  <circle cx="55" cy="155" r="1.5" fill="#f59e0b" opacity="0.6"/>
+  <circle cx="145" cy="155" r="1.5" fill="#f59e0b" opacity="0.6"/>
+</svg>

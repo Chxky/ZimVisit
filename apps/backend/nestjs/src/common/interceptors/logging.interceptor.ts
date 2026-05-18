@@ -9,6 +9,8 @@ export class LoggingInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
     const request = context.switchToHttp().getRequest();
     const { method, url } = request;
+    const clientIp = request.headers['x-forwarded-for'] || request.connection?.remoteAddress || request.ip;
+    const userAgent = request.headers['user-agent'] || 'unknown';
     const startTime = Date.now();
 
     return next.handle().pipe(
@@ -16,11 +18,11 @@ export class LoggingInterceptor implements NestInterceptor {
         next: () => {
           const response = context.switchToHttp().getResponse();
           const duration = Date.now() - startTime;
-          this.logger.log(`${method} ${url} ${response.statusCode} ${duration}ms`);
+          this.logger.log(`${method} ${url} ${response.statusCode} ${duration}ms | IP: ${clientIp} | UA: ${userAgent}`);
         },
         error: (error) => {
           const duration = Date.now() - startTime;
-          this.logger.error(`${method} ${url} ${error.status || 500} ${duration}ms - ${error.message}`);
+          this.logger.error(`${method} ${url} ${error.status || 500} ${duration}ms - ${error.message} | IP: ${clientIp} | UA: ${userAgent}`);
         },
       }),
     );

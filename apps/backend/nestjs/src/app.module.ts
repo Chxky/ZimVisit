@@ -14,6 +14,8 @@ import { ComplianceModule } from './modules/compliance/compliance.module';
 import { GdsModule } from './modules/gds/gds.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
 import { OperatorsModule } from './modules/operators/operators.module';
+import { AuditModule } from './modules/audit/audit.module';
+import { ReportsModule } from './modules/reports/reports.module';
 import { HealthController } from './common/health.controller';
 import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
 import { RolesGuard } from './common/guards/roles.guard';
@@ -71,6 +73,8 @@ import { validateEnv } from './config/env.validation';
     GdsModule,
     NotificationsModule,
     OperatorsModule,
+    AuditModule,
+    ReportsModule,
   ],
   controllers: [HealthController],
   providers: [

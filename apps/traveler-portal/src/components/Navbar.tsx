@@ -183,10 +183,41 @@ const Navbar: React.FC = () => {
 
   return (
     <>
-      <nav
+      {/* Government Branding Bar */}
+      <div
         style={{
           position: 'fixed',
           top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 1001,
+          background: 'linear-gradient(90deg, #052e16 0%, #14532d 50%, #052e16 100%)',
+          padding: '4px 24px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: 12,
+          borderBottom: '1px solid rgba(245,158,11,0.4)',
+        }}
+      >
+        <span style={{ color: 'rgba(255,255,255,0.8)', fontSize: 10, fontWeight: 600, letterSpacing: 1.5, textTransform: 'uppercase' }}>
+          Zimbabwe Tourism Authority
+        </span>
+        <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: 10 }}>|</span>
+        <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: 10 }}>
+          Ministry of Tourism & Hospitality Industry
+        </span>
+        <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: 10 }}>|</span>
+        <span style={{ color: '#22c55e', fontSize: 10, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4 }}>
+          <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#22c55e', display: 'inline-block' }} />
+          VERIFIED
+        </span>
+      </div>
+
+      <nav
+        style={{
+          position: 'fixed',
+          top: 28,
           left: 0,
           right: 0,
           zIndex: 1000,

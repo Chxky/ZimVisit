@@ -8,6 +8,10 @@ dist/
 build/
 *.tsbuildinfo
 
+# Compiled config files (keep .ts source only)
+*.config.js
+*.config.d.ts
+
 # Environment
 .env
 .env.local

@@ -94,6 +94,17 @@ services:
     depends_on:
       - api
 
+  traveler-portal:
+    build:
+      context: ./apps/traveler-portal
+      dockerfile: Dockerfile
+    container_name: zimvisit-traveler
+    restart: unless-stopped
+    ports:
+      - "3003:3003"
+    depends_on:
+      - api
+
   nginx:
     image: nginx:alpine
     container_name: zimvisit-nginx
@@ -109,6 +120,7 @@ services:
       - api
       - operator-dashboard
       - government-portal
+      - traveler-portal
 
 volumes:
   postgres_data:

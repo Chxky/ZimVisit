@@ -10,8 +10,8 @@ export class EcocashProvider {
   constructor(private readonly config: ConfigService) {}
 
   async initiate(payment: Payment, booking: any): Promise<any> {
-    const merchantId = this.config.get('ECOCHASH_MERCHANT_ID');
-    const apiUrl = this.config.get('ECOCHASH_API_URL');
+    const merchantId = this.config.get('ECOCASH_MERCHANT_ID');
+    const apiUrl = this.config.get('ECOCASH_API_URL');
 
     const payload = {
       merchantId,
@@ -24,7 +24,7 @@ export class EcocashProvider {
 
     try {
       const response = await axios.post(`${apiUrl}/transaction/initiate`, payload, {
-        headers: { 'Content-Type': 'application/json', 'X-API-Key': this.config.get('ECOCHASH_API_KEY') },
+        headers: { 'Content-Type': 'application/json', 'X-API-Key': this.config.get('ECOCASH_API_KEY') },
       });
 
       return {

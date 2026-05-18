@@ -18,6 +18,13 @@ async function bootstrap() {
 
   app.use(helmet());
 
+  // Middleware to capture IP and User-Agent for audit trail
+  app.use((req: any, _res: any, next: any) => {
+    req.clientIp = req.headers['x-forwarded-for'] || req.connection?.remoteAddress || req.ip;
+    req.userAgent = req.headers['user-agent'] || 'unknown';
+    next();
+  });
+
   app.setGlobalPrefix(configService.get('API_PREFIX', 'api/v1'), {
     exclude: ['health', 'health/liveness', 'health/readiness'],
   });

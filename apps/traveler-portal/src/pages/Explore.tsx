@@ -39,6 +39,7 @@ import {
 } from '@ant-design/icons';
 import type { Tour, TourCategory, SearchFilters } from '../types';
 import { toursApi } from '../services/api';
+import { CATEGORY_IMAGES } from '../constants/images';
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -297,18 +298,6 @@ const DIFFICULTY_COLOR: Record<string, string> = {
   expert: 'red',
 };
 
-// ---- Category Icon Map ----
-const CATEGORY_ICON: Record<string, string> = {
-  safari: '🦁',
-  'victoria-falls': '🌊',
-  hiking: '🥾',
-  cultural: '🏛️',
-  lake: '⛵',
-  wildlife: '🐘',
-  adventure: '🧗',
-  historical: '📜',
-};
-
 // ---- Category Gradient Map ----
 const CATEGORY_GRADIENT: Record<string, string> = {
   safari: 'linear-gradient(135deg, #84cc16 0%, #65a30d 100%)',
@@ -475,12 +464,22 @@ const Explore: React.FC = () => {
       {/* ---- Header ---- */}
       <div
         style={{
-          background: 'linear-gradient(135deg, #052e16 0%, #166534 100%)',
+          backgroundImage: `url(${CATEGORY_IMAGES.safari})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
           padding: '48px 24px 40px',
           position: 'relative',
           overflow: 'hidden',
         }}
       >
+        {/* Dark overlay */}
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            background: 'linear-gradient(135deg, rgba(5,46,22,0.95) 0%, rgba(22,101,52,0.9) 100%)',
+          }}
+        />
         <div
           style={{
             position: 'absolute',
@@ -490,11 +489,20 @@ const Explore: React.FC = () => {
           }}
         />
         <div style={{ maxWidth: 1280, margin: '0 auto', position: 'relative', zIndex: 1 }}>
-          <Title level={2} style={{ color: '#ffffff', marginBottom: 8, fontWeight: 800 }}>
-            Explore Zimbabwe
-          </Title>
-          <Text style={{ color: 'rgba(255,255,255,0.7)', fontSize: 16, display: 'block', marginBottom: 28 }}>
-            Discover tours, safaris, and adventures across the country
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
+            <Title level={2} style={{ color: '#ffffff', marginBottom: 0, fontWeight: 800 }}>
+              Explore Zimbabwe
+            </Title>
+            <Tag
+              icon={<SafetyCertificateOutlined />}
+              color="success"
+              style={{ fontSize: 11, padding: '2px 10px', borderRadius: 100, fontWeight: 600 }}
+            >
+              ZTA VERIFIED
+            </Tag>
+          </div>
+          <Text style={{ color: 'rgba(255,255,255,0.7)', fontSize: 16, display: 'block', marginBottom: 8 }}>
+            Discover government-verified tours, safaris, and adventures across the country
           </Text>
 
           {/* Search Bar */}
@@ -513,6 +521,40 @@ const Explore: React.FC = () => {
             }}
           />
         </div>
+      </div>
+
+      {/* Government Compliance Banner */}
+      <div
+        style={{
+          background: 'linear-gradient(90deg, #052e16, #14532d)',
+          padding: '10px 24px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: 24,
+          borderBottom: '1px solid rgba(245,158,11,0.3)',
+        }}
+      >
+        <Space size={6}>
+          <SafetyCertificateOutlined style={{ color: '#f59e0b', fontSize: 14 }} />
+          <Text style={{ color: 'rgba(255,255,255,0.9)', fontSize: 12, fontWeight: 600 }}>
+            All operators ZTA licensed & verified
+          </Text>
+        </Space>
+        <div style={{ width: 1, height: 14, background: 'rgba(255,255,255,0.2)' }} />
+        <Space size={6}>
+          <CheckCircleFilled style={{ color: '#22c55e', fontSize: 14 }} />
+          <Text style={{ color: 'rgba(255,255,255,0.9)', fontSize: 12, fontWeight: 600 }}>
+            ZIMRA tax compliant bookings
+          </Text>
+        </Space>
+        <div style={{ width: 1, height: 14, background: 'rgba(255,255,255,0.2)' }} />
+        <Space size={6}>
+          <QrcodeOutlined style={{ color: '#0ea5e9', fontSize: 14 }} />
+          <Text style={{ color: 'rgba(255,255,255,0.9)', fontSize: 12, fontWeight: 600 }}>
+            Digital ZimPass included
+          </Text>
+        </Space>
       </div>
 
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: '32px 24px' }}>
@@ -654,28 +696,24 @@ const Explore: React.FC = () => {
                       styles={{ body: { padding: 0 } }}
                       className="card-hover"
                     >
-                      {/* Image Placeholder */}
+                      {/* Real Image */}
                       <div
                         style={{
                           height: 180,
-                          background: CATEGORY_GRADIENT[tour.category] || CATEGORY_GRADIENT.safari,
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
+                          backgroundImage: `url(${CATEGORY_IMAGES[tour.category] || CATEGORY_IMAGES.safari})`,
+                          backgroundSize: 'cover',
+                          backgroundPosition: 'center',
                           position: 'relative',
                         }}
                       >
+                        {/* Dark overlay for badges */}
                         <div
                           style={{
                             position: 'absolute',
                             inset: 0,
-                            backgroundImage:
-                              'radial-gradient(circle at 30% 40%, rgba(255,255,255,0.15) 0%, transparent 50%)',
+                            background: 'linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.3) 100%)',
                           }}
                         />
-                        <span style={{ fontSize: 56, position: 'relative', zIndex: 1, filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.2))' }}>
-                          {CATEGORY_ICON[tour.category] || '🌍'}
-                        </span>
 
                         {/* Featured badge */}
                         {tour.isFeatured && (

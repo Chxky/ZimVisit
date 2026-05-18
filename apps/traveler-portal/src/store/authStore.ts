@@ -95,8 +95,9 @@ export const useAuthStore = create<AuthState & AuthActions>()(
         set({ isLoading: true, error: null });
         try {
           const response = await authApi.login({ email, password });
-          const { user, accessToken, refreshToken } = response.data || response;
-          get().login(user, accessToken, refreshToken);
+          const d = response.data || response;
+          const t = d.accessToken || d.token || '';
+          get().login(d.user, t, d.refreshToken);
         } catch (err: any) {
           const message = err.response?.data?.message || 'Invalid email or password';
           set({ error: message });
@@ -110,8 +111,9 @@ export const useAuthStore = create<AuthState & AuthActions>()(
         set({ isLoading: true, error: null });
         try {
           const response = await authApi.register(data);
-          const { user, accessToken, refreshToken } = response.data || response;
-          get().login(user, accessToken, refreshToken);
+          const d = response.data || response;
+          const t = d.accessToken || d.token || '';
+          get().login(d.user, t, d.refreshToken);
         } catch (err: any) {
           const message = err.response?.data?.message || 'Registration failed. Please try again.';
           set({ error: message });
@@ -125,8 +127,9 @@ export const useAuthStore = create<AuthState & AuthActions>()(
         set({ isLoading: true, error: null });
         try {
           const response = await authApi.demoLogin(role);
-          const { user, accessToken, refreshToken } = response.data || response;
-          get().login(user, accessToken, refreshToken);
+          const d = response.data || response;
+          const t = d.accessToken || d.token || '';
+          get().login(d.user, t, d.refreshToken);
         } catch (err: any) {
           const message = err.response?.data?.message || 'Demo login failed';
           set({ error: message });

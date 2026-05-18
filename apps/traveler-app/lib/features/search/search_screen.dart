@@ -190,7 +190,7 @@ class _SearchScreenState extends State<SearchScreen> {
                             const SizedBox(width: 4),
                             Text(tour['location'] as String, style: TextStyle(color: Colors.grey[600], fontSize: 12)),
                             const Spacer(),
-                            Icon(Icons.star, size: 14, color: Colors.amber),
+                            const Icon(Icons.star, size: 14, color: Colors.amber),
                             const SizedBox(width: 2),
                             Text('${tour['rating']}', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 12)),
                           ],

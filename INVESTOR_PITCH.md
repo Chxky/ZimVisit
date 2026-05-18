@@ -242,6 +242,28 @@ A full-stack engineering team with expertise in:
 
 ---
 
+## Technology Differentiators
+
+### AI-Powered Compliance
+- **Agent Fingerprinting** — Isolation Forest ML model identifies shell agencies and suspicious booking patterns in real-time
+- **Revenue Forecasting** — Polynomial regression with seasonal factors predicts national tourism revenue and leakage
+- **Compliance Risk Scoring** — Multi-factor weighted scoring with actionable recommendations for government auditors
+- **Batch Analysis** — Score all 480+ operators in a single API call with distribution analytics
+
+### Government-Grade Security
+- **Immutable Audit Trail** — Every compliance review, payment, and operator action logged with IP, user agent, and change details
+- **Role-Based Access Control** — 7 distinct roles from traveler to system admin with granular permissions
+- **Rate Limiting** — Per-endpoint rate limits (100/min standard, 1000/min government)
+- **TLS 1.2/1.3** — Enforced HTTPS with modern cipher suites
+
+### Zimbabwe-First Design
+- **EcoCash Native** — Deep integration with Zimbabwe's dominant mobile money platform
+- **Offline-First Mobile** — Flutter app works in national parks with zero connectivity
+- **ZimPass QR Code** — Single digital pass for entire trip across tours, hotels, and activities
+- **Automatic Tax Calculation** — ZTA levy (2%), VAT (15%), and BSP fee (3%) computed at point of sale
+
+---
+
 ## Contact
 
 For investment inquiries, partnership discussions, or a live demo:

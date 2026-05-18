@@ -1,7 +1,7 @@
 import numpy as np
 import logging
 from typing import List, Dict, Optional, Tuple
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 logger = logging.getLogger(__name__)
 
@@ -32,7 +32,7 @@ class RevenueForecaster:
         last_month = len(revenues)
 
         forecasts = []
-        current_month = datetime.utcnow().month
+        current_month = datetime.now(timezone.utc).month
 
         for i in range(months_ahead):
             month_idx = (current_month + i - 1) % 12
@@ -69,7 +69,7 @@ class RevenueForecaster:
     def _generate_default_forecast(self, months_ahead: int) -> dict:
         base_revenue = 500000
         forecasts = []
-        current_month = datetime.utcnow().month
+        current_month = datetime.now(timezone.utc).month
 
         for i in range(months_ahead):
             month_idx = (current_month + i - 1) % 12
