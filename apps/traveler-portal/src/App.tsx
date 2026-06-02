@@ -8,6 +8,9 @@ import { Spin, Layout } from 'antd';
 import { useAuthStore } from './store/authStore';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import SkipToContent from './components/SkipToContent';
+import CookieConsent from './components/CookieConsent';
+import ZimPassDemo from './components/ZimPassDemo';
 
 // ---- Lazy-loaded Pages ----
 const Landing = lazy(() => import('./pages/Landing'));
@@ -21,6 +24,11 @@ const ZimPass = lazy(() => import('./pages/ZimPass'));
 const Profile = lazy(() => import('./pages/Profile'));
 const EconomicImpact = lazy(() => import('./pages/EconomicImpact'));
 const AIAssistant = lazy(() => import('./pages/AIAssistant'));
+const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
+const TermsOfService = lazy(() => import('./pages/TermsOfService'));
+const HelpCenter = lazy(() => import('./pages/HelpCenter'));
+const ContactUs = lazy(() => import('./pages/ContactUs'));
+const CancellationPolicy = lazy(() => import('./pages/CancellationPolicy'));
 
 // ---- Loading Spinner ----
 const PageLoader: React.FC = () => (
@@ -66,13 +74,22 @@ const AuthRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
 // ---- Routes that show Navbar + Footer ----
 const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <>
-    <Navbar />
+    <SkipToContent />
+    <header role="banner">
+      <Navbar />
+    </header>
     {/* Spacer for government bar (28px) + navbar (72px) */}
     <div style={{ height: 100 }} />
-    <Layout.Content style={{ minHeight: '100vh' }}>
-      <Suspense fallback={<PageLoader />}>{children}</Suspense>
-    </Layout.Content>
-    <Footer />
+    <main id="main-content" role="main" tabIndex={-1} style={{ outline: 'none' }}>
+      <Layout.Content style={{ minHeight: '100vh' }}>
+        <Suspense fallback={<PageLoader />}>{children}</Suspense>
+      </Layout.Content>
+    </main>
+    <footer role="contentinfo">
+      <Footer />
+    </footer>
+    <ZimPassDemo />
+    <CookieConsent />
   </>
 );
 
@@ -125,6 +142,56 @@ const App: React.FC = () => {
         element={
           <MainLayout>
             <TourDetail />
+          </MainLayout>
+        }
+      />
+
+      {/* Privacy Policy */}
+      <Route
+        path="/privacy"
+        element={
+          <MainLayout>
+            <PrivacyPolicy />
+          </MainLayout>
+        }
+      />
+
+      {/* Terms of Service */}
+      <Route
+        path="/terms"
+        element={
+          <MainLayout>
+            <TermsOfService />
+          </MainLayout>
+        }
+      />
+
+      {/* Help Center */}
+      <Route
+        path="/help"
+        element={
+          <MainLayout>
+            <HelpCenter />
+          </MainLayout>
+        }
+      />
+
+      {/* Contact Us */}
+      <Route
+        path="/contact"
+        element={
+          <MainLayout>
+            <ContactUs />
+          </MainLayout>
+        }
+      />
+
+      {/* Cancellation Policy */}
+      <Route
+        path="/cancellation"
+        element={
+          <MainLayout>
+            <CancellationPolicy />
           </MainLayout>
         }
       />
@@ -183,7 +250,7 @@ const App: React.FC = () => {
 
       {/* ZimPass QR Itinerary */}
       <Route
-        path="/zimpass/:id"
+        path="/zimpass"
         element={
           <ProtectedRoute>
             <MainLayout>

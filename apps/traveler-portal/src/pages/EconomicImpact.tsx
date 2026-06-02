@@ -10,7 +10,6 @@ import {
   Typography,
   Space,
   Tag,
-  Progress,
   Divider,
   Avatar,
 } from 'antd';
@@ -63,7 +62,10 @@ const useAnimatedCounter = (target: number, duration = 2000, decimals = 0) => {
   return { value, ref };
 };
 
-// ---- Mock Data (swap to API later) ----
+// ---- Mock Data ----
+// TODO: Replace with economic impact API endpoint when available.
+// Mock data is acceptable for this display-only government stats page
+// until the economic impact API is implemented.
 const IMPACT_DATA = {
   totalSpent: 4200,
   taxContributed: 630,       // 15% VAT

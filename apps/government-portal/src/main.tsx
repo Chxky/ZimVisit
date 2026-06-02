@@ -44,8 +44,8 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
             Menu: {
               darkItemBg: 'transparent',
               darkSubMenuItemBg: 'transparent',
-              darkItemSelectedBg: 'rgba(245,158,11,0.15)',
-              darkItemSelectedColor: '#f59e0b',
+              darkItemSelectedBg: 'rgba(217,119,6,0.15)',
+              darkItemSelectedColor: '#d97706',
               darkItemHoverBg: 'rgba(255,255,255,0.06)',
               itemBorderRadius: 8,
               iconSize: 18,

@@ -328,7 +328,7 @@ export const OperatorDetail: React.FC = () => {
         {[
           { label: 'Total Revenue', value: `$${(operator.totalRevenue / 1000).toFixed(0)}K`, icon: <DollarOutlined />, bg: 'linear-gradient(135deg, #059669, #10b981)', change: '+12%', changeType: 'up' },
           { label: 'Levy Remitted', value: `$${(operator.totalLevy / 1000).toFixed(1)}K`, icon: <BankOutlined />, bg: 'linear-gradient(135deg, #1e1b4b, #312e81)', change: '+8%', changeType: 'up' },
-          { label: 'Total Bookings', value: operator.totalBookings.toString(), icon: <FileTextOutlined />, bg: 'linear-gradient(135deg, #f59e0b, #fbbf24)', change: '+15%', changeType: 'up' },
+          { label: 'Total Bookings', value: operator.totalBookings.toString(), icon: <FileTextOutlined />, bg: 'linear-gradient(135deg, #d97706, #b45309)', change: '+15%', changeType: 'up' },
           { label: 'Active Agents', value: operator.agentCount.toString(), icon: <TeamOutlined />, bg: 'linear-gradient(135deg, #312e81, #4338ca)', change: '+2', changeType: 'up' },
         ].map((kpi, idx) => (
           <Col xs={12} sm={6} key={idx}>

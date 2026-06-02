@@ -37,10 +37,10 @@ const compliancePieData = [
 ];
 
 const quickActions = [
-  { key: 'bookings', label: 'New Booking', icon: <CalendarOutlined />, color: '#166534', bg: '#f0fdf4', path: '/bookings' },
-  { key: 'inventory', label: 'Add Listing', icon: <ShoppingCartOutlined />, color: '#0369a1', bg: '#f0f9ff', path: '/inventory/new' },
-  { key: 'compliance', label: 'View Compliance', icon: <SafetyOutlined />, color: '#059669', bg: '#ecfdf5', path: '/compliance' },
-  { key: 'staff', label: 'Manage Staff', icon: <TeamOutlined />, color: '#7c3aed', bg: '#f5f3ff', path: '/staff' },
+  { key: 'bookings', label: 'New Booking', icon: <CalendarOutlined />, color: '#4ade80', bg: 'rgba(22, 163, 74, 0.1)', path: '/bookings' },
+  { key: 'inventory', label: 'Add Listing', icon: <ShoppingCartOutlined />, color: '#d97706', bg: 'rgba(217, 119, 6, 0.1)', path: '/inventory/new' },
+  { key: 'compliance', label: 'View Compliance', icon: <SafetyOutlined />, color: '#34d399', bg: 'rgba(5, 150, 105, 0.1)', path: '/compliance' },
+  { key: 'staff', label: 'Manage Staff', icon: <TeamOutlined />, color: '#f59e0b', bg: 'rgba(245, 158, 11, 0.1)', path: '/staff' },
 ];
 
 const alerts = [
@@ -53,14 +53,15 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     return (
       <div style={{
-        background: '#fff',
+        background: '#ffffff',
         border: '1px solid #e2e8f0',
         borderRadius: 8,
         padding: '12px 16px',
         boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
+        backdropFilter: 'blur(10px)',
       }}>
         <Text style={{ fontSize: 12, color: '#64748b', display: 'block', marginBottom: 4 }}>{label}</Text>
-        <Text style={{ fontSize: 14, fontWeight: 700, color: '#166534' }}>
+        <Text style={{ fontSize: 14, fontWeight: 700, color: '#4ade80' }}>
           ${payload[0].value.toLocaleString()}
         </Text>
       </div>
@@ -110,7 +111,7 @@ export const Dashboard: React.FC = () => {
       dataIndex: 'bookingReference',
       key: 'ref',
       render: (v: string, r: Booking) => (
-        <a onClick={() => navigate(`/bookings/${r.id}`)} style={{ fontWeight: 600, color: '#166534' }}>
+        <a onClick={() => navigate(`/bookings/${r.id}`)} style={{ fontWeight: 600, color: '#4ade80' }}>
           {v}
         </a>
       ),
@@ -120,7 +121,7 @@ export const Dashboard: React.FC = () => {
       dataIndex: 'totalAmount',
       key: 'amount',
       render: (v: number) => (
-        <Text style={{ fontWeight: 600 }}>${Number(v).toLocaleString()}</Text>
+        <Text style={{ fontWeight: 600, color: '#1e293b' }}>${Number(v).toLocaleString()}</Text>
       ),
     },
     {
@@ -167,10 +168,10 @@ export const Dashboard: React.FC = () => {
       <div className="page-header" style={{ marginBottom: 28 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <div>
-            <Title level={4} style={{ margin: 0 }}>
+            <Title level={4} style={{ margin: 0, color: '#1e293b' }}>
               Welcome back, {user?.fullName?.split(' ')[0] || 'Operator'}
             </Title>
-            <Text type="secondary">Here is your business at a glance</Text>
+            <Text type="secondary" style={{ color: '#64748b' }}>Here is your business at a glance</Text>
           </div>
           <Space>
             <Button icon={<CalendarOutlined />}>
@@ -184,13 +185,13 @@ export const Dashboard: React.FC = () => {
       <Row gutter={[20, 20]} style={{ marginBottom: 24 }} className="stagger-children">
         <Col xs={24} sm={12} lg={6}>
           <div className="card-stat animate-fade-in-up" style={{ position: 'relative' }}>
-            <Card bordered={false} style={{ borderRadius: 12 }}>
+            <Card bordered={false} className="glass-card" style={{ borderRadius: 12 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                 <div>
                   <Text style={{ color: '#64748b', fontSize: 13, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.3px' }}>
                     Total Revenue
                   </Text>
-                  <Title level={3} style={{ margin: '4px 0 0 0', color: '#166534' }}>
+                  <Title level={3} style={{ margin: '4px 0 0 0', color: '#4ade80', textShadow: '0 0 10px rgba(74, 222, 128, 0.3)' }}>
                     ${stats.totalRevenue?.toLocaleString() || '0'}
                   </Title>
                 </div>
@@ -198,19 +199,19 @@ export const Dashboard: React.FC = () => {
                   width: 44,
                   height: 44,
                   borderRadius: 12,
-                  background: '#f0fdf4',
+                  background: 'rgba(74, 222, 128, 0.1)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}>
-                  <DollarOutlined style={{ fontSize: 20, color: '#166534' }} />
+                  <DollarOutlined style={{ fontSize: 20, color: '#4ade80' }} />
                 </div>
               </div>
               <div style={{ marginTop: 12, display: 'flex', alignItems: 'center', gap: 6 }}>
                 <Tag color="green" style={{ margin: 0, borderRadius: 10 }}>
                   <ArrowUpOutlined /> 12.5%
                 </Tag>
-                <Text style={{ fontSize: 12, color: '#94a3b8' }}>vs last month</Text>
+                <Text style={{ fontSize: 12, color: '#64748b' }}>vs last month</Text>
               </div>
             </Card>
           </div>
@@ -218,13 +219,13 @@ export const Dashboard: React.FC = () => {
 
         <Col xs={24} sm={12} lg={6}>
           <div className="card-stat animate-fade-in-up" style={{ position: 'relative' }}>
-            <Card bordered={false} style={{ borderRadius: 12 }}>
+            <Card bordered={false} className="glass-card" style={{ borderRadius: 12 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                 <div>
                   <Text style={{ color: '#64748b', fontSize: 13, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.3px' }}>
                     Total Bookings
                   </Text>
-                  <Title level={3} style={{ margin: '4px 0 0 0', color: '#0369a1' }}>
+                  <Title level={3} style={{ margin: '4px 0 0 0', color: '#d97706', textShadow: '0 0 10px rgba(217, 119, 6, 0.3)' }}>
                     {stats.totalBookings || 0}
                   </Title>
                 </div>
@@ -232,19 +233,19 @@ export const Dashboard: React.FC = () => {
                   width: 44,
                   height: 44,
                   borderRadius: 12,
-                  background: '#f0f9ff',
+                  background: 'rgba(251, 191, 36, 0.1)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}>
-                  <ShoppingCartOutlined style={{ fontSize: 20, color: '#0369a1' }} />
+                  <ShoppingCartOutlined style={{ fontSize: 20, color: '#d97706' }} />
                 </div>
               </div>
               <div style={{ marginTop: 12, display: 'flex', alignItems: 'center', gap: 6 }}>
-                <Tag color="blue" style={{ margin: 0, borderRadius: 10 }}>
+                <Tag color="gold" style={{ margin: 0, borderRadius: 10 }}>
                   <ArrowUpOutlined /> 8.3%
                 </Tag>
-                <Text style={{ fontSize: 12, color: '#94a3b8' }}>vs last month</Text>
+                <Text style={{ fontSize: 12, color: '#64748b' }}>vs last month</Text>
               </div>
             </Card>
           </div>
@@ -252,13 +253,13 @@ export const Dashboard: React.FC = () => {
 
         <Col xs={24} sm={12} lg={6}>
           <div className="card-stat animate-fade-in-up" style={{ position: 'relative' }}>
-            <Card bordered={false} style={{ borderRadius: 12 }}>
+            <Card bordered={false} className="glass-card" style={{ borderRadius: 12 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                 <div>
                   <Text style={{ color: '#64748b', fontSize: 13, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.3px' }}>
                     Compliance Rate
                   </Text>
-                  <Title level={3} style={{ margin: '4px 0 0 0', color: '#059669' }}>
+                  <Title level={3} style={{ margin: '4px 0 0 0', color: '#4ade80', textShadow: '0 0 10px rgba(74, 222, 128, 0.3)' }}>
                     {stats.complianceScore || 0}%
                   </Title>
                 </div>
@@ -266,12 +267,12 @@ export const Dashboard: React.FC = () => {
                   width: 44,
                   height: 44,
                   borderRadius: 12,
-                  background: '#ecfdf5',
+                  background: 'rgba(16, 185, 129, 0.1)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}>
-                  <SafetyOutlined style={{ fontSize: 20, color: '#059669' }} />
+                  <SafetyOutlined style={{ fontSize: 20, color: '#34d399' }} />
                 </div>
               </div>
               <div style={{ marginTop: 12 }}>
@@ -288,13 +289,13 @@ export const Dashboard: React.FC = () => {
 
         <Col xs={24} sm={12} lg={6}>
           <div className="card-stat animate-fade-in-up" style={{ position: 'relative' }}>
-            <Card bordered={false} style={{ borderRadius: 12 }}>
+            <Card bordered={false} className="glass-card" style={{ borderRadius: 12 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                 <div>
                   <Text style={{ color: '#64748b', fontSize: 13, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.3px' }}>
                     Active Listings
                   </Text>
-                  <Title level={3} style={{ margin: '4px 0 0 0', color: '#7c3aed' }}>
+                  <Title level={3} style={{ margin: '4px 0 0 0', color: '#f59e0b', textShadow: '0 0 10px rgba(245, 158, 11, 0.3)' }}>
                     24
                   </Title>
                 </div>
@@ -302,19 +303,19 @@ export const Dashboard: React.FC = () => {
                   width: 44,
                   height: 44,
                   borderRadius: 12,
-                  background: '#f5f3ff',
+                  background: 'rgba(245, 158, 11, 0.1)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}>
-                  <RiseOutlined style={{ fontSize: 20, color: '#7c3aed' }} />
+                  <RiseOutlined style={{ fontSize: 20, color: '#f59e0b' }} />
                 </div>
               </div>
               <div style={{ marginTop: 12, display: 'flex', alignItems: 'center', gap: 6 }}>
-                <Tag color="purple" style={{ margin: 0, borderRadius: 10 }}>
+                <Tag color="orange" style={{ margin: 0, borderRadius: 10 }}>
                   <ArrowUpOutlined /> 3 new
                 </Tag>
-                <Text style={{ fontSize: 12, color: '#94a3b8' }}>this month</Text>
+                <Text style={{ fontSize: 12, color: '#64748b' }}>this month</Text>
               </div>
             </Card>
           </div>
@@ -328,17 +329,18 @@ export const Dashboard: React.FC = () => {
           <Card
             title={
               <Space>
-                <Text style={{ fontWeight: 700, fontSize: 16 }}>Revenue Trend</Text>
-                <Tag color="green">+12.5% YoY</Tag>
+                <Text style={{ fontWeight: 700, fontSize: 16, color: '#1e293b' }}>Revenue Trend</Text>
+                <Tag color="green" style={{ background: 'rgba(74, 222, 128, 0.1)', borderColor: 'rgba(74, 222, 128, 0.3)' }}>+12.5% YoY</Tag>
               </Space>
             }
             bordered={false}
+            className="glass-card"
             style={{ borderRadius: 12 }}
             extra={
               <Space>
-                <Button size="small" type="text">Week</Button>
-                <Button size="small" type="primary" ghost>Month</Button>
-                <Button size="small" type="text">Year</Button>
+                <Button size="small" type="text" style={{ color: '#64748b' }}>Week</Button>
+                <Button size="small" type="primary" style={{ background: 'linear-gradient(135deg, #16a34a, #15803d)', border: 'none', boxShadow: '0 4px 14px rgba(22, 163, 74, 0.4)' }}>Month</Button>
+                <Button size="small" type="text" style={{ color: '#64748b' }}>Year</Button>
               </Space>
             }
           >
@@ -367,10 +369,11 @@ export const Dashboard: React.FC = () => {
                 <Area
                   type="monotone"
                   dataKey="revenue"
-                  stroke="#166534"
-                  strokeWidth={2.5}
+                  stroke="#4ade80"
+                  strokeWidth={3}
                   fillOpacity={1}
                   fill="url(#colorRevenue)"
+                  className="recharts-area-area"
                 />
               </AreaChart>
             </ResponsiveContainer>
@@ -384,8 +387,9 @@ export const Dashboard: React.FC = () => {
             <Col span={24}>
               <Card
                 bordered={false}
+                className="glass-card"
                 style={{ borderRadius: 12 }}
-                title={<Text style={{ fontWeight: 700, fontSize: 16 }}>Compliance Status</Text>}
+                title={<Text style={{ fontWeight: 700, fontSize: 16, color: '#1e293b' }}>Compliance Status</Text>}
               >
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 24 }}>
                   <div style={{ position: 'relative', width: 120, height: 120 }}>
@@ -417,7 +421,7 @@ export const Dashboard: React.FC = () => {
                       <Text style={{ fontSize: 24, fontWeight: 800, color: '#059669', display: 'block', lineHeight: 1 }}>
                         87%
                       </Text>
-                      <Text style={{ fontSize: 10, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                      <Text style={{ fontSize: 10, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                         Compliant
                       </Text>
                     </div>
@@ -426,8 +430,8 @@ export const Dashboard: React.FC = () => {
                     {compliancePieData.map((item) => (
                       <Space key={item.name} size={10}>
                         <div style={{ width: 10, height: 10, borderRadius: 3, background: item.color }} />
-                        <Text style={{ fontSize: 13, color: '#475569' }}>{item.name}</Text>
-                        <Text style={{ fontSize: 13, fontWeight: 700 }}>{item.value}%</Text>
+                        <Text style={{ fontSize: 13, color: '#64748b' }}>{item.name}</Text>
+                        <Text style={{ fontSize: 13, fontWeight: 700, color: '#1e293b' }}>{item.value}%</Text>
                       </Space>
                     ))}
                   </div>
@@ -439,8 +443,9 @@ export const Dashboard: React.FC = () => {
             <Col span={24}>
               <Card
                 bordered={false}
+                className="glass-card"
                 style={{ borderRadius: 12 }}
-                title={<Text style={{ fontWeight: 700, fontSize: 16 }}>Quick Actions</Text>}
+                title={<Text style={{ fontWeight: 700, fontSize: 16, color: '#1e293b' }}>Quick Actions</Text>}
                 bodyStyle={{ padding: '12px 16px' }}
               >
                 <Row gutter={[10, 10]}>
@@ -485,11 +490,12 @@ export const Dashboard: React.FC = () => {
         <Col xs={24} lg={16}>
           <Card
             bordered={false}
+            className="glass-card"
             style={{ borderRadius: 12 }}
             title={
               <Space>
-                <Text style={{ fontWeight: 700, fontSize: 16 }}>Recent Bookings</Text>
-                <Badge count={bookings.length} style={{ backgroundColor: '#166534' }} />
+                <Text style={{ fontWeight: 700, fontSize: 16, color: '#1e293b' }}>Recent Bookings</Text>
+                <Badge count={bookings.length} style={{ backgroundColor: '#16a34a', boxShadow: '0 0 10px rgba(22, 163, 74, 0.4)' }} />
               </Space>
             }
             extra={
@@ -512,11 +518,12 @@ export const Dashboard: React.FC = () => {
         <Col xs={24} lg={8}>
           <Card
             bordered={false}
+            className="glass-card"
             style={{ borderRadius: 12 }}
             title={
               <Space>
-                <BellOutlined style={{ color: '#f59e0b' }} />
-                <Text style={{ fontWeight: 700, fontSize: 16 }}>Alerts & Notifications</Text>
+                <BellOutlined style={{ color: '#d97706', textShadow: '0 0 10px rgba(217, 119, 6, 0.5)' }} />
+                <Text style={{ fontWeight: 700, fontSize: 16, color: '#1e293b' }}>Alerts & Notifications</Text>
               </Space>
             }
             extra={
@@ -532,21 +539,21 @@ export const Dashboard: React.FC = () => {
                   style={{
                     padding: '12px 14px',
                     borderRadius: 10,
-                    background: alert.type === 'warning' ? '#fffbeb' : alert.type === 'error' ? '#fef2f2' : '#f0fdf4',
-                    border: `1px solid ${alert.type === 'warning' ? '#fde68a' : alert.type === 'error' ? '#fecaca' : '#bbf7d0'}`,
+                    background: alert.type === 'warning' ? 'rgba(245, 158, 11, 0.1)' : alert.type === 'error' ? 'rgba(239, 68, 68, 0.1)' : 'rgba(16, 185, 129, 0.1)',
+                    border: `1px solid ${alert.type === 'warning' ? 'rgba(245, 158, 11, 0.2)' : alert.type === 'error' ? 'rgba(239, 68, 68, 0.2)' : 'rgba(16, 185, 129, 0.2)'}`,
                   }}
                 >
                   <Space align="start" size={10}>
-                    {alert.type === 'warning' && <ExclamationCircleOutlined style={{ color: '#f59e0b', marginTop: 2 }} />}
-                    {alert.type === 'error' && <WarningOutlined style={{ color: '#dc2626', marginTop: 2 }} />}
-                    {alert.type === 'success' && <CheckCircleOutlined style={{ color: '#059669', marginTop: 2 }} />}
+                    {alert.type === 'warning' && <ExclamationCircleOutlined style={{ color: '#fcd34d', marginTop: 2 }} />}
+                    {alert.type === 'error' && <WarningOutlined style={{ color: '#fca5a5', marginTop: 2 }} />}
+                    {alert.type === 'success' && <CheckCircleOutlined style={{ color: '#6ee7b7', marginTop: 2 }} />}
                     <div>
                       <Text style={{ fontSize: 13, color: '#1e293b', display: 'block', lineHeight: 1.5 }}>
                         {alert.message}
                       </Text>
                       <Space size={4} style={{ marginTop: 4 }}>
-                        <ClockCircleOutlined style={{ fontSize: 11, color: '#94a3b8' }} />
-                        <Text style={{ fontSize: 11, color: '#94a3b8' }}>{alert.time}</Text>
+                        <ClockCircleOutlined style={{ fontSize: 11, color: '#64748b' }} />
+                        <Text style={{ fontSize: 11, color: '#64748b' }}>{alert.time}</Text>
                       </Space>
                     </div>
                   </Space>
@@ -559,16 +566,16 @@ export const Dashboard: React.FC = () => {
               marginTop: 20,
               padding: '14px 16px',
               borderRadius: 10,
-              background: 'linear-gradient(135deg, #f0fdf4, #ecfdf5)',
-              border: '1px solid #d1fae5',
+              background: 'linear-gradient(135deg, rgba(22, 163, 74, 0.1), rgba(5, 150, 105, 0.1))',
+              border: '1px solid rgba(74, 222, 128, 0.2)',
             }}>
               <Space align="start" size={10}>
-                <SafetyOutlined style={{ color: '#166534', fontSize: 16, marginTop: 2 }} />
+                <SafetyOutlined style={{ color: '#4ade80', fontSize: 16, marginTop: 2 }} />
                 <div>
-                  <Text style={{ fontSize: 13, fontWeight: 600, color: '#166534', display: 'block' }}>
+                  <Text style={{ fontSize: 13, fontWeight: 600, color: '#4ade80', display: 'block' }}>
                     Compliance Tip
                   </Text>
-                  <Text style={{ fontSize: 12, color: '#374151', lineHeight: 1.6 }}>
+                  <Text style={{ fontSize: 12, color: '#64748b', lineHeight: 1.6 }}>
                     Ensure all bookings are routed through BSP within 48 hours to maintain your compliance score.
                   </Text>
                 </div>

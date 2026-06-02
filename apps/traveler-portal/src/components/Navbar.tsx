@@ -17,85 +17,28 @@ import {
   DownOutlined,
   RobotOutlined,
   FundOutlined,
+  SafetyCertificateOutlined,
 } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { useAuthStore } from '../store/authStore';
+import { showHowItWorksModal } from '../utils/modals';
 
-// ---- Inline SVG: Zimbabwe Bird (simplified) ----
-const ZimbabweBird: React.FC<{ size?: number; color?: string }> = ({
-  size = 36,
-  color = '#f59e0b',
-}) => (
-  <svg
-    width={size}
-    height={size}
-    viewBox="0 0 64 64"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    {/* Bird body */}
-    <path
-      d="M32 8C24 8 18 14 16 20C14 26 15 32 18 36C14 38 10 42 8 48C10 47 13 46 16 46C18 50 22 54 28 56C30 56 32 56 34 56C40 54 44 50 46 46C49 46 52 47 54 48C52 42 48 38 44 36C47 32 48 26 46 20C44 14 38 8 32 8Z"
-      fill={color}
-      stroke="#92400e"
-      strokeWidth="1.5"
-    />
-    {/* Head crest */}
-    <path
-      d="M28 12C28 8 30 4 32 2C34 4 36 8 36 12"
-      stroke={color}
-      strokeWidth="2.5"
-      strokeLinecap="round"
-      fill="none"
-    />
-    {/* Eye */}
-    <circle cx="28" cy="22" r="2.5" fill="#92400e" />
-    <circle cx="28" cy="22" r="1" fill="#ffffff" />
-    {/* Beak */}
-    <path
-      d="M22 24L16 22L22 26Z"
-      fill="#b45309"
-      stroke="#92400e"
-      strokeWidth="0.5"
-    />
-    {/* Wing detail */}
-    <path
-      d="M24 32C28 30 36 30 40 32"
-      stroke="#92400e"
-      strokeWidth="1"
-      strokeLinecap="round"
-      fill="none"
-      opacity="0.5"
-    />
-    <path
-      d="M22 36C27 34 37 34 42 36"
-      stroke="#92400e"
-      strokeWidth="1"
-      strokeLinecap="round"
-      fill="none"
-      opacity="0.4"
-    />
-    {/* Tail feathers */}
-    <path
-      d="M28 52L24 60L28 58L32 62L36 58L40 60L36 52"
-      fill={color}
-      stroke="#92400e"
-      strokeWidth="1"
-    />
-    {/* Legs */}
-    <path
-      d="M28 48L26 54M26 54L22 56M26 54L30 56"
-      stroke="#92400e"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-    />
-    <path
-      d="M36 48L38 54M38 54L34 56M38 54L42 56"
-      stroke="#92400e"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-    />
-  </svg>
+// ---- Official Logo Component ----
+const ZimbabweBird: React.FC<{ size?: number }> = ({ size = 36 }) => (
+  <div style={{
+    width: size,
+    height: size,
+    borderRadius: '50%',
+    overflow: 'hidden',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    background: '#052e16',
+    border: '2px solid #f59e0b',
+    boxShadow: '0 2px 8px rgba(245, 158, 11, 0.3)',
+  }}>
+    <img src="/zim-bird-logo.png" alt="Zimbabwe Bird" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+  </div>
 );
 
 const Navbar: React.FC = () => {
@@ -191,33 +134,54 @@ const Navbar: React.FC = () => {
           left: 0,
           right: 0,
           zIndex: 1001,
-          background: 'linear-gradient(90deg, #052e16 0%, #14532d 50%, #052e16 100%)',
-          padding: '4px 24px',
+          background: '#052e16',
+          padding: '8px 24px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          gap: 12,
-          borderBottom: '1px solid rgba(245,158,11,0.4)',
+          gap: 24,
+          borderBottom: '3px solid #d97706',
+          boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
         }}
       >
-        <span style={{ color: 'rgba(255,255,255,0.8)', fontSize: 10, fontWeight: 600, letterSpacing: 1.5, textTransform: 'uppercase' }}>
-          Zimbabwe Tourism Authority
-        </span>
-        <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: 10 }}>|</span>
-        <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: 10 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <div
+            style={{
+              width: 24,
+              height: 24,
+              borderRadius: '50%',
+              background: '#d97706',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: '0 0 8px rgba(217, 119, 6, 0.4)',
+            }}
+          >
+            <svg width="14" height="14" viewBox="0 0 64 64" fill="none">
+              <path d="M32 8C24 8 18 14 16 20C14 26 15 32 18 36C14 38 10 42 8 48C10 47 13 46 16 46C18 50 22 54 28 56C30 56 32 56 34 56C40 54 44 50 46 46C49 46 52 47 54 48C52 42 48 38 44 36C47 32 48 26 46 20C44 14 38 8 32 8Z" fill="#052e16"/>
+            </svg>
+          </div>
+          <span style={{ color: '#ffffff', fontSize: 12, fontWeight: 700, letterSpacing: 2, textTransform: 'uppercase' }}>
+            Zimbabwe Tourism Authority
+          </span>
+        </div>
+        <div style={{ width: 1, height: 16, background: 'rgba(255,255,255,0.2)' }} />
+        <span style={{ color: '#e5e5e5', fontSize: 11, letterSpacing: 0.5, fontWeight: 500 }}>
           Ministry of Tourism & Hospitality Industry
         </span>
-        <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: 10 }}>|</span>
-        <span style={{ color: '#22c55e', fontSize: 10, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4 }}>
-          <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#22c55e', display: 'inline-block' }} />
-          VERIFIED
-        </span>
+        <div style={{ width: 1, height: 16, background: 'rgba(255,255,255,0.2)' }} />
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <SafetyCertificateOutlined style={{ color: '#d97706', fontSize: 14 }} />
+          <span style={{ color: '#d97706', fontSize: 11, fontWeight: 700, letterSpacing: 1 }}>OFFICIAL PLATFORM</span>
+        </div>
       </div>
 
       <nav
+        role="navigation"
+        aria-label="Main navigation"
         style={{
           position: 'fixed',
-          top: 28,
+          top: 40, /* adjusted for taller branding bar */
           left: 0,
           right: 0,
           zIndex: 1000,
@@ -276,6 +240,7 @@ const Navbar: React.FC = () => {
           >
             <Link
               to="/explore"
+              aria-current={location.pathname === '/explore' ? 'page' : undefined}
               style={{
                 color: '#ffffff',
                 fontSize: 15,
@@ -292,8 +257,15 @@ const Navbar: React.FC = () => {
               <CompassOutlined style={{ marginRight: 6 }} />
               Explore
             </Link>
-            <a
-              href="#destinations"
+            <Link
+              to="/#destinations"
+              onClick={(e) => {
+                // If on landing page, let browser handle the hash
+                if (location.pathname !== '/') {
+                  e.preventDefault();
+                  navigate('/#destinations');
+                }
+              }}
               style={{
                 color: '#ffffff',
                 fontSize: 15,
@@ -302,14 +274,18 @@ const Navbar: React.FC = () => {
               }}
             >
               Destinations
-            </a>
+            </Link>
             <a
-              href="#how-it-works"
+              onClick={(e) => {
+                e.preventDefault();
+                showHowItWorksModal();
+              }}
               style={{
                 color: '#ffffff',
                 fontSize: 15,
                 fontWeight: 500,
                 opacity: 0.85,
+                cursor: 'pointer'
               }}
             >
               How It Works

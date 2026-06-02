@@ -4,13 +4,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, Row, Col, Tag, Typography, Space, Tabs, Empty, Button, Badge, Spin, Skeleton, message } from 'antd';
+import { Card, Row, Col, Tag, Typography, Space, Tabs, Empty, Button, Badge, Skeleton, message, Alert } from 'antd';
 import {
   CalendarOutlined,
   EnvironmentOutlined,
-  DollarOutlined,
   EyeOutlined,
-  ClockCircleOutlined,
   CheckCircleFilled,
   CloseCircleFilled,
   SyncOutlined,
@@ -20,159 +18,6 @@ import type { Booking, BookingStatus } from '../types';
 import { bookingsApi } from '../services/api';
 
 const { Title, Text } = Typography;
-
-// ---- Mock Bookings Data ----
-const MOCK_BOOKINGS: Booking[] = [
-  {
-    id: 'bk_001',
-    reference: 'ZV-2026-001',
-    userId: 'usr_001',
-    status: 'confirmed',
-    items: [
-      {
-        id: 'bi_001',
-        type: 'tour',
-        itemId: '1',
-        itemName: 'Victoria Falls Grand Adventure',
-        date: '2026-06-15',
-        quantity: 2,
-        unitPrice: 120,
-        totalPrice: 240,
-        status: 'confirmed',
-      },
-      {
-        id: 'bi_002',
-        type: 'hotel',
-        itemId: 'h1',
-        itemName: 'Victoria Falls Hotel',
-        date: '2026-06-14',
-        endDate: '2026-06-16',
-        quantity: 2,
-        unitPrice: 180,
-        totalPrice: 360,
-        status: 'confirmed',
-      },
-    ],
-    totalAmount: 600,
-    currency: 'USD',
-    paymentStatus: 'paid',
-    startDate: '2026-06-14',
-    endDate: '2026-06-16',
-    travelers: 2,
-    zimpassQR: 'ZV-QR-001-ABCDEF',
-    createdAt: '2026-05-10T14:30:00Z',
-    updatedAt: '2026-05-10T15:00:00Z',
-  },
-  {
-    id: 'bk_002',
-    reference: 'ZV-2026-002',
-    userId: 'usr_001',
-    status: 'confirmed',
-    items: [
-      {
-        id: 'bi_003',
-        type: 'tour',
-        itemId: '2',
-        itemName: 'Hwange Big Five Safari',
-        date: '2026-07-01',
-        quantity: 2,
-        unitPrice: 280,
-        totalPrice: 560,
-        status: 'confirmed',
-      },
-    ],
-    totalAmount: 560,
-    currency: 'USD',
-    paymentStatus: 'paid',
-    startDate: '2026-07-01',
-    endDate: '2026-07-03',
-    travelers: 2,
-    zimpassQR: 'ZV-QR-002-GHIJKL',
-    createdAt: '2026-05-12T09:15:00Z',
-    updatedAt: '2026-05-12T10:00:00Z',
-  },
-  {
-    id: 'bk_003',
-    reference: 'ZV-2026-003',
-    userId: 'usr_001',
-    status: 'pending',
-    items: [
-      {
-        id: 'bi_004',
-        type: 'tour',
-        itemId: '3',
-        itemName: 'Mana Pools Walking Safari',
-        date: '2026-08-10',
-        quantity: 1,
-        unitPrice: 350,
-        totalPrice: 350,
-        status: 'pending',
-      },
-    ],
-    totalAmount: 350,
-    currency: 'USD',
-    paymentStatus: 'pending',
-    startDate: '2026-08-10',
-    endDate: '2026-08-13',
-    travelers: 1,
-    createdAt: '2026-05-15T11:45:00Z',
-    updatedAt: '2026-05-15T11:45:00Z',
-  },
-  {
-    id: 'bk_004',
-    reference: 'ZV-2025-098',
-    userId: 'usr_001',
-    status: 'completed',
-    items: [
-      {
-        id: 'bi_005',
-        type: 'tour',
-        itemId: '7',
-        itemName: 'Matobo Hills Rhino Tracking',
-        date: '2025-12-20',
-        quantity: 2,
-        unitPrice: 90,
-        totalPrice: 180,
-        status: 'confirmed',
-      },
-    ],
-    totalAmount: 180,
-    currency: 'USD',
-    paymentStatus: 'paid',
-    startDate: '2025-12-20',
-    endDate: '2025-12-20',
-    travelers: 2,
-    createdAt: '2025-11-15T08:00:00Z',
-    updatedAt: '2025-12-20T18:00:00Z',
-  },
-  {
-    id: 'bk_005',
-    reference: 'ZV-2025-075',
-    userId: 'usr_001',
-    status: 'cancelled',
-    items: [
-      {
-        id: 'bi_006',
-        type: 'tour',
-        itemId: '6',
-        itemName: 'Nyanga Mountain Hiking Trail',
-        date: '2025-10-05',
-        quantity: 3,
-        unitPrice: 65,
-        totalPrice: 195,
-        status: 'cancelled',
-      },
-    ],
-    totalAmount: 195,
-    currency: 'USD',
-    paymentStatus: 'refunded',
-    startDate: '2025-10-05',
-    endDate: '2025-10-05',
-    travelers: 3,
-    createdAt: '2025-09-20T16:30:00Z',
-    updatedAt: '2025-10-01T12:00:00Z',
-  },
-];
 
 // ---- Status Config ----
 const STATUS_CONFIG: Record<BookingStatus, { color: string; label: string; icon: React.ReactNode }> = {
@@ -197,16 +42,20 @@ const MyBookings: React.FC = () => {
   const [activeTab, setActiveTab] = useState('all');
   const [allBookings, setAllBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchBookings = async () => {
       setLoading(true);
+      setError(null);
       try {
         const res = await bookingsApi.getAll();
         const data = Array.isArray(res) ? res : (res as any).data || [];
         setAllBookings(data);
-      } catch (err) {
-        message.error('Failed to load bookings.');
+      } catch (err: any) {
+        setError(err.message || 'Failed to load bookings');
+        message.error('Failed to load bookings. Please try again.');
+        setAllBookings([]);
       } finally {
         setLoading(false);
       }
@@ -278,6 +127,24 @@ const MyBookings: React.FC = () => {
               </Col>
             ))}
           </Row>
+        ) : error ? (
+          <Card style={{ borderRadius: 18, textAlign: 'center', padding: '60px 24px' }}>
+            <Empty
+              description={
+                <Text style={{ color: '#737373', fontSize: 16 }}>
+                  {error}
+                </Text>
+              }
+            >
+              <Button
+                type="primary"
+                onClick={() => window.location.reload()}
+                style={{ background: '#166534', borderColor: '#166534' }}
+              >
+                Retry
+              </Button>
+            </Empty>
+          </Card>
         ) : bookings.length === 0 ? (
           <Card style={{ borderRadius: 18, textAlign: 'center', padding: '60px 24px' }}>
             <Empty

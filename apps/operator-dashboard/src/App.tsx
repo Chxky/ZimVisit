@@ -1,5 +1,6 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
+import { ConfigProvider, theme } from 'antd';
 import { AppLayout } from './components/Layout';
 import { Dashboard } from './pages/Dashboard';
 import { Bookings } from './pages/Bookings';
@@ -21,27 +22,45 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) =
 
 export default function App() {
   return (
-    <Routes>
-      <Route path="/login" element={<Login />} />
-      <Route
-        path="/"
-        element={
-          <ProtectedRoute>
-            <AppLayout />
-          </ProtectedRoute>
-        }
-      >
-        <Route index element={<Dashboard />} />
-        <Route path="bookings" element={<Bookings />} />
-        <Route path="bookings/:id" element={<BookingDetail />} />
-        <Route path="inventory" element={<Inventory />} />
-        <Route path="inventory/new" element={<InventoryEditor />} />
-        <Route path="inventory/:id/edit" element={<InventoryEditor />} />
-        <Route path="compliance" element={<Compliance />} />
-        <Route path="fingerprinting" element={<AgentFingerprinting />} />
-        <Route path="staff" element={<Staff />} />
-        <Route path="settings" element={<Settings />} />
-      </Route>
-    </Routes>
+    <ConfigProvider
+      theme={{
+        algorithm: theme.defaultAlgorithm,
+        token: {
+          fontFamily: "'Inter', sans-serif",
+          colorPrimary: '#166534', // Forest Green
+          colorBgBase: '#ffffff',
+          colorTextBase: '#1e293b',
+        },
+        components: {
+          Layout: {
+            bodyBg: '#f8fafc',
+            headerBg: '#ffffff',
+          },
+        },
+      }}
+    >
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <AppLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<Dashboard />} />
+          <Route path="bookings" element={<Bookings />} />
+          <Route path="bookings/:id" element={<BookingDetail />} />
+          <Route path="inventory" element={<Inventory />} />
+          <Route path="inventory/new" element={<InventoryEditor />} />
+          <Route path="inventory/:id/edit" element={<InventoryEditor />} />
+          <Route path="compliance" element={<Compliance />} />
+          <Route path="fingerprinting" element={<AgentFingerprinting />} />
+          <Route path="staff" element={<Staff />} />
+          <Route path="settings" element={<Settings />} />
+        </Route>
+      </Routes>
+    </ConfigProvider>
   );
 }

@@ -13,6 +13,23 @@ import {
 
 const { Title, Text } = Typography;
 
+/* ── CSV Export Utility ───────────────────────────────────── */
+const downloadCSV = (data: Record<string, unknown>[], filename: string) => {
+  const headers = ['ID', 'Name', 'Region', 'Status', 'Compliance Rate', 'Risk Score', 'Revenue', 'Bookings', 'Agents', 'BSP Connected', 'Last Active'];
+  const rows = data.map((o) => [
+    o.id, o.name, o.region, o.status, o.complianceRate, o.riskScore,
+    o.totalRevenue, o.totalBookings, o.agents, o.bspConnected ? 'Yes' : 'No', o.lastActive,
+  ]);
+  const csv = [headers, ...rows].map((r) => r.map((v) => `"${v}"`).join(',')).join('\n');
+  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+};
+
 /* ── Data ─────────────────────────────────────────────────── */
 const allOperators = Array.from({ length: 48 }, (_, i) => {
   const names = [
@@ -221,6 +238,22 @@ export const Operators: React.FC = () => {
 
   return (
     <div>
+      <div style={{ textAlign: 'center', marginBottom: 32, paddingBottom: 24, borderBottom: '2px solid #1e1b4b', position: 'relative' }}>
+        <div style={{ position: 'absolute', top: -10, left: -20, opacity: 0.1 }}>
+          <img src="/zim-bird.svg" alt="" style={{ height: 120 }} />
+        </div>
+        <Title level={4} style={{ margin: 0, fontFamily: 'Cinzel, serif', fontWeight: 700, letterSpacing: '2px', color: '#64748b' }}>
+          REPUBLIC OF ZIMBABWE - MINISTRY OF TOURISM
+        </Title>
+        <Title level={2} style={{ margin: '8px 0 0 0', fontFamily: 'Cinzel, serif', fontWeight: 800, color: '#1e1b4b' }}>
+          OPERATOR REGISTRY
+        </Title>
+        <div style={{ marginTop: 12, display: 'flex', justifyContent: 'center', gap: 16 }}>
+          <Tag color="red" style={{ margin: 0, fontWeight: 700, border: '1px solid #dc2626' }}>CONFIDENTIAL</Tag>
+          <Tag color="blue" style={{ margin: 0, fontWeight: 700 }}>SECURE CONNECTION</Tag>
+        </div>
+      </div>
+
       {/* Page Header */}
       <div className="section-header">
         <div>
@@ -235,7 +268,14 @@ export const Operators: React.FC = () => {
           </Text>
         </div>
         <Space>
-          <Button icon={<DownloadOutlined />} style={{ borderColor: '#e2e8f0' }}>
+          <Button
+            icon={<DownloadOutlined />}
+            style={{ borderColor: '#e2e8f0' }}
+            onClick={() => {
+              const date = new Date().toISOString().split('T')[0];
+              downloadCSV(filtered, `operators-registry-${date}.csv`);
+            }}
+          >
             Export CSV
           </Button>
         </Space>
@@ -263,7 +303,7 @@ export const Operators: React.FC = () => {
             title: 'Amber',
             value: amberCount,
             icon: <WarningOutlined />,
-            iconBg: 'linear-gradient(135deg, #f59e0b, #fbbf24)',
+            iconBg: 'linear-gradient(135deg, #d97706, #b45309)',
             color: '#f59e0b',
             filter: 'amber',
           },

@@ -140,6 +140,12 @@ export const Login: React.FC = () => {
 
   return (
     <div className="login-bg">
+      <img src="/gov-login-bg.png" alt=""
+        style={{
+          position: 'absolute', inset: 0, width: '100%', height: '100%',
+          objectFit: 'cover', pointerEvents: 'none',
+        }}
+      />
       <ParticleCanvas />
 
       {/* Decorative circles */}
@@ -150,7 +156,7 @@ export const Login: React.FC = () => {
         width: 300,
         height: 300,
         borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(245,158,11,0.06) 0%, transparent 70%)',
+        background: 'radial-gradient(circle, rgba(217,119,6,0.08) 0%, transparent 70%)',
         animation: 'float 8s ease-in-out infinite',
         pointerEvents: 'none',
       }} />
@@ -186,14 +192,15 @@ export const Login: React.FC = () => {
             height: 80,
             margin: '0 auto 16px',
             borderRadius: '50%',
-            background: 'linear-gradient(135deg, rgba(245,158,11,0.15), rgba(30,27,75,0.15))',
-            border: '2px solid rgba(245,158,11,0.3)',
+            background: 'linear-gradient(135deg, rgba(245,158,11,0.25), rgba(30,27,75,0.25))',
+            border: '2px solid rgba(245,158,11,0.5)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             backdropFilter: 'blur(10px)',
+            boxShadow: '0 0 20px rgba(245,158,11,0.3)',
           }}>
-            <img src="/logo.svg" alt="ZimVisit" style={{ width: 48, height: 48 }} />
+            <img src="/zim-bird-logo.png" alt="ZimVisit" style={{ width: 64, height: 64, objectFit: 'contain' }} />
           </div>
           <Title level={2} style={{
             color: '#f8fafc',
@@ -292,7 +299,7 @@ export const Login: React.FC = () => {
               marginBottom: 24,
             }}>
               <Checkbox>Remember me</Checkbox>
-              <a style={{ fontSize: 13, color: '#312e81', fontWeight: 500 }}>
+              <a onClick={(e) => { e.preventDefault(); message.info('Contact system administrator for password resets.'); }} style={{ fontSize: 13, color: '#312e81', fontWeight: 500, cursor: 'pointer' }}>
                 Forgot password?
               </a>
             </div>
@@ -356,10 +363,10 @@ export const Login: React.FC = () => {
                 borderRadius: 10,
                 fontSize: 14,
                 fontWeight: 600,
-                background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+                background: 'linear-gradient(135deg, #d97706 0%, #b45309 100%)',
                 border: 'none',
                 color: '#fff',
-                boxShadow: '0 4px 12px rgba(245, 158, 11, 0.3)',
+                boxShadow: '0 4px 12px rgba(217, 119, 6, 0.3)',
               }}
             >
               Quick Demo Access

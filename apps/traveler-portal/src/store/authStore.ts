@@ -5,7 +5,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { User } from '../types';
-import { authApi } from '../services/api';
+import { authApi, setMemoryToken } from '../services/api';
 
 interface AuthState {
   user: User | null;
@@ -50,8 +50,7 @@ export const useAuthStore = create<AuthState & AuthActions>()(
 
       setTokens: (token: string, refreshToken: string) => {
         set({ token, refreshToken });
-        localStorage.setItem('zimvisit_token', token);
-        localStorage.setItem('zimvisit_refresh_token', refreshToken);
+        setMemoryToken(token);
       },
 
       login: (user: User, token: string, refreshToken: string) => {
@@ -62,14 +61,12 @@ export const useAuthStore = create<AuthState & AuthActions>()(
           isAuthenticated: true,
           error: null,
         });
-        localStorage.setItem('zimvisit_token', token);
-        localStorage.setItem('zimvisit_refresh_token', refreshToken);
+        setMemoryToken(token);
       },
 
       logout: () => {
         set(initialState);
-        localStorage.removeItem('zimvisit_token');
-        localStorage.removeItem('zimvisit_refresh_token');
+        setMemoryToken(null);
       },
 
       setLoading: (loading: boolean) => {
@@ -95,7 +92,7 @@ export const useAuthStore = create<AuthState & AuthActions>()(
         set({ isLoading: true, error: null });
         try {
           const response = await authApi.login({ email, password });
-          const d = response.data || response;
+          const d: any = (response as any).data || response;
           const t = d.accessToken || d.token || '';
           get().login(d.user, t, d.refreshToken);
         } catch (err: any) {
@@ -111,7 +108,7 @@ export const useAuthStore = create<AuthState & AuthActions>()(
         set({ isLoading: true, error: null });
         try {
           const response = await authApi.register(data);
-          const d = response.data || response;
+          const d: any = (response as any).data || response;
           const t = d.accessToken || d.token || '';
           get().login(d.user, t, d.refreshToken);
         } catch (err: any) {
@@ -127,7 +124,7 @@ export const useAuthStore = create<AuthState & AuthActions>()(
         set({ isLoading: true, error: null });
         try {
           const response = await authApi.demoLogin(role);
-          const d = response.data || response;
+          const d: any = (response as any).data || response;
           const t = d.accessToken || d.token || '';
           get().login(d.user, t, d.refreshToken);
         } catch (err: any) {
@@ -147,6 +144,11 @@ export const useAuthStore = create<AuthState & AuthActions>()(
         refreshToken: state.refreshToken,
         isAuthenticated: state.isAuthenticated,
       }),
+      onRehydrateStorage: () => (state) => {
+        if (state?.token) {
+          setMemoryToken(state.token);
+        }
+      },
     }
   )
 );

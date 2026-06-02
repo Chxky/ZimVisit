@@ -20,7 +20,6 @@ import {
   Empty,
   Spin,
   Drawer,
-  Badge,
   Skeleton,
   message,
 } from 'antd';
@@ -31,253 +30,17 @@ import {
   StarFilled,
   DollarOutlined,
   FilterOutlined,
-  ArrowRightOutlined,
   FireOutlined,
-  ThunderboltOutlined,
   TeamOutlined,
   SafetyCertificateOutlined,
+  CheckCircleFilled,
+  QrcodeOutlined,
 } from '@ant-design/icons';
-import type { Tour, TourCategory, SearchFilters } from '../types';
+import type { Tour } from '../types';
 import { toursApi } from '../services/api';
-import { CATEGORY_IMAGES } from '../constants/images';
+import { CATEGORY_IMAGES, HERO_IMAGES, DESTINATION_IMAGES } from '../constants/images';
 
 const { Title, Text, Paragraph } = Typography;
-
-// ---- Mock Tour Data ----
-const MOCK_TOURS: Tour[] = [
-  {
-    id: '1',
-    name: 'Victoria Falls Grand Adventure',
-    slug: 'victoria-falls-grand-adventure',
-    description: 'Experience the mighty Victoria Falls from every angle — walk along the rainforest path, take a helicopter flip, and enjoy a sunset cruise on the Zambezi.',
-    shortDescription: 'Full-day Victoria Falls experience with helicopter and cruise',
-    location: 'Victoria Falls',
-    province: 'Matabeleland North',
-    category: 'victoria-falls',
-    images: [],
-    price: 120,
-    currency: 'USD',
-    duration: 'Full Day',
-    durationHours: 10,
-    maxGroupSize: 15,
-    difficulty: 'easy',
-    rating: 4.9,
-    reviewCount: 234,
-    inclusions: ['Park entry fees', 'Guide', 'Lunch', 'Helicopter flip', 'Sunset cruise'],
-    exclusions: ['Accommodation', 'Visa fees'],
-    meetingPoint: 'Victoria Falls Rainforest Entrance',
-    highlights: ['Helicopter flip over the Falls', 'Walking rainforest tour', 'Zambezi sunset cruise'],
-    operator: { id: 'op1', name: 'Falls Adventures Co.', rating: 4.8 },
-    isFeatured: true,
-    isActive: true,
-    availability: [],
-    createdAt: '',
-    updatedAt: '',
-  },
-  {
-    id: '2',
-    name: 'Hwange Big Five Safari',
-    slug: 'hwange-big-five-safari',
-    description: "Track Africa's Big Five in Zimbabwe's largest national park. Morning and afternoon game drives with expert guides in open 4x4 vehicles.",
-    shortDescription: 'Multi-day safari in Hwange National Park',
-    location: 'Hwange National Park',
-    province: 'Matabeleland North',
-    category: 'safari',
-    images: [],
-    price: 280,
-    currency: 'USD',
-    duration: '3 Days',
-    durationDays: 3,
-    maxGroupSize: 8,
-    difficulty: 'easy',
-    rating: 4.8,
-    reviewCount: 189,
-    inclusions: ['Game drives', 'Accommodation', 'Meals', 'Professional guide', 'Park fees'],
-    exclusions: ['Flights', 'Travel insurance', 'Tips'],
-    meetingPoint: 'Hwange Main Camp',
-    highlights: ['Big Five sightings', 'Night game drive', 'Bush dinner experience'],
-    operator: { id: 'op2', name: 'Safari Legends Zimbabwe', rating: 4.9 },
-    isFeatured: true,
-    isActive: true,
-    availability: [],
-    createdAt: '',
-    updatedAt: '',
-  },
-  {
-    id: '3',
-    name: 'Mana Pools Walking Safari',
-    slug: 'mana-pools-walking-safari',
-    description: 'Explore the UNESCO World Heritage Mana Pools on foot with armed guides. Get closer to nature than you ever thought possible.',
-    shortDescription: 'Guided walking safari through pristine wilderness',
-    location: 'Mana Pools',
-    province: 'Mashonaland West',
-    category: 'safari',
-    images: [],
-    price: 350,
-    currency: 'USD',
-    duration: '4 Days',
-    durationDays: 4,
-    maxGroupSize: 6,
-    difficulty: 'moderate',
-    rating: 4.9,
-    reviewCount: 98,
-    inclusions: ['Walking safari', 'Canoeing', 'Camping', 'All meals', 'Armed guide'],
-    exclusions: ['Sleeping bag', 'Personal items'],
-    meetingPoint: 'Mana Pools National Park Gate',
-    highlights: ['Walking with elephants', 'Zambezi canoeing', 'Wild camping under stars'],
-    operator: { id: 'op3', name: 'Wild Zambezi Safaris', rating: 4.9 },
-    isFeatured: true,
-    isActive: true,
-    availability: [],
-    createdAt: '',
-    updatedAt: '',
-  },
-  {
-    id: '4',
-    name: 'Great Zimbabwe Heritage Tour',
-    slug: 'great-zimbabwe-heritage-tour',
-    description: 'Step back in time at the Great Zimbabwe ruins — the largest ancient stone structures in Africa south of the pyramids.',
-    shortDescription: 'Guided tour of the ancient Great Zimbabwe ruins',
-    location: 'Masvingo',
-    province: 'Masvingo',
-    category: 'cultural',
-    images: [],
-    price: 45,
-    currency: 'USD',
-    duration: 'Half Day',
-    durationHours: 5,
-    maxGroupSize: 20,
-    difficulty: 'easy',
-    rating: 4.7,
-    reviewCount: 156,
-    inclusions: ['Entry fees', 'Expert guide', 'Refreshments'],
-    exclusions: ['Transport to site', 'Lunch'],
-    meetingPoint: 'Great Zimbabwe Entrance',
-    highlights: ['Hill Complex', 'Great Enclosure', 'Valley Ruins'],
-    operator: { id: 'op4', name: 'Heritage Trails ZW', rating: 4.7 },
-    isFeatured: false,
-    isActive: true,
-    availability: [],
-    createdAt: '',
-    updatedAt: '',
-  },
-  {
-    id: '5',
-    name: 'Lake Kariba Houseboat Escape',
-    slug: 'lake-kariba-houseboat',
-    description: 'Cruise the vast Lake Kariba on a luxury houseboat. Fish, game view from the water, and watch legendary African sunsets.',
-    shortDescription: 'Multi-day luxury houseboat experience on Lake Kariba',
-    location: 'Lake Kariba',
-    province: 'Mashonaland West',
-    category: 'lake',
-    images: [],
-    price: 200,
-    currency: 'USD',
-    duration: '2 Days',
-    durationDays: 2,
-    maxGroupSize: 12,
-    difficulty: 'easy',
-    rating: 4.6,
-    reviewCount: 122,
-    inclusions: ['Houseboat accommodation', 'All meals', 'Fishing equipment', 'Game viewing'],
-    exclusions: ['Drinks', 'Transport to Kariba'],
-    meetingPoint: 'Kariba Harbor',
-    highlights: ['Sunset over the lake', 'Tiger fishing', 'Hippo encounters'],
-    operator: { id: 'op5', name: 'Kariba Cruises', rating: 4.6 },
-    isFeatured: false,
-    isActive: true,
-    availability: [],
-    createdAt: '',
-    updatedAt: '',
-  },
-  {
-    id: '6',
-    name: 'Nyanga Mountain Hiking Trail',
-    slug: 'nyanga-mountain-hiking',
-    description: "Trek through the misty Eastern Highlands, past waterfalls and ancient ruins, to the peak of Zimbabwe's highest mountain.",
-    shortDescription: 'Guided hiking in the beautiful Eastern Highlands',
-    location: 'Nyanga',
-    province: 'Manicaland',
-    category: 'hiking',
-    images: [],
-    price: 65,
-    currency: 'USD',
-    duration: 'Full Day',
-    durationHours: 8,
-    maxGroupSize: 10,
-    difficulty: 'challenging',
-    rating: 4.7,
-    reviewCount: 87,
-    inclusions: ['Guide', 'Packed lunch', 'Water', 'First aid'],
-    exclusions: ['Hiking gear', 'Transport'],
-    meetingPoint: 'Nyanga National Park Office',
-    highlights: ['Mount Nyangani summit', 'Mutarazi Falls', 'Ancient terraces'],
-    operator: { id: 'op6', name: 'Highland Treks', rating: 4.7 },
-    isFeatured: false,
-    isActive: true,
-    availability: [],
-    createdAt: '',
-    updatedAt: '',
-  },
-  {
-    id: '7',
-    name: 'Matobo Hills Rhino Tracking',
-    slug: 'matobo-hills-rhino-tracking',
-    description: 'Track rhinos on foot in the ancient Matobo Hills, visit Cecil Rhodes grave, and explore San rock art sites.',
-    shortDescription: 'Rhino tracking and cultural tour in Matobo Hills',
-    location: 'Matobo Hills',
-    province: 'Matabeleland South',
-    category: 'wildlife',
-    images: [],
-    price: 90,
-    currency: 'USD',
-    duration: 'Full Day',
-    durationHours: 9,
-    maxGroupSize: 8,
-    difficulty: 'moderate',
-    rating: 4.8,
-    reviewCount: 143,
-    inclusions: ['Park fees', 'Armed ranger', 'Guide', 'Lunch', 'Transport from Bulawayo'],
-    exclusions: ['Accommodation', 'Personal items'],
-    meetingPoint: 'Matobo National Park Main Gate',
-    highlights: ['Walking with rhinos', 'World View', 'San rock paintings'],
-    operator: { id: 'op7', name: 'Matobo Explorer', rating: 4.8 },
-    isFeatured: true,
-    isActive: true,
-    availability: [],
-    createdAt: '',
-    updatedAt: '',
-  },
-  {
-    id: '8',
-    name: 'Chimanimani Adventure Trek',
-    slug: 'chimanimani-adventure-trek',
-    description: 'Multi-day trek through the remote Chimanimani Mountains, crossing rivers and camping in pristine wilderness.',
-    shortDescription: 'Multi-day mountain trek in remote wilderness',
-    location: 'Chimanimani',
-    province: 'Manicaland',
-    category: 'hiking',
-    images: [],
-    price: 180,
-    currency: 'USD',
-    duration: '3 Days',
-    durationDays: 3,
-    maxGroupSize: 8,
-    difficulty: 'expert',
-    rating: 4.9,
-    reviewCount: 54,
-    inclusions: ['Guide', 'Camping equipment', 'All meals', 'Park fees'],
-    exclusions: ['Sleeping bag', 'Hiking boots'],
-    meetingPoint: 'Chimanimani Village',
-    highlights: ['Bridal Veil Falls', 'Mountain pools', 'Border views into Mozambique'],
-    operator: { id: 'op8', name: 'Eastern Highlands Adventures', rating: 4.9 },
-    isFeatured: false,
-    isActive: true,
-    availability: [],
-    createdAt: '',
-    updatedAt: '',
-  },
-];
 
 // ---- Category Config ----
 const CATEGORIES = [
@@ -317,6 +80,7 @@ const Explore: React.FC = () => {
   const [allTours, setAllTours] = useState<Tour[]>([]);
   const [tours, setTours] = useState<Tour[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '');
   const [selectedCategory, setSelectedCategory] = useState(searchParams.get('category') || 'all');
   const [sortBy, setSortBy] = useState<string>('popular');
@@ -328,13 +92,15 @@ const Explore: React.FC = () => {
   useEffect(() => {
     const fetchTours = async () => {
       setLoading(true);
+      setError(null);
       try {
         const res = await toursApi.getAll();
         const data = Array.isArray(res) ? res : (res as any).data || [];
         setAllTours(data);
-      } catch (err) {
-        message.error('Failed to load tours. Using demo data.');
-        // Keep empty — will show empty state
+      } catch (err: any) {
+        setError(err.message || 'Failed to load tours');
+        message.error('Failed to load tours. Please try again.');
+        setAllTours([]);
       } finally {
         setLoading(false);
       }
@@ -464,7 +230,7 @@ const Explore: React.FC = () => {
       {/* ---- Header ---- */}
       <div
         style={{
-          backgroundImage: `url(${CATEGORY_IMAGES.safari})`,
+          backgroundImage: `url(${HERO_IMAGES.explore})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           padding: '48px 24px 40px',
@@ -558,6 +324,57 @@ const Explore: React.FC = () => {
       </div>
 
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: '32px 24px' }}>
+        {/* ---- Featured Destinations Showcase ---- */}
+        <div style={{ marginBottom: 48 }}>
+          <Title level={3} style={{ marginBottom: 24, fontWeight: 800 }}>
+            Iconic Destinations
+          </Title>
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+              gap: '20px',
+            }}
+          >
+            {Object.entries(DESTINATION_IMAGES)
+              .filter(([_, url]) => url.startsWith('/images'))
+              .map(([name, imgUrl]) => (
+                <div
+                  key={name}
+                  onClick={() => setSearchQuery(name)}
+                  style={{
+                    position: 'relative',
+                    height: 220,
+                    borderRadius: 16,
+                    overflow: 'hidden',
+                    cursor: 'pointer',
+                    backgroundImage: `url(${imgUrl})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                  }}
+                  className="card-hover"
+                >
+                  <div
+                    style={{
+                      position: 'absolute',
+                      inset: 0,
+                      background: 'linear-gradient(to top, rgba(5,46,22,0.85) 0%, rgba(0,0,0,0) 60%)',
+                    }}
+                  />
+                  <div style={{ position: 'absolute', bottom: 16, left: 16 }}>
+                    <Text style={{ color: '#ffffff', fontSize: 18, fontWeight: 700, display: 'block' }}>
+                      {name}
+                    </Text>
+                    <Text style={{ color: '#d97706', fontSize: 13, fontWeight: 600 }}>
+                      Explore tours &rarr;
+                    </Text>
+                  </div>
+                </div>
+              ))}
+          </div>
+        </div>
+
         {/* ---- Category Chips + Sort ---- */}
         <div
           style={{
@@ -657,6 +474,24 @@ const Explore: React.FC = () => {
                   </Col>
                 ))}
               </Row>
+            ) : error ? (
+              <Card style={{ borderRadius: 18, textAlign: 'center', padding: '60px 24px' }}>
+                <Empty
+                  description={
+                    <Text style={{ color: '#737373', fontSize: 16 }}>
+                      {error}
+                    </Text>
+                  }
+                >
+                  <Button
+                    type="primary"
+                    onClick={() => window.location.reload()}
+                    style={{ background: '#166534', borderColor: '#166534' }}
+                  >
+                    Retry
+                  </Button>
+                </Empty>
+              </Card>
             ) : tours.length === 0 ? (
               <Card style={{ borderRadius: 18, textAlign: 'center', padding: '60px 24px' }}>
                 <Empty
@@ -700,7 +535,7 @@ const Explore: React.FC = () => {
                       <div
                         style={{
                           height: 180,
-                          backgroundImage: `url(${CATEGORY_IMAGES[tour.category] || CATEGORY_IMAGES.safari})`,
+                          backgroundImage: `url(${tour.images?.[0] || CATEGORY_IMAGES[tour.category] || CATEGORY_IMAGES.safari})`,
                           backgroundSize: 'cover',
                           backgroundPosition: 'center',
                           position: 'relative',

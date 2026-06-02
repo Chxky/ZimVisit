@@ -1,10 +1,15 @@
-FROM node:lts-alpine
-ENV NODE_ENV=production
-WORKDIR /usr/src/app
-COPY ["package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./"]
-RUN npm install --production --silent && mv node_modules ../
+FROM node:20-alpine AS builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm install && npm cache clean --force
 COPY . .
-EXPOSE 3000
-RUN chown -R node /usr/src/app
-USER node
-CMD ["npm", "start"]
+RUN npm run build
+
+FROM nginx:alpine AS runner
+COPY --from=builder /app/dist /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+RUN apk add --no-cache curl
+EXPOSE 3003
+HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
+  CMD curl -f http://localhost:3003/ || exit 1
+CMD ["nginx", "-g", "daemon off;"]

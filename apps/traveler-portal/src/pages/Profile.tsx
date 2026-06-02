@@ -2,7 +2,7 @@
 // ZimVisit Traveler Portal - Profile Page
 // ============================================================
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Card,
   Row,
@@ -16,8 +16,10 @@ import {
   Tag,
   Divider,
   Switch,
+  Skeleton,
+  Spin,
+  Empty,
   message,
-  Statistic,
 } from 'antd';
 import {
   UserOutlined,
@@ -37,6 +39,8 @@ import {
   CheckCircleFilled,
 } from '@ant-design/icons';
 import { useAuthStore } from '../store/authStore';
+import type { Booking } from '../types';
+import { bookingsApi } from '../services/api';
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -45,6 +49,10 @@ const Profile: React.FC = () => {
   const [editing, setEditing] = useState(false);
   const [form] = Form.useForm();
 
+  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [statsLoading, setStatsLoading] = useState(true);
+  const [statsError, setStatsError] = useState<string | null>(null);
+
   const handleSave = () => {
     form.validateFields().then(() => {
       message.success('Profile updated successfully!');
@@ -52,17 +60,48 @@ const Profile: React.FC = () => {
     });
   };
 
-  // Mock travel stats
+  // Fetch bookings for travel stats
+  useEffect(() => {
+    const fetchBookings = async () => {
+      try {
+        setStatsLoading(true);
+        const res = await bookingsApi.getAll();
+        const data = Array.isArray(res) ? res : (res as any).data || [];
+        setBookings(data);
+      } catch (err: any) {
+        setStatsError(err.message || 'Failed to load travel stats');
+      } finally {
+        setStatsLoading(false);
+      }
+    };
+    fetchBookings();
+  }, []);
+
+  // Calculate travel stats from real booking data
+  const completedBookings = bookings.filter((b) => b.status === 'completed');
+  const confirmedBookings = bookings.filter((b) => b.status === 'confirmed');
+  const allDestinations = new Set(
+    bookings.flatMap((b) => b.items.map((i) => i.itemName))
+  );
+  const totalNights = bookings.reduce((sum, b) => {
+    const start = new Date(b.startDate);
+    const end = new Date(b.endDate);
+    const nights = Math.max(1, Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)));
+    return sum + nights;
+  }, 0);
+
   const travelStats = {
-    tripsCompleted: 7,
-    destinationsVisited: 12,
-    countriesVisited: 3,
-    totalNights: 24,
-    favoriteDestination: 'Victoria Falls',
-    memberSince: 'January 2025',
+    tripsCompleted: completedBookings.length + confirmedBookings.length,
+    destinationsVisited: allDestinations.size,
+    countriesVisited: 1,
+    totalNights,
+    favoriteDestination: 'Zimbabwe',
+    memberSince: user?.createdAt
+      ? new Date(user.createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+      : 'Recently',
   };
 
-  // Mock travel interests
+  // Travel interests
   const interests = ['Safari', 'Hiking', 'Cultural Heritage', 'Photography', 'Wildlife', 'Adventure'];
 
   return (
@@ -392,82 +431,93 @@ const Profile: React.FC = () => {
                   </Title>
                 </div>
                 <div style={{ padding: 24 }}>
-                  <Row gutter={[16, 20]}>
-                    <Col span={12}>
-                      <div style={{ textAlign: 'center' }}>
-                        <div
-                          style={{
-                            fontSize: 32,
-                            fontWeight: 900,
-                            color: '#166534',
-                            lineHeight: 1,
-                            marginBottom: 4,
-                          }}
-                        >
-                          {travelStats.tripsCompleted}
-                        </div>
-                        <Text style={{ color: '#737373', fontSize: 13 }}>Trips Completed</Text>
-                      </div>
-                    </Col>
-                    <Col span={12}>
-                      <div style={{ textAlign: 'center' }}>
-                        <div
-                          style={{
-                            fontSize: 32,
-                            fontWeight: 900,
-                            color: '#f59e0b',
-                            lineHeight: 1,
-                            marginBottom: 4,
-                          }}
-                        >
-                          {travelStats.destinationsVisited}
-                        </div>
-                        <Text style={{ color: '#737373', fontSize: 13 }}>Destinations</Text>
-                      </div>
-                    </Col>
-                    <Col span={12}>
-                      <div style={{ textAlign: 'center' }}>
-                        <div
-                          style={{
-                            fontSize: 32,
-                            fontWeight: 900,
-                            color: '#0ea5e9',
-                            lineHeight: 1,
-                            marginBottom: 4,
-                          }}
-                        >
-                          {travelStats.countriesVisited}
-                        </div>
-                        <Text style={{ color: '#737373', fontSize: 13 }}>Countries</Text>
-                      </div>
-                    </Col>
-                    <Col span={12}>
-                      <div style={{ textAlign: 'center' }}>
-                        <div
-                          style={{
-                            fontSize: 32,
-                            fontWeight: 900,
-                            color: '#8b5cf6',
-                            lineHeight: 1,
-                            marginBottom: 4,
-                          }}
-                        >
-                          {travelStats.totalNights}
-                        </div>
-                        <Text style={{ color: '#737373', fontSize: 13 }}>Total Nights</Text>
-                      </div>
-                    </Col>
-                  </Row>
+                  {statsLoading ? (
+                    <Skeleton active paragraph={{ rows: 4 }} />
+                  ) : statsError ? (
+                    <Empty
+                      description={<Text style={{ color: '#737373' }}>Could not load stats</Text>}
+                      style={{ padding: '20px 0' }}
+                    />
+                  ) : (
+                    <>
+                      <Row gutter={[16, 20]}>
+                        <Col span={12}>
+                          <div style={{ textAlign: 'center' }}>
+                            <div
+                              style={{
+                                fontSize: 32,
+                                fontWeight: 900,
+                                color: '#166534',
+                                lineHeight: 1,
+                                marginBottom: 4,
+                              }}
+                            >
+                              {travelStats.tripsCompleted}
+                            </div>
+                            <Text style={{ color: '#737373', fontSize: 13 }}>Trips Completed</Text>
+                          </div>
+                        </Col>
+                        <Col span={12}>
+                          <div style={{ textAlign: 'center' }}>
+                            <div
+                              style={{
+                                fontSize: 32,
+                                fontWeight: 900,
+                                color: '#f59e0b',
+                                lineHeight: 1,
+                                marginBottom: 4,
+                              }}
+                            >
+                              {travelStats.destinationsVisited}
+                            </div>
+                            <Text style={{ color: '#737373', fontSize: 13 }}>Destinations</Text>
+                          </div>
+                        </Col>
+                        <Col span={12}>
+                          <div style={{ textAlign: 'center' }}>
+                            <div
+                              style={{
+                                fontSize: 32,
+                                fontWeight: 900,
+                                color: '#0ea5e9',
+                                lineHeight: 1,
+                                marginBottom: 4,
+                              }}
+                            >
+                              {travelStats.countriesVisited}
+                            </div>
+                            <Text style={{ color: '#737373', fontSize: 13 }}>Countries</Text>
+                          </div>
+                        </Col>
+                        <Col span={12}>
+                          <div style={{ textAlign: 'center' }}>
+                            <div
+                              style={{
+                                fontSize: 32,
+                                fontWeight: 900,
+                                color: '#8b5cf6',
+                                lineHeight: 1,
+                                marginBottom: 4,
+                              }}
+                            >
+                              {travelStats.totalNights}
+                            </div>
+                            <Text style={{ color: '#737373', fontSize: 13 }}>Total Nights</Text>
+                          </div>
+                        </Col>
+                      </Row>
 
-                  <Divider style={{ margin: '20px 0' }} />
+                      <Divider style={{ margin: '20px 0' }} />
 
-                  <div style={{ textAlign: 'center' }}>
-                    <Text style={{ color: '#737373', fontSize: 12, display: 'block' }}>Favorite Destination</Text>
-                    <Text strong style={{ fontSize: 16, color: '#166534' }}>
-                      <CompassOutlined style={{ marginRight: 6 }} />
-                      {travelStats.favoriteDestination}
-                    </Text>
-                  </div>
+                      <div style={{ textAlign: 'center' }}>
+                        <Text style={{ color: '#737373', fontSize: 12, display: 'block' }}>Favorite Destination</Text>
+                        <Text strong style={{ fontSize: 16, color: '#166534' }}>
+                          <CompassOutlined style={{ marginRight: 6 }} />
+                          {travelStats.favoriteDestination}
+                        </Text>
+                      </div>
+                    </>
+                  )}
                 </div>
               </Card>
 

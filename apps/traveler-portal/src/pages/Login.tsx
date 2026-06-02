@@ -94,8 +94,8 @@ const Login: React.FC = () => {
               width: 120,
               height: 120,
               borderRadius: 36,
-              background: 'linear-gradient(135deg, rgba(245,158,11,0.2) 0%, rgba(245,158,11,0.05) 100%)',
-              border: '2px solid rgba(245,158,11,0.2)',
+              background: 'linear-gradient(135deg, rgba(217,119,6,0.2) 0%, rgba(217,119,6,0.05) 100%)',
+              border: '2px solid rgba(217,119,6,0.3)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -103,12 +103,12 @@ const Login: React.FC = () => {
               fontSize: 56,
             }}
           >
-            <CompassOutlined style={{ color: '#f59e0b' }} />
+            <CompassOutlined style={{ color: '#d97706' }} />
           </div>
 
           <Title level={2} style={{ color: '#ffffff', marginBottom: 16, fontWeight: 800, lineHeight: 1.2 }}>
             Welcome Back to{' '}
-            <span style={{ color: '#f59e0b' }}>ZimVisit</span>
+            <span style={{ color: '#d97706' }}>ZimVisit</span>
           </Title>
 
           <Paragraph style={{ color: 'rgba(255,255,255,0.65)', fontSize: 17, lineHeight: 1.8, marginBottom: 48 }}>
@@ -157,7 +157,7 @@ const Login: React.FC = () => {
           {/* Mobile logo */}
           <div className="hide-desktop" style={{ textAlign: 'center', marginBottom: 32 }}>
             <span style={{ fontSize: 28, fontWeight: 800 }}>
-              Zim<span style={{ color: '#f59e0b' }}>Visit</span>
+              Zim<span style={{ color: '#d97706' }}>Visit</span>
             </span>
           </div>
 
@@ -207,28 +207,17 @@ const Login: React.FC = () => {
               />
             </Form.Item>
 
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                marginBottom: 28,
-              }}
-            >
-              <Form.Item name="remember" valuePropName="checked" noStyle>
-                <Checkbox style={{ fontSize: 14 }}>Remember me</Checkbox>
-              </Form.Item>
-              <a
-                href="#"
-                style={{
-                  color: '#166534',
-                  fontSize: 14,
-                  fontWeight: 500,
-                }}
-              >
-                Forgot password?
-              </a>
-            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <Form.Item name="remember" valuePropName="checked" noStyle>
+                  <Checkbox style={{ color: '#525252' }}>Remember me</Checkbox>
+                </Form.Item>
+                <a
+                  onClick={(e) => { e.preventDefault(); message.info('Password reset coming soon'); }}
+                  style={{ color: '#f59e0b', fontSize: 13, fontWeight: 500, cursor: 'pointer' }}
+                >
+                  Forgot password?
+                </a>
+              </div>
 
             <Form.Item>
               <Button
@@ -259,6 +248,7 @@ const Login: React.FC = () => {
           <Space size={12} style={{ width: '100%', marginBottom: 32 }}>
             <Button
               block
+              onClick={handleDemoLogin}
               icon={<GoogleOutlined />}
               style={{
                 height: 48,
@@ -272,6 +262,7 @@ const Login: React.FC = () => {
             </Button>
             <Button
               block
+              onClick={handleDemoLogin}
               icon={<FacebookOutlined />}
               style={{
                 height: 48,

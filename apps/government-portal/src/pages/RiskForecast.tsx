@@ -208,6 +208,22 @@ export const RiskForecast: React.FC = () => {
 
   return (
     <div>
+      <div style={{ textAlign: 'center', marginBottom: 32, paddingBottom: 24, borderBottom: '2px solid #1e1b4b', position: 'relative' }}>
+        <div style={{ position: 'absolute', top: -10, left: -20, opacity: 0.1 }}>
+          <img src="/zim-bird.svg" alt="" style={{ height: 120 }} />
+        </div>
+        <Title level={4} style={{ margin: 0, fontFamily: 'Cinzel, serif', fontWeight: 700, letterSpacing: '2px', color: '#64748b' }}>
+          REPUBLIC OF ZIMBABWE - MINISTRY OF TOURISM
+        </Title>
+        <Title level={2} style={{ margin: '8px 0 0 0', fontFamily: 'Cinzel, serif', fontWeight: 800, color: '#1e1b4b' }}>
+          RISK FORECAST
+        </Title>
+        <div style={{ marginTop: 12, display: 'flex', justifyContent: 'center', gap: 16 }}>
+          <Tag color="red" style={{ margin: 0, fontWeight: 700, border: '1px solid #dc2626' }}>CONFIDENTIAL</Tag>
+          <Tag color="blue" style={{ margin: 0, fontWeight: 700 }}>SECURE CONNECTION</Tag>
+        </div>
+      </div>
+
       {/* Page Header */}
       <div className="section-header">
         <div>

@@ -26,7 +26,6 @@ import {
   EnvironmentOutlined,
   DollarOutlined,
   CheckCircleFilled,
-  ClockCircleOutlined,
   CloseCircleFilled,
   SyncOutlined,
   ExclamationCircleOutlined,
@@ -42,53 +41,6 @@ import type { Booking, BookingStatus, BookingItem } from '../types';
 import { bookingsApi } from '../services/api';
 
 const { Title, Text, Paragraph } = Typography;
-
-// ---- Mock Booking Data ----
-const MOCK_BOOKINGS: Record<string, Booking> = {
-  bk_001: {
-    id: 'bk_001',
-    reference: 'ZV-2026-001',
-    userId: 'usr_001',
-    status: 'confirmed',
-    items: [
-      {
-        id: 'bi_001',
-        type: 'tour',
-        itemId: '1',
-        itemName: 'Victoria Falls Grand Adventure',
-        date: '2026-06-15',
-        quantity: 2,
-        unitPrice: 120,
-        totalPrice: 240,
-        status: 'confirmed',
-      },
-      {
-        id: 'bi_002',
-        type: 'hotel',
-        itemId: 'h1',
-        itemName: 'Victoria Falls Hotel',
-        date: '2026-06-14',
-        endDate: '2026-06-16',
-        quantity: 2,
-        unitPrice: 180,
-        totalPrice: 360,
-        status: 'confirmed',
-      },
-    ],
-    totalAmount: 600,
-    currency: 'USD',
-    paymentStatus: 'paid',
-    startDate: '2026-06-14',
-    endDate: '2026-06-16',
-    travelers: 2,
-    specialRequests: 'Vegetarian meals preferred. Early check-in if possible.',
-    zimpassQR: 'ZV-QR-001-ABCDEF',
-    createdAt: '2026-05-10T14:30:00Z',
-    updatedAt: '2026-05-10T15:00:00Z',
-  },
-};
-
-const DEFAULT_BOOKING = MOCK_BOOKINGS['bk_001'];
 
 // ---- Status Config ----
 const STATUS_CONFIG: Record<BookingStatus, { color: string; label: string; icon: React.ReactNode }> = {
@@ -112,15 +64,22 @@ const BookingDetail: React.FC = () => {
   const navigate = useNavigate();
   const [booking, setBooking] = useState<Booking | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchBooking = async () => {
-      if (!id) return;
+      if (!id) {
+        setLoading(false);
+        setError('No booking ID provided.');
+        return;
+      }
       setLoading(true);
+      setError(null);
       try {
         const res = await bookingsApi.getById(id);
         setBooking((res as any).data || res);
-      } catch (err) {
+      } catch (err: any) {
+        setError(err.message || 'Failed to load booking');
         message.error('Failed to load booking details.');
       } finally {
         setLoading(false);
@@ -137,10 +96,16 @@ const BookingDetail: React.FC = () => {
     );
   }
 
-  if (!booking) {
+  if (error || !booking) {
     return (
-      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Booking not found.</Text>
+      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 16 }}>
+        <Text style={{ fontSize: 16, color: '#737373' }}>{error || 'Booking not found.'}</Text>
+        <Space>
+          <Button type="primary" onClick={() => window.location.reload()} style={{ background: '#166534', borderColor: '#166534' }}>
+            Retry
+          </Button>
+          <Button onClick={() => navigate('/bookings')}>Back to Bookings</Button>
+        </Space>
       </div>
     );
   }
@@ -403,7 +368,7 @@ const BookingDetail: React.FC = () => {
                 <div
                   style={{
                     height: 4,
-                    background: 'linear-gradient(90deg, #f59e0b, #fbbf24, #f59e0b)',
+                    background: 'linear-gradient(90deg, #d97706, #b45309, #d97706)',
                   }}
                 />
                 <div style={{ padding: 28 }}>
@@ -528,7 +493,7 @@ const BookingDetail: React.FC = () => {
                           background: '#166534',
                           borderColor: '#166534',
                         }}
-                        onClick={() => navigate('/zimpass')}
+                        onClick={() => navigate(`/zimpass?bookingId=${booking?.id || ''}`)}
                       >
                         View ZimPass
                       </Button>

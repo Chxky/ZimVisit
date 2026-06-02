@@ -40,6 +40,7 @@ import {
   ArrowRightOutlined,
   HomeOutlined,
   CompassOutlined,
+  QrcodeOutlined,
 } from '@ant-design/icons';
 import type { Tour } from '../types';
 import { toursApi } from '../services/api';
@@ -47,116 +48,44 @@ import { CATEGORY_IMAGES } from '../constants/images';
 
 const { Title, Text, Paragraph } = Typography;
 
-// ---- Mock Tour Data (reuse from Explore) ----
-const TOURS_DB: Record<string, Tour> = {
-  '1': {
-    id: '1',
-    name: 'Victoria Falls Grand Adventure',
-    slug: 'victoria-falls-grand-adventure',
-    description: "Experience the mighty Victoria Falls from every angle. Start your day with a guided walking tour through the rainforest, feeling the spray of the world's largest curtain of falling water. Then take to the skies on a thrilling helicopter flip for a bird's eye view of the Falls and the winding Zambezi River below. End your day with a leisurely sunset cruise, sipping drinks as the African sun dips below the horizon and hippos surface in the golden water.",
-    shortDescription: 'Full-day Victoria Falls experience with helicopter and cruise',
-    location: 'Victoria Falls',
-    province: 'Matabeleland North',
-    category: 'victoria-falls',
-    images: [],
-    price: 120,
-    currency: 'USD',
-    duration: 'Full Day',
-    durationHours: 10,
-    maxGroupSize: 15,
-    difficulty: 'easy',
-    rating: 4.9,
-    reviewCount: 234,
-    inclusions: [
-      'Park entry fees ($30 value)',
-      'Professional English-speaking guide',
-      'Helicopter flip (15 minutes)',
-      'Zambezi sunset cruise (2 hours)',
-      'Complimentary lunch at The Lookout Cafe',
-      'Hotel pickup and drop-off',
-      'Bottled water and snacks',
-    ],
-    exclusions: [
-      'Accommodation',
-      'Visa fees',
-      'Travel insurance',
-      'Gratuities',
-      'Rain coat (available for rent)',
-    ],
-    meetingPoint: 'Victoria Falls Rainforest Entrance, Livingstone Way',
-    highlights: [
-      'Helicopter flip over the Falls — the ultimate photo opportunity',
-      'Walking tour through the lush rainforest created by the Falls spray',
-      'Sunset cruise on the Zambezi with drinks and snacks',
-      'See the Falls from both the Zimbabwe and Zambia sides',
-      'Spot hippos, crocodiles, and elephants from the boat',
-    ],
-    operator: { id: 'op1', name: 'Falls Adventures Co.', rating: 4.8 },
-    isFeatured: true,
-    isActive: true,
-    availability: [],
-    createdAt: '',
-    updatedAt: '',
-  },
-};
-
-// Fallback tour for any ID
-const DEFAULT_TOUR: Tour = TOURS_DB['1'];
-
-// ---- Mock Reviews ----
-const REVIEWS = [
-  {
-    id: '1',
-    name: 'Sarah Mitchell',
-    avatar: 'SM',
-    from: 'London, UK',
-    rating: 5,
-    date: '2 weeks ago',
-    text: "Absolutely incredible experience! The helicopter flip was the highlight of our entire trip to Africa. Our guide Knowledge was fantastic — so knowledgeable and passionate about the Falls. The sunset cruise was the perfect way to end the day. Highly recommend!",
-  },
-  {
-    id: '2',
-    name: 'David Chen',
-    avatar: 'DC',
-    from: 'Sydney, Australia',
-    rating: 5,
-    date: '1 month ago',
-    text: "This was worth every penny. The combination of walking, flying, and cruising gives you a complete perspective of Victoria Falls. The lunch at Lookout Cafe was surprisingly good with amazing views. The only thing I'd change is spending more time at each stop!",
-  },
-  {
-    id: '3',
-    name: 'Amara Okafor',
-    avatar: 'AO',
-    from: 'Lagos, Nigeria',
-    rating: 4,
-    date: '1 month ago',
-    text: 'Great tour overall. The helicopter ride was breathtaking — seeing the Falls from above really puts their scale into perspective. The sunset cruise was lovely though the boat was a bit crowded. Guide was excellent and very accommodating.',
-  },
-];
-
-// ---- Similar Tours ----
-const SIMILAR_TOURS = [
-  { id: '7', name: 'Matobo Hills Rhino Tracking', location: 'Matobo Hills', price: 90, rating: 4.8, category: 'wildlife', duration: 'Full Day' },
-  { id: '5', name: 'Lake Kariba Houseboat Escape', location: 'Lake Kariba', price: 200, rating: 4.6, category: 'lake', duration: '2 Days' },
-  { id: '2', name: 'Hwange Big Five Safari', location: 'Hwange', price: 280, rating: 4.8, category: 'safari', duration: '3 Days' },
-];
-
 const TourDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [tour, setTour] = useState<Tour | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [reviews, setReviews] = useState<any[]>([]);
+  const [similarTours, setSimilarTours] = useState<Tour[]>([]);
   const [travelers, setTravelers] = useState(2);
-  const [selectedDate, setSelectedDate] = useState<string>('');
 
   useEffect(() => {
     const fetchTour = async () => {
-      if (!id) return;
+      if (!id) {
+        setLoading(false);
+        setError('No tour ID provided.');
+        return;
+      }
       setLoading(true);
+      setError(null);
       try {
         const res = await toursApi.getById(id);
         setTour((res as any).data || res);
-      } catch (err) {
+
+        // Fetch reviews and similar tours in parallel
+        const [reviewsRes, similarRes] = await Promise.allSettled([
+          toursApi.getReviews(id),
+          toursApi.getSimilar(id),
+        ]);
+        if (reviewsRes.status === 'fulfilled') {
+          const r = reviewsRes.value;
+          setReviews(Array.isArray(r) ? r : (r as any).data || []);
+        }
+        if (similarRes.status === 'fulfilled') {
+          const s = similarRes.value;
+          setSimilarTours(Array.isArray(s) ? s : (s as any).data || []);
+        }
+      } catch (err: any) {
+        setError(err.message || 'Failed to load tour');
         message.error('Failed to load tour details.');
       } finally {
         setLoading(false);
@@ -198,10 +127,16 @@ const TourDetail: React.FC = () => {
     );
   }
 
-  if (!tour) {
+  if (error || !tour) {
     return (
-      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Tour not found.</Text>
+      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 16 }}>
+        <Text style={{ fontSize: 16, color: '#737373' }}>{error || 'Tour not found.'}</Text>
+        <Space>
+          <Button type="primary" onClick={() => window.location.reload()} style={{ background: '#166534', borderColor: '#166534' }}>
+            Retry
+          </Button>
+          <Button onClick={() => navigate('/explore')}>Back to Explore</Button>
+        </Space>
       </div>
     );
   }
@@ -212,7 +147,7 @@ const TourDetail: React.FC = () => {
       <div
         style={{
           height: 360,
-          backgroundImage: `url(${CATEGORY_IMAGES[tour.category] || CATEGORY_IMAGES.safari})`,
+          backgroundImage: `url(${tour.images?.[0] || CATEGORY_IMAGES[tour.category] || CATEGORY_IMAGES.safari})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           position: 'relative',
@@ -386,17 +321,23 @@ const TourDetail: React.FC = () => {
             {/* Highlights */}
             <Card style={{ borderRadius: 18, marginBottom: 24, border: '1px solid #f0f0f0' }} styles={{ body: { padding: 28 } }}>
               <Title level={4} style={{ marginBottom: 16 }}>Highlights</Title>
-              <List
-                dataSource={tour.highlights}
-                renderItem={(item) => (
-                  <List.Item style={{ border: 'none', padding: '8px 0' }}>
-                    <Space size={12} align="start">
-                      <CheckCircleFilled style={{ color: '#166534', fontSize: 16, marginTop: 3 }} />
-                      <Text style={{ fontSize: 15, color: '#404040' }}>{item}</Text>
-                    </Space>
-                  </List.Item>
-                )}
-              />
+              {tour.highlights && tour.highlights.length > 0 ? (
+                <List
+                  dataSource={tour.highlights}
+                  renderItem={(item) => (
+                    <List.Item style={{ border: 'none', padding: '8px 0' }}>
+                      <Space size={12} align="start">
+                        <CheckCircleFilled style={{ color: '#166534', fontSize: 16, marginTop: 3 }} />
+                        <Text style={{ fontSize: 15, color: '#404040' }}>{item}</Text>
+                      </Space>
+                    </List.Item>
+                  )}
+                />
+              ) : (
+                <Text style={{ color: '#737373', fontSize: 14 }}>
+                  Contact the operator for detailed highlights of this tour.
+                </Text>
+              )}
             </Card>
 
             {/* Inclusions / Exclusions */}
@@ -407,17 +348,23 @@ const TourDetail: React.FC = () => {
                     <CheckCircleFilled style={{ marginRight: 8 }} />
                     What's Included
                   </Title>
-                  <List
-                    dataSource={tour.inclusions}
-                    renderItem={(item) => (
-                      <List.Item style={{ border: 'none', padding: '6px 0' }}>
-                        <Space size={10}>
-                          <CheckCircleFilled style={{ color: '#22c55e', fontSize: 13 }} />
-                          <Text style={{ fontSize: 14 }}>{item}</Text>
-                        </Space>
-                      </List.Item>
-                    )}
-                  />
+                  {tour.inclusions && tour.inclusions.length > 0 ? (
+                    <List
+                      dataSource={tour.inclusions}
+                      renderItem={(item) => (
+                        <List.Item style={{ border: 'none', padding: '6px 0' }}>
+                          <Space size={10}>
+                            <CheckCircleFilled style={{ color: '#22c55e', fontSize: 13 }} />
+                            <Text style={{ fontSize: 14 }}>{item}</Text>
+                          </Space>
+                        </List.Item>
+                      )}
+                    />
+                  ) : (
+                    <Text style={{ color: '#737373', fontSize: 14 }}>
+                      Contact the operator for inclusion details.
+                    </Text>
+                  )}
                 </Card>
               </Col>
               <Col xs={24} sm={12}>
@@ -426,17 +373,23 @@ const TourDetail: React.FC = () => {
                     <CloseCircleFilled style={{ marginRight: 8 }} />
                     What's Not Included
                   </Title>
-                  <List
-                    dataSource={tour.exclusions}
-                    renderItem={(item) => (
-                      <List.Item style={{ border: 'none', padding: '6px 0' }}>
-                        <Space size={10}>
-                          <CloseCircleFilled style={{ color: '#ef4444', fontSize: 13 }} />
-                          <Text style={{ fontSize: 14 }}>{item}</Text>
-                        </Space>
-                      </List.Item>
-                    )}
-                  />
+                  {tour.exclusions && tour.exclusions.length > 0 ? (
+                    <List
+                      dataSource={tour.exclusions}
+                      renderItem={(item) => (
+                        <List.Item style={{ border: 'none', padding: '6px 0' }}>
+                          <Space size={10}>
+                            <CloseCircleFilled style={{ color: '#ef4444', fontSize: 13 }} />
+                            <Text style={{ fontSize: 14 }}>{item}</Text>
+                          </Space>
+                        </List.Item>
+                      )}
+                    />
+                  ) : (
+                    <Text style={{ color: '#737373', fontSize: 14 }}>
+                      Contact the operator for exclusion details.
+                    </Text>
+                  )}
                 </Card>
               </Col>
             </Row>
@@ -482,8 +435,8 @@ const TourDetail: React.FC = () => {
               </div>
 
               <List
-                dataSource={REVIEWS}
-                renderItem={(review) => (
+                dataSource={reviews}
+                renderItem={(review: any) => (
                   <List.Item style={{ border: 'none', padding: '16px 0' }}>
                     <div style={{ width: '100%' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 12 }}>
@@ -539,7 +492,7 @@ const TourDetail: React.FC = () => {
             <div style={{ marginBottom: 24 }}>
               <Title level={4} style={{ marginBottom: 20 }}>You Might Also Like</Title>
               <Row gutter={[16, 16]}>
-                {SIMILAR_TOURS.map((st) => (
+                {(similarTours.length > 0 ? similarTours : []).map((st: any) => (
                   <Col xs={24} sm={8} key={st.id}>
                     <Card
                       hoverable
@@ -551,7 +504,7 @@ const TourDetail: React.FC = () => {
                       <div
                         style={{
                           height: 120,
-                          backgroundImage: `url(${CATEGORY_IMAGES[st.category] || CATEGORY_IMAGES.safari})`,
+                          backgroundImage: `url(${st.images?.[0] || CATEGORY_IMAGES[st.category] || CATEGORY_IMAGES.safari})`,
                           backgroundSize: 'cover',
                           backgroundPosition: 'center',
                         }}
@@ -593,7 +546,7 @@ const TourDetail: React.FC = () => {
                 <div
                   style={{
                     height: 4,
-                    background: 'linear-gradient(90deg, #f59e0b, #fbbf24, #f59e0b)',
+                    background: 'linear-gradient(90deg, #d97706, #b45309, #d97706)',
                   }}
                 />
 

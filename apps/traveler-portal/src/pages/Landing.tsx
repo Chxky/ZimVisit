@@ -3,7 +3,7 @@
 // ============================================================
 
 import React, { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Button, Input, Row, Col, Card, Rate, Typography, Space, Tag, message } from 'antd';
 import {
   SearchOutlined,
@@ -56,8 +56,19 @@ const useScrollReveal = (threshold = 0.15) => {
 // ============================================================
 const Landing: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { demoLogin, isLoading: demoLoading } = useAuthStore();
   const [searchValue, setSearchValue] = useState('');
+
+  // Scroll to hash on mount or hash change
+  useEffect(() => {
+    if (location.hash === '#destinations') {
+      const el = document.getElementById('destinations');
+      if (el) {
+        setTimeout(() => el.scrollIntoView({ behavior: 'smooth' }), 100);
+      }
+    }
+  }, [location]);
 
   const handleDemoLogin = async (role: string = 'traveler') => {
     try {
@@ -209,37 +220,6 @@ const Landing: React.FC = () => {
   // ============================================================
   return (
     <div style={{ overflow: 'hidden' }}>
-      {/* ===================== GOVERNMENT BRANDING BAR ===================== */}
-      <div
-        style={{
-          background: 'linear-gradient(90deg, #052e16 0%, #14532d 50%, #052e16 100%)',
-          padding: '8px 24px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: 16,
-          borderBottom: '2px solid #f59e0b',
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <svg width="20" height="20" viewBox="0 0 64 64" fill="none">
-            <path d="M32 8C24 8 18 14 16 20C14 26 15 32 18 36C14 38 10 42 8 48C10 47 13 46 16 46C18 50 22 54 28 56C30 56 32 56 34 56C40 54 44 50 46 46C49 46 52 47 54 48C52 42 48 38 44 36C47 32 48 26 46 20C44 14 38 8 32 8Z" fill="#f59e0b" stroke="#92400e" strokeWidth="1.5"/>
-          </svg>
-          <Text style={{ color: 'rgba(255,255,255,0.9)', fontSize: 12, fontWeight: 600, letterSpacing: 1.5, textTransform: 'uppercase' }}>
-            {GOVERNMENT_BRANDING.authority}
-          </Text>
-        </div>
-        <div style={{ width: 1, height: 16, background: 'rgba(255,255,255,0.3)' }} />
-        <Text style={{ color: 'rgba(255,255,255,0.7)', fontSize: 11, letterSpacing: 0.5 }}>
-          {GOVERNMENT_BRANDING.ministry}
-        </Text>
-        <div style={{ width: 1, height: 16, background: 'rgba(255,255,255,0.3)' }} />
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-          <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#22c55e', animation: 'pulse 2s infinite' }} />
-          <Text style={{ color: '#22c55e', fontSize: 11, fontWeight: 600 }}>VERIFIED PLATFORM</Text>
-        </div>
-      </div>
-
       {/* ===================== HERO SECTION ===================== */}
       <section
         style={{
@@ -248,7 +228,7 @@ const Landing: React.FC = () => {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          backgroundImage: `url(${DESTINATION_IMAGES['Victoria Falls']})`,
+          backgroundImage: `url(/premium-hero.png)`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           overflow: 'hidden',
@@ -261,7 +241,7 @@ const Landing: React.FC = () => {
           style={{
             position: 'absolute',
             inset: 0,
-            background: 'linear-gradient(135deg, rgba(5,46,22,0.92) 0%, rgba(20,83,45,0.88) 25%, rgba(22,101,52,0.85) 50%, rgba(5,46,22,0.92) 75%, rgba(0,0,0,0.95) 100%)',
+            background: 'linear-gradient(135deg, rgba(3,25,14,0.95) 0%, rgba(5,46,22,0.85) 35%, rgba(0,0,0,0.4) 100%)',
           }}
         />
         {/* Background decoration */}
@@ -349,20 +329,18 @@ const Landing: React.FC = () => {
             className="animate-fade-in-up"
             style={{
               color: '#ffffff',
-              fontSize: 'clamp(36px, 6vw, 68px)',
-              fontWeight: 900,
-              lineHeight: 1.1,
+              fontSize: 'clamp(40px, 7vw, 76px)',
+              fontWeight: 800,
+              lineHeight: 1.05,
               marginBottom: 24,
-              letterSpacing: '-1px',
+              letterSpacing: '-1.5px',
+              textShadow: '0 4px 12px rgba(0,0,0,0.3)',
             }}
           >
-            Discover{' '}
+            Experience{' '}
             <span
               style={{
-                background: 'linear-gradient(135deg, #f59e0b 0%, #fbbf24 50%, #fcd34d 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
+                color: '#d97706',
               }}
             >
               Zimbabwe
@@ -373,16 +351,16 @@ const Landing: React.FC = () => {
           <Paragraph
             className="animate-fade-in-up"
             style={{
-              color: 'rgba(255,255,255,0.75)',
-              fontSize: 'clamp(16px, 2vw, 20px)',
-              lineHeight: 1.7,
-              maxWidth: 640,
+              color: 'rgba(255,255,255,0.9)',
+              fontSize: 'clamp(18px, 2.5vw, 22px)',
+              lineHeight: 1.6,
+              maxWidth: 700,
               margin: '0 auto 40px',
               fontWeight: 400,
+              textShadow: '0 2px 4px rgba(0,0,0,0.5)',
             }}
           >
-            Book tours, hotels, and activities with a unified digital travel pass.
-            From Victoria Falls to the Eastern Highlands — your adventure starts here.
+            The official portal for booking verified tours, hotels, and activities. Secure your journey with the unified digital ZimPass.
           </Paragraph>
 
           {/* Search Bar */}
@@ -419,16 +397,17 @@ const Landing: React.FC = () => {
               type="primary"
               size="large"
               onClick={handleSearch}
-              style={{
-                height: 54,
-                padding: '0 32px',
-                borderRadius: 14,
-                fontSize: 15,
-                fontWeight: 700,
-                background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
-                borderColor: '#f59e0b',
-                boxShadow: '0 8px 24px rgba(245, 158, 11, 0.3)',
-              }}
+                style={{
+                  height: 54,
+                  padding: '0 32px',
+                  borderRadius: 14,
+                  fontSize: 15,
+                  fontWeight: 700,
+                  background: '#d97706',
+                  borderColor: '#d97706',
+                  color: '#ffffff',
+                  boxShadow: '0 8px 24px rgba(217, 119, 6, 0.4)',
+                }}
             >
               Explore
               <ArrowRightOutlined />
@@ -944,7 +923,7 @@ const Landing: React.FC = () => {
                       left: 0,
                       right: 0,
                       height: 4,
-                      background: 'linear-gradient(90deg, #f59e0b, #fbbf24, #f59e0b)',
+                      background: 'linear-gradient(90deg, #d97706, #b45309, #d97706)',
                     }}
                   />
 

@@ -3,7 +3,7 @@
 // ============================================================
 
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import {
   Card,
   Row,
@@ -15,6 +15,7 @@ import {
   Timeline,
   Divider,
   Spin,
+  Empty,
   message,
 } from 'antd';
 import {
@@ -36,91 +37,6 @@ import { bookingsApi } from '../services/api';
 import type { Booking } from '../types';
 
 const { Title, Text, Paragraph } = Typography;
-
-// ---- Mock ZimPass Itinerary Data ----
-const ZIMPASS_DATA = {
-  id: 'zp_001',
-  bookingId: 'bk_001',
-  qrCode: 'ZV-QR-001-ABCDEF',
-  validFrom: '2026-06-14',
-  validTo: '2026-06-16',
-  status: 'active' as const,
-  travelerName: 'Traveler Explorer',
-  travelerEmail: 'traveler@example.com',
-  items: [
-    {
-      id: 'zi_001',
-      type: 'transfer' as const,
-      title: 'Airport Pickup',
-      description: 'Private transfer from Victoria Falls Airport to hotel',
-      date: '2026-06-14',
-      time: '14:00',
-      location: 'Victoria Falls Airport',
-      status: 'upcoming' as const,
-      confirmationCode: 'TRF-001',
-      notes: 'Driver will hold a ZimVisit sign at arrivals',
-    },
-    {
-      id: 'zi_002',
-      type: 'hotel' as const,
-      title: 'Victoria Falls Hotel',
-      description: 'Check-in at the historic Victoria Falls Hotel',
-      date: '2026-06-14',
-      time: '15:00',
-      location: 'Victoria Falls Hotel, Zimbabwe',
-      status: 'upcoming' as const,
-      confirmationCode: 'HTL-002',
-      notes: 'Deluxe room, 2 guests. Early check-in confirmed.',
-    },
-    {
-      id: 'zi_003',
-      type: 'tour' as const,
-      title: 'Victoria Falls Grand Adventure',
-      description: 'Full-day tour: Walking tour, helicopter flip, sunset cruise',
-      date: '2026-06-15',
-      time: '07:30',
-      location: 'Victoria Falls Rainforest Entrance',
-      status: 'upcoming' as const,
-      confirmationCode: 'TOUR-003',
-      notes: 'Wear comfortable shoes. Bring camera. Rain coats provided.',
-    },
-    {
-      id: 'zi_004',
-      type: 'activity' as const,
-      title: 'Boma Dinner Experience',
-      description: 'Traditional Zimbabwean dinner with drumming and dancing',
-      date: '2026-06-15',
-      time: '19:00',
-      location: 'The Boma Restaurant, Victoria Falls',
-      status: 'upcoming' as const,
-      confirmationCode: 'ACT-004',
-      notes: 'Dress code: Smart casual',
-    },
-    {
-      id: 'zi_005',
-      type: 'hotel' as const,
-      title: 'Victoria Falls Hotel',
-      description: 'Check-out',
-      date: '2026-06-16',
-      time: '11:00',
-      location: 'Victoria Falls Hotel, Zimbabwe',
-      status: 'upcoming' as const,
-      confirmationCode: 'HTL-002',
-    },
-    {
-      id: 'zi_006',
-      type: 'transfer' as const,
-      title: 'Airport Drop-off',
-      description: 'Private transfer from hotel to Victoria Falls Airport',
-      date: '2026-06-16',
-      time: '13:00',
-      location: 'Victoria Falls Hotel',
-      status: 'upcoming' as const,
-      confirmationCode: 'TRF-005',
-      notes: 'Please be ready 15 minutes before pickup time',
-    },
-  ],
-};
 
 // ---- Type Icon Map ----
 const TYPE_ICON: Record<string, React.ReactNode> = {
@@ -154,25 +70,40 @@ const STATUS_ICON: Record<string, React.ReactNode> = {
 };
 
 const ZimPass: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+  const [searchParams] = useSearchParams();
+  const bookingId = searchParams.get('bookingId');
   const [booking, setBooking] = useState<Booking | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchBooking = async () => {
-      if (!id) return;
       setLoading(true);
+      setError(null);
       try {
-        const res = await bookingsApi.getById(id);
-        setBooking((res as any).data || res);
-      } catch (err) {
+        if (bookingId) {
+          const res = await bookingsApi.getById(bookingId);
+          setBooking((res as any).data || res);
+        } else {
+          // No bookingId specified, try to load all bookings and use the first confirmed one
+          const res = await bookingsApi.getAll();
+          const bookings: Booking[] = Array.isArray(res) ? res : (res as any).data || [];
+          const confirmed = bookings.find((b) => b.status === 'confirmed');
+          if (confirmed) {
+            setBooking(confirmed);
+          } else {
+            setError('No confirmed bookings found. Please book a tour first to get your ZimPass.');
+          }
+        }
+      } catch (err: any) {
+        setError(err.message || 'Failed to load ZimPass');
         message.error('Failed to load ZimPass data.');
       } finally {
         setLoading(false);
       }
     };
     fetchBooking();
-  }, [id]);
+  }, [bookingId]);
 
   if (loading) {
     return (
@@ -182,8 +113,29 @@ const ZimPass: React.FC = () => {
     );
   }
 
-  // Derive ZimPass data from booking, fallback to mock
-  const pass = booking ? {
+  if (error || !booking) {
+    return (
+      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 16 }}>
+        <Empty
+          description={
+            <Text style={{ color: '#737373', fontSize: 16 }}>
+              {error || 'No ZimPass available.'}
+            </Text>
+          }
+        >
+          <Space>
+            <Button type="primary" onClick={() => window.location.reload()} style={{ background: '#166534', borderColor: '#166534' }}>
+              Retry
+            </Button>
+            <Button onClick={() => window.location.href = '/bookings'}>View Bookings</Button>
+          </Space>
+        </Empty>
+      </div>
+    );
+  }
+
+  // Derive ZimPass data from booking
+  const pass = {
     id: `zp_${booking.id}`,
     bookingId: booking.id,
     qrCode: booking.zimpassQR || `ZV-QR-${booking.reference}`,
@@ -204,7 +156,7 @@ const ZimPass: React.FC = () => {
       confirmationCode: `${item.type.toUpperCase()}-${String(i + 1).padStart(3, '0')}`,
       notes: '',
     })),
-  } : ZIMPASS_DATA;
+  };
 
   return (
     <div style={{ minHeight: '100vh', background: '#fafafa' }}>

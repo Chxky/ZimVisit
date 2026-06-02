@@ -278,16 +278,16 @@ export const Dashboard: React.FC = () => {
   return (
     <div>
       {/* Page Header */}
-      <div className="section-header" style={{ marginBottom: 24 }}>
+      <div className="section-header" style={{ marginBottom: 24, borderBottom: '2px solid #1e1b4b', paddingBottom: 12 }}>
         <div>
-          <Space align="center">
-            <Title level={4} style={{ margin: 0, color: '#1e1b4b', fontWeight: 800 }}>
-              National Command Center
+          <Space align="center" style={{ marginBottom: 4 }}>
+            <Title level={3} className="font-cinzel" style={{ margin: 0, color: '#1e1b4b', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px' }}>
+              REPUBLIC OF ZIMBABWE - MINISTRY OF TOURISM
             </Title>
-            <span className="badge-live">LIVE</span>
+            <span className="badge-live" style={{ marginLeft: 8 }}>SECURE CONNECTION</span>
           </Space>
-          <Text style={{ fontSize: 12, color: '#64748b', display: 'block', marginTop: 2 }}>
-            Real-time tourism revenue and compliance monitoring
+          <Text className="font-cinzel" style={{ fontSize: 14, color: '#64748b', display: 'block', fontWeight: 600, letterSpacing: '0.5px' }}>
+            NATIONAL COMMAND CENTER &bull; OFFICIAL OVERSIGHT DASHBOARD
           </Text>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -357,6 +357,8 @@ export const Dashboard: React.FC = () => {
             iconColor: '#ffffff',
             sparkData: sparklineData[0],
             sparkColor: '#059669',
+            stamp: 'ZTA VERIFIED',
+            stampColor: 'stamp-green'
           },
           {
             label: 'Levy Collected',
@@ -368,6 +370,8 @@ export const Dashboard: React.FC = () => {
             iconColor: '#ffffff',
             sparkData: sparklineData[2],
             sparkColor: '#312e81',
+            stamp: 'CONFIDENTIAL',
+            stampColor: 'stamp-gold'
           },
           {
             label: 'Revenue Capture Rate',
@@ -375,10 +379,12 @@ export const Dashboard: React.FC = () => {
             change: '-2.1%',
             changeType: 'down',
             icon: <SafetyOutlined />,
-            iconBg: 'linear-gradient(135deg, #f59e0b, #fbbf24)',
+            iconBg: 'linear-gradient(135deg, #d97706, #b45309)',
             iconColor: '#ffffff',
             sparkData: sparklineData[1],
             sparkColor: '#f59e0b',
+            stamp: 'ZIMRA AUDIT',
+            stampColor: 'stamp-red'
           },
           {
             label: 'Estimated Leakage',
@@ -390,6 +396,8 @@ export const Dashboard: React.FC = () => {
             iconColor: '#ffffff',
             sparkData: sparklineData[3],
             sparkColor: '#dc2626',
+            stamp: 'ACTION REQUIRED',
+            stampColor: 'stamp-red'
           },
         ].map((kpi, idx) => (
           <Col xs={24} sm={12} lg={6} key={idx}>
@@ -398,6 +406,11 @@ export const Dashboard: React.FC = () => {
               role="region"
               aria-label={`${kpi.label}: ${kpi.value}, ${kpi.change} vs last period`}
             >
+              {kpi.stamp && (
+                <div className={`official-stamp ${kpi.stampColor}`} style={{ top: 20, right: 10, transform: 'rotate(15deg)' }}>
+                  {kpi.stamp}
+                </div>
+              )}
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                 <div>
                   <div className="kpi-label">{kpi.label}</div>

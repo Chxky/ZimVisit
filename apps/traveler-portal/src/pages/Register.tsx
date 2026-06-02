@@ -42,6 +42,11 @@ const Register: React.FC = () => {
     }
   };
 
+  const handleDemoLogin = async () => {
+    message.success('OAuth Demo successful! Welcome to ZimVisit.');
+    navigate('/explore');
+  };
+
   return (
     <div
       style={{
@@ -294,6 +299,7 @@ const Register: React.FC = () => {
           <Space size={12} style={{ width: '100%', marginBottom: 32 }}>
             <Button
               block
+              onClick={handleDemoLogin}
               icon={<GoogleOutlined />}
               style={{
                 height: 48,
@@ -307,6 +313,7 @@ const Register: React.FC = () => {
             </Button>
             <Button
               block
+              onClick={handleDemoLogin}
               icon={<FacebookOutlined />}
               style={{
                 height: 48,

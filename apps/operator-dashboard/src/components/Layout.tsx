@@ -11,6 +11,7 @@ import {
 } from '@ant-design/icons';
 import { useAuthStore } from '../store/authStore';
 import { notificationsApi } from '../services/api';
+import LiveAuditDemo from './LiveAuditDemo';
 
 const { Header, Sider, Content } = Layout;
 const { Text, Title } = Typography;
@@ -105,7 +106,14 @@ export const AppLayout: React.FC = () => {
   };
 
   return (
-    <Layout style={{ minHeight: '100vh', background: '#f8fafc' }}>
+    <Layout style={{ minHeight: '100vh', background: 'transparent' }}>
+      {/* Skip to Content - Accessibility */}
+      <a
+        href="#main-content"
+        className="skip-to-content"
+      >
+        Skip to main content
+      </a>
       <Sider
         trigger={null}
         collapsible
@@ -113,6 +121,7 @@ export const AppLayout: React.FC = () => {
         width={260}
         collapsedWidth={72}
         theme="light"
+        className="glass-card"
         style={{
           borderRight: '1px solid #e2e8f0',
           background: '#ffffff',
@@ -122,6 +131,7 @@ export const AppLayout: React.FC = () => {
           bottom: 0,
           zIndex: 100,
           overflow: 'auto',
+          backdropFilter: 'blur(20px)'
         }}
       >
         {/* Logo Area */}
@@ -136,21 +146,22 @@ export const AppLayout: React.FC = () => {
           transition: 'all 0.2s ease',
         }}>
           <img
-            src="/logo.svg"
-            alt="ZimVisit"
+            src="/zim-bird-logo.png"
+            alt="ZimVisit Logo"
             style={{
               width: 36,
               height: 36,
-              borderRadius: 8,
+              borderRadius: '50%',
+              border: '2px solid #166534',
               flexShrink: 0,
             }}
           />
           {!collapsed && (
             <div style={{ overflow: 'hidden' }}>
-              <Title level={5} style={{ margin: 0, color: '#166534', fontSize: 18, fontWeight: 700, letterSpacing: '-0.3px' }}>
+              <Title level={5} style={{ margin: 0, color: '#4ade80', fontSize: 18, fontWeight: 700, letterSpacing: '-0.3px', textShadow: '0 0 10px rgba(74, 222, 128, 0.5)' }}>
                 ZimVisit
               </Title>
-              <Text style={{ fontSize: 11, color: '#94a3b8', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+              <Text style={{ fontSize: 11, color: '#64748b', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                 Operator Portal
               </Text>
             </div>
@@ -171,18 +182,18 @@ export const AppLayout: React.FC = () => {
           />
         </div>
 
-        {/* Zimbabwe Flag Accent */}
+        {/* Zimbabwe Flag Accent & Cyber Act */}
         {!collapsed && (
           <div style={{
             position: 'absolute',
             bottom: 16,
-            left: 20,
-            right: 20,
+            left: 12,
+            right: 12,
           }}>
             <div style={{
               background: 'linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%)',
               borderRadius: 10,
-              padding: '12px 14px',
+              padding: '12px',
               border: '1px solid #d1fae5',
             }}>
               <Space size={8} align="start">
@@ -202,11 +213,29 @@ export const AppLayout: React.FC = () => {
                   <Text style={{ fontSize: 12, fontWeight: 600, color: '#166534', display: 'block' }}>
                     Zimbabwe Tourism
                   </Text>
-                  <Text style={{ fontSize: 11, color: '#6b7280' }}>
+                  <Text style={{ fontSize: 10, color: '#6b7280' }}>
                     Compliant & Verified
                   </Text>
                 </div>
               </Space>
+
+              {/* Cyber Security Act Banner */}
+              <div style={{
+                background: '#052e16',
+                border: '1px solid #166534',
+                borderRadius: 6,
+                padding: '8px 6px',
+                textAlign: 'center',
+                marginTop: 12,
+              }}>
+                <SafetyOutlined style={{ color: '#22c55e', fontSize: 12, marginBottom: 2 }} />
+                <Text style={{ fontSize: 8, color: '#22c55e', fontWeight: 700, display: 'block', lineHeight: 1.2 }}>
+                  CYBER & DATA PROTECTION ACT [CH 11:22]
+                </Text>
+                <Text style={{ fontSize: 7, color: '#a7f3d0', display: 'block', marginTop: 2 }}>
+                  AES-256 ENCRYPTION
+                </Text>
+              </div>
             </div>
           </div>
         )}
@@ -238,28 +267,32 @@ export const AppLayout: React.FC = () => {
 
       <Layout style={{ marginLeft: collapsed ? 72 : 260, transition: 'margin-left 0.2s ease' }}>
         {/* Header */}
-        <Header style={{
+        <Header role="banner" className="glass-card" style={{
           padding: '0 28px',
-          background: colorBgContainer,
+          background: '#ffffff',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           borderBottom: '1px solid #e2e8f0',
+          borderLeft: 'none',
+          borderRight: 'none',
+          borderTop: 'none',
           height: 64,
           position: 'sticky',
           top: 0,
           zIndex: 50,
-          boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.03)',
+          backdropFilter: 'blur(20px)',
+          borderRadius: 0,
         }}>
           <Space align="center" size={16}>
             <Button
               type="text"
               icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
               onClick={() => setCollapsed(!collapsed)}
-              style={{ fontSize: 16, color: '#64748b', width: 36, height: 36 }}
+              style={{ fontSize: 16, color: '#1e293b', width: 36, height: 36 }}
             />
             <div>
-              <Title level={5} style={{ margin: 0, color: '#0f172a', fontSize: 16, fontWeight: 700 }}>
+              <Title level={5} style={{ margin: 0, color: '#1e293b', fontSize: 16, fontWeight: 700, textShadow: '0 0 10px rgba(255,255,255,0.2)' }}>
                 {getPageTitle()}
               </Title>
             </div>
@@ -284,7 +317,7 @@ export const AppLayout: React.FC = () => {
               <Button
                 type="text"
                 icon={<QuestionCircleOutlined />}
-                style={{ color: '#94a3b8', width: 36, height: 36 }}
+                style={{ color: '#64748b', width: 36, height: 36 }}
               />
             </Tooltip>
 
@@ -317,26 +350,28 @@ export const AppLayout: React.FC = () => {
                   <Text style={{ fontSize: 13, fontWeight: 600, color: '#1e293b', display: 'block' }}>
                     {user?.fullName?.split(' ')[0] || 'Operator'}
                   </Text>
-                  <Text style={{ fontSize: 11, color: '#94a3b8', display: 'block' }}>
+                  <Text style={{ fontSize: 11, color: '#64748b', display: 'block' }}>
                     {user?.role || 'Admin'}
                   </Text>
                 </div>
-                <DownOutlined style={{ fontSize: 10, color: '#94a3b8' }} />
+                <DownOutlined style={{ fontSize: 10, color: '#64748b' }} />
               </Space>
             </Dropdown>
           </Space>
         </Header>
 
         {/* Main Content */}
-        <Content style={{
+        <Content id="main-content" role="main" tabIndex={-1} style={{
           margin: 24,
           minHeight: 280,
+          outline: 'none',
         }}>
           <div className="animate-fade-in-up">
             <Outlet />
           </div>
         </Content>
       </Layout>
+      <LiveAuditDemo portalName="Operator Data Center" />
     </Layout>
   );
 };

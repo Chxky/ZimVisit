@@ -37,7 +37,9 @@ export const Login: React.FC = () => {
       {/* Left Panel - Brand */}
       <div style={{
         flex: 1,
-        background: 'linear-gradient(135deg, #052e16 0%, #14532d 30%, #166534 60%, #15803d 100%)',
+        background: 'linear-gradient(rgba(5, 46, 22, 0.75), rgba(5, 46, 22, 0.85)), url("/zim-big-five.png")',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
@@ -53,7 +55,7 @@ export const Login: React.FC = () => {
           width: 400,
           height: 400,
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(245,158,11,0.15) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(217,119,6,0.15) 0%, transparent 70%)',
         }} />
         <div style={{
           position: 'absolute',
@@ -126,7 +128,7 @@ export const Login: React.FC = () => {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  color: '#f59e0b',
+                  color: '#d97706',
                   fontSize: 14,
                 }}>
                   {feature.icon}
@@ -148,7 +150,7 @@ export const Login: React.FC = () => {
               { value: '$2.4M', label: 'Revenue Tracked' },
             ].map((stat, i) => (
               <div key={i}>
-                <Text style={{ color: '#f59e0b', fontSize: 24, fontWeight: 800, display: 'block' }}>
+                <Text style={{ color: '#d97706', fontSize: 24, fontWeight: 800, display: 'block' }}>
                   {stat.value}
                 </Text>
                 <Text style={{ color: 'rgba(255,255,255,0.5)', fontSize: 12, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
@@ -217,7 +219,7 @@ export const Login: React.FC = () => {
               <Form.Item name="remember" valuePropName="checked" noStyle>
                 <Checkbox>Remember me</Checkbox>
               </Form.Item>
-              <a href="#" style={{ color: '#166534', fontSize: 13, fontWeight: 500 }}>
+              <a onClick={(e) => { e.preventDefault(); message.info('Password reset coming soon'); }} style={{ color: '#166534', fontSize: 13, fontWeight: 500, cursor: 'pointer' }}>
                 Forgot password?
               </a>
             </div>
@@ -281,10 +283,10 @@ export const Login: React.FC = () => {
                 borderRadius: 10,
                 fontSize: 14,
                 fontWeight: 600,
-                background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+                background: 'linear-gradient(135deg, #d97706 0%, #b45309 100%)',
                 border: 'none',
                 color: '#fff',
-                boxShadow: '0 4px 12px rgba(245, 158, 11, 0.3)',
+                boxShadow: '0 4px 12px rgba(217, 119, 6, 0.3)',
               }}
             >
               Quick Demo Access

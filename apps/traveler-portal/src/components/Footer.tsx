@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Row, Col, Space, Divider, Typography } from 'antd';
+import { Row, Col, Space, Typography } from 'antd';
 import {
   FacebookOutlined,
   TwitterOutlined,
@@ -15,6 +15,8 @@ import {
   EnvironmentOutlined,
   HeartFilled,
 } from '@ant-design/icons';
+import { message } from 'antd';
+import { showHowItWorksModal } from '../utils/modals';
 
 const { Text, Title } = Typography;
 
@@ -50,17 +52,7 @@ const Footer: React.FC = () => {
                   marginBottom: 16,
                 }}
               >
-                <svg width="32" height="32" viewBox="0 0 64 64" fill="none">
-                  <path
-                    d="M32 8C24 8 18 14 16 20C14 26 15 32 18 36C14 38 10 42 8 48C10 47 13 46 16 46C18 50 22 54 28 56C30 56 32 56 34 56C40 54 44 50 46 46C49 46 52 47 54 48C52 42 48 38 44 36C47 32 48 26 46 20C44 14 38 8 32 8Z"
-                    fill="#f59e0b"
-                    stroke="#92400e"
-                    strokeWidth="1.5"
-                  />
-                  <path d="M28 12C28 8 30 4 32 2C34 4 36 8 36 12" stroke="#f59e0b" strokeWidth="2.5" strokeLinecap="round" fill="none" />
-                  <circle cx="28" cy="22" r="2.5" fill="#92400e" />
-                  <path d="M22 24L16 22L22 26Z" fill="#b45309" />
-                </svg>
+                <img src="/zim-bird-logo.png" alt="Zimbabwe Bird" style={{ width: 36, height: 36, objectFit: 'contain', filter: 'drop-shadow(0 2px 4px rgba(245, 158, 11, 0.4))' }} />
                 <span style={{ fontSize: 22, fontWeight: 800 }}>
                   Zim<span style={{ color: '#f59e0b' }}>Visit</span>
                 </span>
@@ -87,8 +79,7 @@ const Footer: React.FC = () => {
               ].map((social) => (
                 <a
                   key={social.label}
-                  href="#"
-                  aria-label={social.label}
+                  onClick={(e) => { e.preventDefault(); message.info(`${social.label} integration coming soon`); }}
                   style={{
                     width: 38,
                     height: 38,
@@ -157,25 +148,42 @@ const Footer: React.FC = () => {
             </Title>
             <Space direction="vertical" size={10}>
               {[
-                { label: 'About Us', to: '/about' },
-                { label: 'Careers', to: '/careers' },
-                { label: 'Press', to: '/press' },
-                { label: 'Blog', to: '/blog' },
-                { label: 'Partners', to: '/partners' },
+                { label: 'About ZimVisit', to: '/' },
+                { label: 'How It Works', isModal: true },
+                { label: 'Economic Impact', to: '/impact' },
+                { label: 'For Operators', to: '/register' },
+                { label: 'Zimbabwe Tourism', to: '/explore' },
               ].map((link) => (
-                <Link
-                  key={link.label}
-                  to={link.to}
-                  style={{
-                    color: 'rgba(255,255,255,0.65)',
-                    fontSize: 14,
-                    transition: 'color 0.2s',
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = '#f59e0b')}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(255,255,255,0.65)')}
-                >
-                  {link.label}
-                </Link>
+                link.isModal ? (
+                  <a
+                    key={link.label}
+                    onClick={(e) => { e.preventDefault(); showHowItWorksModal(); }}
+                    style={{
+                      color: 'rgba(255,255,255,0.65)',
+                      fontSize: 14,
+                      transition: 'color 0.2s',
+                      cursor: 'pointer'
+                    }}
+                    onMouseEnter={(e) => (e.currentTarget.style.color = '#f59e0b')}
+                    onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(255,255,255,0.65)')}
+                  >
+                    {link.label}
+                  </a>
+                ) : (
+                  <Link
+                    key={link.label}
+                    to={link.to!}
+                    style={{
+                      color: 'rgba(255,255,255,0.65)',
+                      fontSize: 14,
+                      transition: 'color 0.2s',
+                    }}
+                    onMouseEnter={(e) => (e.currentTarget.style.color = '#f59e0b')}
+                    onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(255,255,255,0.65)')}
+                  >
+                    {link.label}
+                  </Link>
+                )
               ))}
             </Space>
           </Col>
@@ -266,6 +274,7 @@ const Footer: React.FC = () => {
                   }}
                 />
                 <button
+                  onClick={(e) => { e.preventDefault(); message.success('Subscribed to travel deals successfully!'); }}
                   style={{
                     padding: '8px 16px',
                     borderRadius: 8,
