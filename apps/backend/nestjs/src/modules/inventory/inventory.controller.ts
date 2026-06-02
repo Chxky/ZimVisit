@@ -33,10 +33,38 @@ export class InventoryController {
   }
 
   @Public()
+  @Get('tours/:id/reviews')
+  @ApiOperation({ summary: 'Get reviews for a tour' })
+  async getTourReviews(@Param('id', ParseUUIDPipe) id: string) {
+    return this.inventoryService.findTourReviews(id);
+  }
+
+  @Public()
+  @Get('tours/:id/similar')
+  @ApiOperation({ summary: 'Get similar tours' })
+  async getSimilarTours(@Param('id', ParseUUIDPipe) id: string) {
+    return this.inventoryService.findSimilarTours(id);
+  }
+
+  @Public()
   @Get('hotels')
   @ApiOperation({ summary: 'Search hotels' })
-  async searchHotels(@Query('city') city?: string) {
-    return this.inventoryService.findHotels({ city });
+  async searchHotels(@Query('city') city?: string, @Query('q') q?: string) {
+    return this.inventoryService.findHotels({ city, q });
+  }
+
+  @Public()
+  @Get('hotels/featured')
+  @ApiOperation({ summary: 'Get featured hotels' })
+  async getFeaturedHotels() {
+    return this.inventoryService.findHotels({ featured: true });
+  }
+
+  @Public()
+  @Get('hotels/search')
+  @ApiOperation({ summary: 'Search hotels by query' })
+  async searchHotelsByQuery(@Query('q') q?: string) {
+    return this.inventoryService.findHotels({ q });
   }
 
   @Public()

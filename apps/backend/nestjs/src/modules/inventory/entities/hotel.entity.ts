@@ -25,10 +25,10 @@ export class Hotel {
   @Column({ nullable: true })
   country: string;
 
-  @Column({ type: 'simple-json', nullable: true })
+  @Column('text', { array: true, nullable: true })
   images: string[];
 
-  @Column({ type: 'simple-json', nullable: true })
+  @Column('text', { array: true, nullable: true })
   amenities: string[];
 
   @Column({ default: false })

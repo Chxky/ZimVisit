@@ -138,7 +138,7 @@ function normalizeTour(raw: any): Tour {
   const location = raw.location || 'Zimbabwe';
 
   return {
-    id: raw.id,
+    id: raw._id || raw.id,
     name: raw.name || 'Untitled Tour',
     slug: raw.slug || raw.name?.toLowerCase().replace(/[^a-z0-9]+/g, '-') || '',
     description: raw.description || '',

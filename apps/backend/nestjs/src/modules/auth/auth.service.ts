@@ -1,10 +1,12 @@
 import { Injectable, UnauthorizedException, ConflictException, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import { UsersService } from '../users/users.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { JwtPayload } from '../../common/interfaces/jwt-payload.interface';
+import { BruteForceGuard } from '../../common/security/brute-force.guard';
+import { SecurityEventService } from '../../common/security/security-event.service';
 
 @Injectable()
 export class AuthService {
@@ -13,6 +15,7 @@ export class AuthService {
   constructor(
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
+    private readonly securityEventService: SecurityEventService,
   ) {}
 
   async register(dto: RegisterDto) {
@@ -31,19 +34,49 @@ export class AuthService {
     return { user: this.sanitizeUser(user), ...tokens };
   }
 
-  async login(dto: LoginDto) {
+  async login(dto: LoginDto, ip?: string) {
     const user = await this.usersService.findByEmail(dto.email);
     if (!user) {
+      if (ip) {
+        BruteForceGuard.recordFailure(ip);
+        this.securityEventService.logEvent({
+          type: 'failed_login',
+          ip,
+          details: `Failed login attempt for email: ${dto.email} (user not found)`,
+        });
+      }
       throw new UnauthorizedException('Invalid credentials');
     }
 
     const isPasswordValid = await bcrypt.compare(dto.password, user.password);
     if (!isPasswordValid) {
+      if (ip) {
+        BruteForceGuard.recordFailure(ip);
+        this.securityEventService.logEvent({
+          type: 'failed_login',
+          ip,
+          userId: user.id,
+          details: `Failed login attempt for email: ${dto.email} (invalid password)`,
+        });
+      }
       throw new UnauthorizedException('Invalid credentials');
     }
 
     if (!user.isActive) {
+      if (ip) {
+        this.securityEventService.logEvent({
+          type: 'failed_login',
+          ip,
+          userId: user.id,
+          details: `Login attempt for deactivated account: ${dto.email}`,
+        });
+      }
       throw new UnauthorizedException('Account is deactivated');
+    }
+
+    // Clear failures on successful login
+    if (ip) {
+      BruteForceGuard.clearFailures(ip);
     }
 
     const tokens = await this.generateTokens(user);

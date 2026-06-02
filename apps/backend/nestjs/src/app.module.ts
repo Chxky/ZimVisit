@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { SnakeNamingStrategy } from './common/naming-strategy';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { ScheduleModule } from '@nestjs/schedule';
@@ -16,6 +17,9 @@ import { NotificationsModule } from './modules/notifications/notifications.modul
 import { OperatorsModule } from './modules/operators/operators.module';
 import { AuditModule } from './modules/audit/audit.module';
 import { ReportsModule } from './modules/reports/reports.module';
+import { DataProtectionModule } from './modules/data-protection/data-protection.module';
+import { MetricsModule } from './common/metrics/metrics.module';
+import { SecurityModule } from './common/security/security.module';
 import { HealthController } from './common/health.controller';
 import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
 import { RolesGuard } from './common/guards/roles.guard';
@@ -49,7 +53,10 @@ import { validateEnv } from './config/env.validation';
             password: config.get('DB_PASSWORD', 'zimvisit_secret'),
             database: config.get('DB_DATABASE', 'zimvisit'),
             entities: [__dirname + '/**/*.entity{.ts,.js}'],
-            synchronize: config.get('NODE_ENV') !== 'production',
+            migrations: [__dirname + '/../../database/migrations/*{.ts,.js}'],
+            migrationsRun: config.get('NODE_ENV') === 'production',
+            namingStrategy: new SnakeNamingStrategy(),
+            synchronize: false, // Use migrations in all environments
             logging: config.get('NODE_ENV') === 'development',
           };
         }
@@ -75,6 +82,9 @@ import { validateEnv } from './config/env.validation';
     OperatorsModule,
     AuditModule,
     ReportsModule,
+    DataProtectionModule,
+    MetricsModule,
+    SecurityModule,
   ],
   controllers: [HealthController],
   providers: [

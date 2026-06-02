@@ -2,6 +2,7 @@ import { Controller, Get, Param, Query, Res } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
 import { Response } from 'express';
 import { ReportsService, ReportFilters } from './reports.service';
+import { Public } from '../../common/decorators/public.decorator';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { UserRole } from '../../common/interfaces/user-role.enum';
 
@@ -10,6 +11,20 @@ import { UserRole } from '../../common/interfaces/user-role.enum';
 @Controller('reports')
 export class ReportsController {
   constructor(private readonly reportsService: ReportsService) {}
+
+  @Public()
+  @Get('economic-impact')
+  @ApiOperation({ summary: 'Get economic impact data for tourism' })
+  async getEconomicImpact() {
+    return this.reportsService.generateEconomicImpact();
+  }
+
+  @Public()
+  @Get('platform-stats')
+  @ApiOperation({ summary: 'Get platform statistics' })
+  async getPlatformStats() {
+    return this.reportsService.generatePlatformStats();
+  }
 
   @Get('compliance')
   @Roles(UserRole.ZTA_OFFICIAL, UserRole.ZIMRA_OFFICIAL, UserRole.SYSTEM_ADMIN)

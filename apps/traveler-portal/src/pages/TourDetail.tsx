@@ -22,6 +22,7 @@ import {
   Spin,
   Skeleton,
   message,
+  Collapse,
 } from 'antd';
 import {
   EnvironmentOutlined,
@@ -41,6 +42,9 @@ import {
   HomeOutlined,
   CompassOutlined,
   QrcodeOutlined,
+  CarOutlined,
+  CameraOutlined,
+  CoffeeOutlined,
 } from '@ant-design/icons';
 import type { Tour } from '../types';
 import { toursApi } from '../services/api';
@@ -338,6 +342,35 @@ const TourDetail: React.FC = () => {
                   Contact the operator for detailed highlights of this tour.
                 </Text>
               )}
+            </Card>
+
+            {/* Activities & Experiences */}
+            <Card style={{ borderRadius: 18, marginBottom: 24, border: '1px solid rgba(255,255,255,0.4)' }} className="glassmorphism" styles={{ body: { padding: 28 } }}>
+              <Title level={4} style={{ marginBottom: 16 }}>Activities & Experiences</Title>
+              <Text style={{ display: 'block', marginBottom: 20, color: '#737373', fontSize: 15 }}>
+                Press any activity below to explore what's offered during this tour:
+              </Text>
+              <Collapse
+                expandIconPosition="end"
+                style={{ background: 'transparent', border: 'none' }}
+                items={[
+                  {
+                    key: '1',
+                    label: <Space size={12}><CarOutlined style={{ color: '#166534', fontSize: 20 }} /><Text strong style={{ fontSize: 16 }}>Morning Guided Exploration</Text></Space>,
+                    children: <Paragraph style={{ color: '#404040', fontSize: 15, paddingLeft: 32, marginBottom: 0 }}>Experience the thrill of discovery with our expert guides. Get up close with nature and learn about the local ecosystem during the prime morning hours. <br/><br/><Text strong>Duration:</Text> 3-4 Hours</Paragraph>,
+                  },
+                  {
+                    key: '2',
+                    label: <Space size={12}><CameraOutlined style={{ color: '#166534', fontSize: 20 }} /><Text strong style={{ fontSize: 16 }}>Photographic & Scenic Views</Text></Space>,
+                    children: <Paragraph style={{ color: '#404040', fontSize: 15, paddingLeft: 32, marginBottom: 0 }}>Capture breathtaking moments at the most scenic vantage points. Perfect for both amateur and professional photographers. <br/><br/><Text strong>Duration:</Text> 2 Hours</Paragraph>,
+                  },
+                  {
+                    key: '3',
+                    label: <Space size={12}><CoffeeOutlined style={{ color: '#166534', fontSize: 20 }} /><Text strong style={{ fontSize: 16 }}>Local Cultural Exchange & Refreshments</Text></Space>,
+                    children: <Paragraph style={{ color: '#404040', fontSize: 15, paddingLeft: 32, marginBottom: 0 }}>Enjoy locally sourced refreshments while engaging with local community leaders. Learn about the rich heritage and history of the area. <br/><br/><Text strong>Duration:</Text> 1.5 Hours</Paragraph>,
+                  }
+                ]}
+              />
             </Card>
 
             {/* Inclusions / Exclusions */}

@@ -37,6 +37,35 @@ export class InventoryService {
     return tour;
   }
 
+  /**
+   * Get reviews for a tour. Returns an empty array until a Review entity is implemented.
+   */
+  async findTourReviews(_id: string): Promise<any[]> {
+    // TODO: Implement Review entity and query
+    return [];
+  }
+
+  /**
+   * Get similar tours based on category, excluding the given tour ID.
+   */
+  async findSimilarTours(id: string, limit = 3): Promise<Tour[]> {
+    const tour = await this.findTourById(id);
+    const categories: string[] = Array.isArray(tour.categories)
+      ? tour.categories
+      : (tour.categories as any)?.split?.(',') || [];
+    const primaryCategory = categories[0]?.trim();
+    if (!primaryCategory) return [];
+
+    return this.tourRepo
+      .createQueryBuilder('tour')
+      .where('tour.id != :id', { id })
+      .andWhere('tour.isActive = true')
+      .andWhere('tour.categories LIKE :category', { category: `%${primaryCategory}%` })
+      .orderBy('tour.rating', 'DESC')
+      .limit(limit)
+      .getMany();
+  }
+
   async findToursByOperator(operatorId: string): Promise<Tour[]> {
     return this.tourRepo.find({ where: { operatorId } });
   }
@@ -52,9 +81,11 @@ export class InventoryService {
     return this.hotelRepo.save(hotel);
   }
 
-  async findHotels(filters: { city?: string } = {}) {
+  async findHotels(filters: { city?: string; q?: string; featured?: boolean } = {}) {
     const query = this.hotelRepo.createQueryBuilder('hotel').where('hotel.isActive = true');
     if (filters.city) query.andWhere('hotel.city LIKE :city', { city: `%${filters.city}%` });
+    if (filters.q) query.andWhere('(hotel.name ILIKE :q OR hotel.city ILIKE :q OR hotel.address ILIKE :q)', { q: `%${filters.q}%` });
+    if (filters.featured) query.andWhere('hotel.rating >= 4.5');
     return query.orderBy('hotel.rating', 'DESC').getMany();
   }
 

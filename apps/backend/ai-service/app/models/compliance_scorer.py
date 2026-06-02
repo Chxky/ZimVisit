@@ -80,7 +80,7 @@ class ComplianceRiskScorer:
             "factors": {k: round(v, 1) for k, v in factors.items()},
             "predicted_leakage": predicted_leakage,
             "recommendations": recommendations,
-            "confidence": round(85 + np.random.uniform(-5, 10), 1),
+            "confidence": round(95.0 - (risk_score * 0.1), 1),
             "scored_at": datetime.now(timezone.utc).isoformat(),
         }
 

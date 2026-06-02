@@ -1,0 +1,6 @@
+{
+  "name": "ZimVisit",
+  "description": "Zimbabwe Tourism Booking & Government Compliance Platform Presentation App",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

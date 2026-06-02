@@ -22,10 +22,10 @@ export class Tour {
   @Column({ nullable: true })
   currency: string;
 
-  @Column({ type: 'simple-json', nullable: true })
+  @Column('text', { array: true, nullable: true })
   images: string[];
 
-  @Column('simple-array', { nullable: true })
+  @Column('text', { array: true, nullable: true })
   categories: string[];
 
   @Column({ nullable: true })

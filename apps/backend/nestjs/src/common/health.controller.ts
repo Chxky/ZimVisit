@@ -1,10 +1,14 @@
 import { Controller, Get } from '@nestjs/common';
+import { DataSource } from 'typeorm';
 import { SkipThrottle } from '@nestjs/throttler';
 import { Public } from './decorators/public.decorator';
+import * as net from 'net';
 
 @SkipThrottle()
 @Controller()
 export class HealthController {
+  constructor(private readonly dataSource: DataSource) {}
+
   @Public()
   @Get('health')
   check() {
@@ -29,14 +33,52 @@ export class HealthController {
 
   @Public()
   @Get('health/readiness')
-  readiness() {
+  async readiness() {
+    let dbStatus = 'disconnected';
+    try {
+      await this.dataSource.query('SELECT 1');
+      dbStatus = 'connected';
+    } catch (err) {
+      dbStatus = `disconnected: ${err.message}`;
+    }
+
+    let redisStatus = 'disconnected';
+    try {
+      const host = process.env.REDIS_HOST || 'localhost';
+      const port = parseInt(process.env.REDIS_PORT || '6379');
+      await this.checkTcpConnection(host, port);
+      redisStatus = 'connected';
+    } catch (err) {
+      redisStatus = `disconnected: ${err.message}`;
+    }
+
     return {
-      status: 'ready',
+      status: dbStatus === 'connected' && redisStatus === 'connected' ? 'ready' : 'unready',
       timestamp: new Date().toISOString(),
       uptime: process.uptime(),
-      database: 'connected',
-      redis: 'connected',
+      database: dbStatus,
+      redis: redisStatus,
     };
+  }
+
+  private checkTcpConnection(host: string, port: number): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const socket = new net.Socket();
+      socket.setTimeout(1000);
+      socket.once('connect', () => {
+        socket.destroy();
+        resolve();
+      });
+      socket.once('timeout', () => {
+        socket.destroy();
+        reject(new Error('Connection timeout'));
+      });
+      socket.once('error', (err) => {
+        socket.destroy();
+        reject(err);
+      });
+      socket.connect(port, host);
+    });
   }
 
   @Public()

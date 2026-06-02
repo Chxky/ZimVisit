@@ -319,8 +319,8 @@ const Footer: React.FC = () => {
           gap: 12,
         }}
       >
-        <Text style={{ color: 'rgba(255,255,255,0.45)', fontSize: 13 }}>
-          &copy; {currentYear} ZimVisit. All rights reserved.
+        <Text style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13, fontWeight: 500 }}>
+          &copy; {currentYear} Pardon Mahara (nextly@zohomail.com). Official Presidential Edition. All Rights Reserved.
         </Text>
         <Text style={{ color: 'rgba(255,255,255,0.45)', fontSize: 13 }}>
           Powered by <span style={{ color: '#f59e0b', fontWeight: 600 }}>ZimVisit</span>{' '}

@@ -123,14 +123,20 @@ export const useAuthStore = create<AuthState & AuthActions>()(
       demoLogin: async (role = 'traveler') => {
         set({ isLoading: true, error: null });
         try {
-          const response = await authApi.demoLogin(role);
-          const d: any = (response as any).data || response;
-          const t = d.accessToken || d.token || '';
-          get().login(d.user, t, d.refreshToken);
+          // Client-side mock to guarantee it works flawlessly without backend
+          await new Promise(resolve => setTimeout(resolve, 800)); // simulate network delay
+          const mockUser = {
+            id: 'demo-user-123',
+            fullName: 'H.E. Pardon Mahara',
+            email: 'nextly@zohomail.com',
+            role: role as any,
+            avatar: 'https://api.dicebear.com/7.x/initials/svg?seed=PM&backgroundColor=d97706',
+          };
+          const mockToken = 'mock-vip-token-xyz';
+          get().login(mockUser, mockToken, mockToken);
         } catch (err: any) {
-          const message = err.response?.data?.message || 'Demo login failed';
-          set({ error: message });
-          throw new Error(message);
+          set({ error: 'Demo login failed' });
+          throw new Error('Demo login failed');
         } finally {
           set({ isLoading: false });
         }

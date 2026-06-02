@@ -52,7 +52,9 @@ class RevenueForecaster:
             })
 
         total_predicted = sum(f["predicted_revenue"] for f in forecasts)
-        leakage_rate = np.random.uniform(0.15, 0.25)
+        # Deterministic leakage rate based on the regression slope
+        slope = base_trend[0]
+        leakage_rate = 0.18 + min(0.06, max(-0.04, slope / 200000.0))
         predicted_leakage = total_predicted * leakage_rate
 
         return {
@@ -137,8 +139,10 @@ class RevenueForecaster:
         total_estimated_leakage = 0
 
         for op_id in operator_ids:
-            leakage = np.random.uniform(10000, 150000)
-            compliance_rate = np.random.uniform(20, 95)
+            # Deterministic seed from the operator ID characters
+            seed = sum(ord(c) for c in op_id)
+            compliance_rate = 45.0 + (seed % 46)
+            leakage = 20000.0 + (seed % 9) * 15000.0
 
             total_estimated_leakage += leakage
             breakdown.append({

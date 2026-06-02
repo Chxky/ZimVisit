@@ -1,52 +1,36 @@
 {
-  "name": "zimvisit",
-  "version": "1.0.0",
+  "name": "react-example",
   "private": true,
-  "description": "ZimVisit - Zimbabwe Tourism Booking & Government Compliance Platform",
-  "workspaces": [
-    "packages/*",
-    "apps/backend/nestjs",
-    "apps/operator-dashboard",
-    "apps/government-portal",
-    "apps/traveler-portal"
-  ],
+  "version": "0.0.0",
+  "author": "Pardon mahara <nextly@zohomail.com>",
+  "type": "module",
   "scripts": {
-    "backend": "npm run start:dev -w apps/backend/nestjs",
-    "operator": "npm run dev -w apps/operator-dashboard",
-    "government": "npm run dev -w apps/government-portal",
-    "traveler": "npm run dev -w apps/traveler-portal",
-    "ai-service": "cd apps/backend/ai-service && uvicorn app.main:app --reload --port 8000",
-    "dev": "concurrently \"npm run backend\" \"npm run operator\" \"npm run government\" \"npm run traveler\" \"npm run ai-service\"",
-    "build": "npm run build -w apps/backend/nestjs && npm run build -w apps/operator-dashboard && npm run build -w apps/government-portal && npm run build -w apps/traveler-portal",
-    "test": "npm test -w apps/backend/nestjs",
-    "test:ai": "cd apps/backend/ai-service && python -m pytest tests/ -v",
-    "lint": "npm run lint -w apps/operator-dashboard && npm run lint -w apps/government-portal && npm run lint -w apps/backend/nestjs",
-    "format": "prettier --write \"**/*.{ts,tsx,js,json,md,yml,yaml}\"",
-    "format:check": "prettier --check \"**/*.{ts,tsx,js,json,md,yml,yaml}\"",
-    "prepare": "husky",
-    "docker:up": "docker compose up -d",
-    "docker:down": "docker compose down",
-    "setup": "npm install && cd apps/backend/ai-service && pip install -r requirements.txt"
+    "dev": "tsx server.ts",
+    "build": "vite build && esbuild server.ts --bundle --platform=node --format=cjs --packages=external --sourcemap --outfile=dist/server.cjs",
+    "start": "node dist/server.cjs",
+    "clean": "rm -rf dist server.js",
+    "lint": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@google/genai": "^2.7.0",
+    "@tailwindcss/vite": "^4.1.14",
+    "@vitejs/plugin-react": "^5.0.4",
+    "dotenv": "^17.2.3",
+    "express": "^4.21.2",
+    "lucide-react": "^0.546.0",
+    "motion": "^12.23.24",
+    "react": "^19.0.1",
+    "react-dom": "^19.0.1",
+    "vite": "^6.2.3"
   },
   "devDependencies": {
-    "@commitlint/cli": "^19.8.0",
-    "@commitlint/config-conventional": "^19.8.0",
-    "concurrently": "^8.2.2",
-    "husky": "^9.1.7",
-    "lint-staged": "^15.5.2",
-    "prettier": "^3.5.3"
-  },
-  "lint-staged": {
-    "*.{ts,tsx,js,jsx}": [
-      "prettier --write",
-      "eslint --fix"
-    ],
-    "*.{json,md,yml,yaml}": [
-      "prettier --write"
-    ]
-  },
-  "engines": {
-    "node": ">=20.0.0",
-    "npm": ">=10.0.0"
+    "@types/express": "^4.17.21",
+    "@types/node": "^22.14.0",
+    "autoprefixer": "^10.4.21",
+    "esbuild": "^0.25.0",
+    "tailwindcss": "^4.1.14",
+    "tsx": "^4.21.0",
+    "typescript": "~5.8.2",
+    "vite": "^6.2.3"
   }
 }

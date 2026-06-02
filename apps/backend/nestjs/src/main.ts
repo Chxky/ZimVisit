@@ -7,16 +7,37 @@ import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
 import { TimeoutInterceptor } from './common/interceptors/timeout.interceptor';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
+import { MetricsInterceptor } from './common/interceptors/metrics.interceptor';
+import { SanitizationInterceptor } from './common/security/sanitization.interceptor';
+import { CsrfGuard } from './common/guards/csrf.guard';
 import { setupSwagger } from './config/swagger.config';
+import { createLogger } from './config/logger.config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     bufferLogs: true,
+    logger: createLogger(),
   });
   const configService = app.get(ConfigService);
   const logger = new Logger('Bootstrap');
 
-  app.use(helmet());
+  app.use(helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+        styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+        fontSrc: ["'self'", "https://fonts.gstatic.com", "data:"],
+        imgSrc: ["'self'", "data:", "https:", "blob:"],
+        connectSrc: ["'self'", "https://api.zimvisit.co.zw", "wss:"],
+        frameAncestors: ["'self'"],
+        baseUri: ["'self'"],
+        formAction: ["'self'"],
+      },
+    },
+    hsts: { maxAge: 31536000, includeSubDomains: true, preload: true },
+    referrerPolicy: { policy: 'strict-origin-when-cross-origin' },
+  } as any));
 
   // Middleware to capture IP and User-Agent for audit trail
   app.use((req: any, _res: any, next: any) => {
@@ -26,7 +47,7 @@ async function bootstrap() {
   });
 
   app.setGlobalPrefix(configService.get('API_PREFIX', 'api/v1'), {
-    exclude: ['health', 'health/liveness', 'health/readiness'],
+    exclude: ['health', 'health/liveness', 'health/readiness', 'metrics'],
   });
 
   app.useGlobalPipes(
@@ -39,10 +60,12 @@ async function bootstrap() {
   );
 
   app.useGlobalFilters(new HttpExceptionFilter());
-  app.useGlobalInterceptors(new LoggingInterceptor(), new TransformInterceptor(), new TimeoutInterceptor());
+  app.useGlobalInterceptors(new SanitizationInterceptor(), new LoggingInterceptor(), new MetricsInterceptor(), new TransformInterceptor(), new TimeoutInterceptor());
+  app.useGlobalGuards(new CsrfGuard());
 
   app.enableCors({
     origin: [
+      'http://localhost',
       'http://localhost:3001',
       'http://localhost:3002',
       'http://localhost:3003',
@@ -52,7 +75,7 @@ async function bootstrap() {
     ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-API-Key'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-API-Key', 'X-Requested-With'],
   });
 
   app.enableShutdownHooks();

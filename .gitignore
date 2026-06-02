@@ -1,69 +1,8 @@
-# Dependencies
 node_modules/
-.pnp
-.pnp.js
-
-# Build output
-dist/
 build/
-*.tsbuildinfo
-
-# Compiled config files (keep .ts source only)
-*.config.js
-*.config.d.ts
-
-# Environment
-.env
-.env.local
-.env.production
-.env.*.local
-
-# Logs
-*.log
-logs/
-npm-debug.log*
-
-# OS
-.DS_Store
-Thumbs.db
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# Testing
+dist/
 coverage/
-.nyc_output/
-.pytest_cache/
-
-# TypeScript
-*.tsbuildinfo
-
-# Flutter
-apps/traveler-app/.dart_tool/
-apps/traveler-app/.packages
-apps/traveler-app/build/
-apps/traveler-app/.flutter-plugins
-apps/traveler-app/.flutter-plugins-dependencies
-
-# Python
-__pycache__/
-*.pyc
-*.pyo
-*.egg-info/
-
-# Data
-data/
-docker-data/
-
-# SSL certs (generated locally)
-certs/
-
-# Husky
-.husky/_
-
-# Misc
-*.tgz
-.eslintcache
+.DS_Store
+*.log
+.env*
+!.env.example

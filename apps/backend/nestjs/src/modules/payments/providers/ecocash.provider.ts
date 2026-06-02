@@ -38,7 +38,16 @@ export class EcocashProvider {
     }
   }
 
-  async handleCallback(payload: any): Promise<any> {
-    return { id: payload.id, status: PaymentStatus.SUCCESS, providerReference: payload.transactionId };
+  async handleCallback(payload: any, payment: Payment): Promise<any> {
+    const incomingAmount = parseFloat(payload.amount);
+    if (Math.abs(incomingAmount - parseFloat(payment.amount.toString())) > 0.01) {
+      this.logger.error(`EcoCash amount mismatch! Expected: ${payment.amount}, Received: ${incomingAmount}`);
+      return { success: false, error: 'EcoCash payment amount mismatch' };
+    }
+
+    return {
+      success: true,
+      providerReference: payload.providerReference || payload.transactionId || `ECO-${Date.now()}`,
+    };
   }
 }

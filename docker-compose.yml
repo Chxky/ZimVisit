@@ -6,7 +6,7 @@ services:
     environment:
       POSTGRES_DB: zimvisit
       POSTGRES_USER: zimvisit
-      POSTGRES_PASSWORD: zimvisit_secret
+      POSTGRES_PASSWORD: zimvisit_s3cur3_P@ssw0rd_2024_very_s3cur3
     ports:
       - "5432:5432"
     volumes:
@@ -43,7 +43,7 @@ services:
       DB_HOST: postgres
       DB_PORT: 5432
       DB_USERNAME: zimvisit
-      DB_PASSWORD: zimvisit_secret
+      DB_PASSWORD: zimvisit_s3cur3_P@ssw0rd_2024_very_s3cur3
       DB_DATABASE: zimvisit
       REDIS_HOST: redis
       AI_SERVICE_URL: http://ai-service:8000
@@ -81,7 +81,8 @@ services:
     ports:
       - "3001:3001"
     depends_on:
-      - api
+      api:
+        condition: service_healthy
 
   government-portal:
     build:
@@ -92,7 +93,8 @@ services:
     ports:
       - "3002:3002"
     depends_on:
-      - api
+      api:
+        condition: service_healthy
 
   traveler-portal:
     build:
@@ -103,7 +105,8 @@ services:
     ports:
       - "3003:3003"
     depends_on:
-      - api
+      api:
+        condition: service_healthy
 
   nginx:
     image: nginx:alpine

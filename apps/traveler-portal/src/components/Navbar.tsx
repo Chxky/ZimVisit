@@ -18,6 +18,7 @@ import {
   RobotOutlined,
   FundOutlined,
   SafetyCertificateOutlined,
+  GlobalOutlined,
 } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { useAuthStore } from '../store/authStore';
@@ -119,6 +120,23 @@ const Navbar: React.FC = () => {
       : []),
   ];
 
+  // Language Menu
+  const languageMenuItems: MenuProps['items'] = [
+    { key: 'en', label: 'English (UK)' },
+    { key: 'fr', label: 'Français' },
+    { key: 'es', label: 'Español' },
+    { key: 'zh', label: '中文 (Mandarin)' },
+    { key: 'sn', label: 'Shona' },
+    { key: 'nd', label: 'Ndebele' },
+  ].map(lang => ({
+    ...lang,
+    onClick: () => {
+      import('antd').then(({ message }) => {
+        message.success(`Translating portal to ${lang.label}...`);
+      });
+    }
+  }));
+
   const isHome = location.pathname === '/';
   const navBg = scrolled || !isHome
     ? 'rgba(22, 101, 52, 0.97)'
@@ -185,8 +203,9 @@ const Navbar: React.FC = () => {
           left: 0,
           right: 0,
           zIndex: 1000,
-          background: navBg,
-          backdropFilter: scrolled ? 'blur(12px)' : 'none',
+          background: scrolled ? 'rgba(22, 101, 52, 0.85)' : navBg,
+          backdropFilter: scrolled ? 'blur(20px)' : 'none',
+          WebkitBackdropFilter: scrolled ? 'blur(20px)' : 'none',
           transition: 'all 0.3s ease',
           borderBottom: scrolled ? '1px solid rgba(255,255,255,0.1)' : 'none',
           boxShadow: scrolled ? '0 4px 20px rgba(0,0,0,0.15)' : 'none',
@@ -292,8 +311,25 @@ const Navbar: React.FC = () => {
             </a>
           </div>
 
-          {/* Desktop Right Section */}
-          <div className="hide-mobile" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          {/* Desktop Right Section & Translator */}
+          <div className="hide-mobile" style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+            {/* Native Language Dropdown */}
+            <Dropdown menu={{ items: languageMenuItems }} placement="bottomRight" trigger={['click']}>
+              <Button 
+                type="text" 
+                icon={<GlobalOutlined />} 
+                style={{ 
+                  color: '#ffffff', 
+                  background: 'rgba(255,255,255,0.1)', 
+                  border: '1px solid rgba(255,255,255,0.2)',
+                  backdropFilter: 'blur(10px)',
+                  borderRadius: 8
+                }}
+              >
+                English
+              </Button>
+            </Dropdown>
+
             {isAuthenticated && user ? (
               <Dropdown menu={{ items: userMenuItems }} placement="bottomRight" trigger={['click']}>
                 <Space

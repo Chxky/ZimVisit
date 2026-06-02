@@ -92,5 +92,22 @@ export function validateEnv(config: Record<string, unknown>) {
     );
   }
 
+  // Security: reject insecure defaults in production
+  if (validated.NODE_ENV === 'production') {
+    const insecureSecrets = [
+      { key: 'JWT_SECRET', value: validated.JWT_SECRET },
+      { key: 'DB_PASSWORD', value: validated.DB_PASSWORD },
+    ];
+    const insecure = insecureSecrets.filter(
+      (s) => !s.value || s.value === 'change-in-production' || s.value === 'zimvisit_secret' || s.value.length < 32,
+    );
+    if (insecure.length > 0) {
+      throw new Error(
+        `SECURITY: Insecure secrets detected in production: ${insecure.map((s) => s.key).join(', ')}. ` +
+        `${insecure.map((s) => `${s.key} must be at least 32 characters and not a default value`).join('; ')}`,
+      );
+    }
+  }
+
   return validated;
 }

@@ -59,27 +59,76 @@ export class PaymentsService {
   }
 
   async handleCallback(provider: PaymentProvider, payload: any) {
-    let payment: Payment;
+    const transactionReference = payload.reference || payload.transactionId || payload.id;
+    if (!transactionReference) {
+      throw new BadRequestException('Missing transaction reference in payload');
+    }
 
+    // Lookup payment by transactionReference or providerReference
+    let payment = await this.paymentRepo.findOne({
+      where: [
+        { transactionReference },
+        { providerReference: transactionReference },
+      ],
+    });
+
+    if (!payment && payload.data?.object) {
+      // Stripe nested reference fallback
+      const nestedRef = payload.data.object.metadata?.transactionReference || payload.data.object.id;
+      if (nestedRef) {
+        payment = await this.paymentRepo.findOne({
+          where: [
+            { transactionReference: nestedRef },
+            { providerReference: nestedRef },
+          ],
+        });
+      }
+    }
+
+    if (!payment) {
+      throw new BadRequestException(`Payment not found for reference ${transactionReference}`);
+    }
+
+    // Return immediately if already processed
+    if (payment.status === PaymentStatus.SUCCESS) {
+      return payment;
+    }
+
+    let verificationResult;
     switch (provider) {
       case PaymentProvider.PAYNOW:
-        payment = await this.paynowProvider.handleCallback(payload);
+        verificationResult = await this.paynowProvider.handleCallback(payload, payment);
         break;
       case PaymentProvider.ECOCASH:
-        payment = await this.ecocashProvider.handleCallback(payload);
+        verificationResult = await this.ecocashProvider.handleCallback(payload, payment);
         break;
       case PaymentProvider.STRIPE:
-        payment = await this.stripeProvider.handleWebhook(payload);
+        verificationResult = await this.stripeProvider.handleWebhook(payload, payment);
         break;
       default:
         throw new BadRequestException('Unsupported payment provider');
     }
 
-    if (payment.status === PaymentStatus.SUCCESS) {
-      payment.paidAt = new Date();
+    if (!verificationResult || !verificationResult.success) {
+      payment.status = PaymentStatus.FAILED;
+      payment.providerResponse = {
+        ...payment.providerResponse,
+        error: verificationResult?.error || 'Verification failed',
+      };
       await this.paymentRepo.save(payment);
-      await this.bookingsService.markPaid(payment.bookingId);
+      throw new BadRequestException(verificationResult?.error || 'Payment signature verification failed');
     }
+
+    payment.status = PaymentStatus.SUCCESS;
+    payment.paidAt = new Date();
+    payment.providerReference = verificationResult.providerReference || payment.providerReference;
+    payment.providerResponse = {
+      ...payment.providerResponse,
+      callbackPayload: payload,
+    };
+
+    await this.paymentRepo.save(payment);
+    await this.bookingsService.markPaid(payment.bookingId);
 
     return payment;
   }
