@@ -337,7 +337,6 @@ const Explore: React.FC = () => {
             }}
           >
             {Object.entries(DESTINATION_IMAGES)
-              .filter(([_, url]) => url.startsWith('/images'))
               .map(([name, imgUrl]) => (
                 <div
                   key={name}

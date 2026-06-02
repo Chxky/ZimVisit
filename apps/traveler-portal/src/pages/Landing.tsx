@@ -25,7 +25,7 @@ import {
   SwapOutlined,
 } from '@ant-design/icons';
 import { useAuthStore } from '../store/authStore';
-import { DESTINATION_IMAGES, GOVERNMENT_BRANDING } from '../constants/images';
+import { DESTINATION_IMAGES, GOVERNMENT_BRANDING, HERO_IMAGES } from '../constants/images';
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -228,7 +228,7 @@ const Landing: React.FC = () => {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          backgroundImage: `url(/premium-hero.png)`,
+          backgroundImage: `url(${HERO_IMAGES.landing})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           overflow: 'hidden',

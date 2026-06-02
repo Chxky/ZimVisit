@@ -32,9 +32,10 @@ const LiveAuditDemo: React.FC<{ portalName: string }> = ({ portalName }) => {
     const runAudit = async () => {
       try {
         const opId = user?.operatorId || 'OP-DEMO-1';
-        let data;
+        let data: any;
         try {
-          data = await complianceApi.getOperatorCompliance(opId);
+          const res = await complianceApi.getOperatorCompliance(opId);
+          data = res.data?.data || res.data || { totalReports: 12, compliant: 12, flagged: 0, complianceRate: 100 };
         } catch (e) {
           // Fallback if no real data
           data = { totalReports: 12, compliant: 12, flagged: 0, complianceRate: 100 };

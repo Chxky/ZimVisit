@@ -8,8 +8,10 @@ import { Spin, Layout } from 'antd';
 import { useAuthStore } from './store/authStore';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import SkipToContent from './components/SkipToContent';
+import ErrorBoundary from './components/ErrorBoundary';
 import CookieConsent from './components/CookieConsent';
+import SkipToContent from './components/SkipToContent';
+import WalkingAnimal from './components/WalkingAnimal';
 import ZimPassDemo from './components/ZimPassDemo';
 
 // ---- Lazy-loaded Pages ----
@@ -88,7 +90,7 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => (
     <footer role="contentinfo">
       <Footer />
     </footer>
-    <ZimPassDemo />
+    <WalkingAnimal />
     <CookieConsent />
   </>
 );

@@ -39,6 +39,23 @@ const initialState: AuthState = {
   error: null,
 };
 
+import { encryptData, decryptData } from '../services/encryption';
+
+const customStorage = {
+  getItem: async (name: string): Promise<string | null> => {
+    const value = localStorage.getItem(name);
+    if (!value) return null;
+    return await decryptData(value);
+  },
+  setItem: async (name: string, value: string): Promise<void> => {
+    const encrypted = await encryptData(value);
+    localStorage.setItem(name, encrypted);
+  },
+  removeItem: (name: string): void => {
+    localStorage.removeItem(name);
+  },
+};
+
 export const useAuthStore = create<AuthState & AuthActions>()(
   persist(
     (set, get) => ({
@@ -91,12 +108,21 @@ export const useAuthStore = create<AuthState & AuthActions>()(
       loginWithApi: async (email: string, password: string) => {
         set({ isLoading: true, error: null });
         try {
-          const response = await authApi.login({ email, password });
-          const d: any = (response as any).data || response;
-          const t = d.accessToken || d.token || '';
-          get().login(d.user, t, d.refreshToken);
+          await new Promise(resolve => setTimeout(resolve, 800)); // simulate network delay
+          const mockUser = {
+            id: 'demo-user-123',
+            fullName: 'H.E. Pardon Mahara',
+            email: 'nextly@zohomail.com',
+            role: 'traveler' as any,
+            avatar: 'https://api.dicebear.com/7.x/initials/svg?seed=PM&backgroundColor=d97706',
+            isVerified: true,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          };
+          const mockToken = 'mock-vip-token-xyz';
+          get().login(mockUser, mockToken, mockToken);
         } catch (err: any) {
-          const message = err.response?.data?.message || 'Invalid email or password';
+          const message = 'Invalid email or password';
           set({ error: message });
           throw new Error(message);
         } finally {
@@ -107,12 +133,21 @@ export const useAuthStore = create<AuthState & AuthActions>()(
       registerWithApi: async (data) => {
         set({ isLoading: true, error: null });
         try {
-          const response = await authApi.register(data);
-          const d: any = (response as any).data || response;
-          const t = d.accessToken || d.token || '';
-          get().login(d.user, t, d.refreshToken);
+          await new Promise(resolve => setTimeout(resolve, 800)); // simulate network delay
+          const mockUser = {
+            id: 'demo-user-123',
+            fullName: data.fullName || 'H.E. Pardon Mahara',
+            email: data.email || 'nextly@zohomail.com',
+            role: 'traveler' as any,
+            avatar: 'https://api.dicebear.com/7.x/initials/svg?seed=PM&backgroundColor=d97706',
+            isVerified: true,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          };
+          const mockToken = 'mock-vip-token-xyz';
+          get().login(mockUser, mockToken, mockToken);
         } catch (err: any) {
-          const message = err.response?.data?.message || 'Registration failed. Please try again.';
+          const message = 'Registration failed. Please try again.';
           set({ error: message });
           throw new Error(message);
         } finally {
@@ -131,6 +166,9 @@ export const useAuthStore = create<AuthState & AuthActions>()(
             email: 'nextly@zohomail.com',
             role: role as any,
             avatar: 'https://api.dicebear.com/7.x/initials/svg?seed=PM&backgroundColor=d97706',
+            isVerified: true,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
           };
           const mockToken = 'mock-vip-token-xyz';
           get().login(mockUser, mockToken, mockToken);
@@ -144,6 +182,7 @@ export const useAuthStore = create<AuthState & AuthActions>()(
     }),
     {
       name: 'zimvisit-auth',
+      storage: customStorage as any, // Attach AES-256-GCM engine
       partialize: (state) => ({
         user: state.user,
         token: state.token,

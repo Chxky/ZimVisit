@@ -23,6 +23,7 @@ import {
   Skeleton,
   message,
   Collapse,
+  Image,
 } from 'antd';
 import {
   EnvironmentOutlined,
@@ -341,6 +342,27 @@ const TourDetail: React.FC = () => {
                 <Text style={{ color: '#737373', fontSize: 14 }}>
                   Contact the operator for detailed highlights of this tour.
                 </Text>
+              )}
+            </Card>
+
+            {/* Image Gallery */}
+            <Card style={{ borderRadius: 18, marginBottom: 24, border: '1px solid #f0f0f0' }} styles={{ body: { padding: 28 } }}>
+              <Title level={4} style={{ marginBottom: 16 }}>Photo Gallery</Title>
+              {tour.images && tour.images.length > 0 ? (
+                <Row gutter={[12, 12]}>
+                  {tour.images.map((img, idx) => (
+                    <Col xs={12} sm={8} md={6} key={idx}>
+                      <Image
+                        src={img}
+                        alt={`${tour.name} - image ${idx + 1}`}
+                        style={{ borderRadius: 8, objectFit: 'cover', width: '100%', height: 120 }}
+                        preview={{ src: img }}
+                      />
+                    </Col>
+                  ))}
+                </Row>
+              ) : (
+                <Text style={{ color: '#737373', fontSize: 14 }}>No images available.</Text>
               )}
             </Card>
 

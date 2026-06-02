@@ -32,9 +32,10 @@ const LiveAuditDemo: React.FC<{ portalName: string }> = ({ portalName }) => {
         const end = new Date();
         const start = new Date();
         start.setMonth(start.getMonth() - 1);
-        let data;
+        let data: any;
         try {
-          data = await complianceApi.getLeakage({ startDate: start.toISOString(), endDate: end.toISOString() });
+          const res = await complianceApi.getLeakage({ startDate: start.toISOString(), endDate: end.toISOString() });
+          data = res.data?.data || res.data || { estimatedLeakage: 0, nonCompliantBookings: 0 };
         } catch (e) {
           data = { estimatedLeakage: 0, nonCompliantBookings: 0 };
         }

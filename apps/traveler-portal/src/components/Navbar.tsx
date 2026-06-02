@@ -313,6 +313,53 @@ const Navbar: React.FC = () => {
 
           {/* Desktop Right Section & Translator */}
           <div className="hide-mobile" style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+            {/* Majestic ZimPass Button */}
+            <div
+              className="zimpass-majestic-btn"
+              onClick={() => navigate('/zimpass')}
+              style={{
+                height: 48,
+                padding: '0 20px',
+                background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+                border: '2px solid #fcd34d',
+                borderRadius: 24,
+                color: '#ffffff',
+                fontWeight: 800,
+                fontSize: 16,
+                display: 'flex',
+                alignItems: 'center',
+                gap: 12,
+                boxShadow: '0 4px 16px rgba(245, 158, 11, 0.4)',
+                cursor: 'pointer',
+                transition: 'all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'scale(1.05) translateY(-2px)';
+                e.currentTarget.style.boxShadow = '0 8px 24px rgba(245, 158, 11, 0.6)';
+                const img = e.currentTarget.querySelector('img');
+                if (img) img.style.transform = 'scale(1.1) rotate(5deg)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'scale(1) translateY(0)';
+                e.currentTarget.style.boxShadow = '0 4px 16px rgba(245, 158, 11, 0.4)';
+                const img = e.currentTarget.querySelector('img');
+                if (img) img.style.transform = 'scale(1) rotate(0deg)';
+              }}
+            >
+              <img 
+                src="/golden-lion-qr.png" 
+                alt="ZimPass Lion" 
+                style={{ 
+                  width: 32, 
+                  height: 32, 
+                  objectFit: 'contain',
+                  filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))',
+                  transition: 'transform 0.3s ease',
+                }} 
+              />
+              Get ZimPass
+            </div>
+
             {/* Native Language Dropdown */}
             <Dropdown menu={{ items: languageMenuItems }} placement="bottomRight" trigger={['click']}>
               <Button 

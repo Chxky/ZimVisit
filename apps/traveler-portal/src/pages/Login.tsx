@@ -57,7 +57,9 @@ const Login: React.FC = () => {
         className="hide-mobile"
         style={{
           flex: 1,
-          background: 'linear-gradient(135deg, #052e16 0%, #14532d 40%, #166534 70%, #000000 100%)',
+          backgroundImage: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.7)), url('/images/big_five.png')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',

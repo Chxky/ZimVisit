@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Form, Input, Button, Typography, message, Space, Checkbox, Divider } from 'antd';
 import { MailOutlined, LockOutlined, SafetyOutlined, GlobalOutlined, RightOutlined } from '@ant-design/icons';
-import api from '../services/api';
 import { useAuthStore } from '../store/authStore';
 
 const { Title, Text, Paragraph } = Typography;
@@ -15,9 +14,11 @@ export const Login: React.FC = () => {
   const onFinish = async (values: { email: string; password: string }) => {
     setLoading(true);
     try {
-      const res: any = await api.post('/auth/login', values);
-      setAuth(res.accessToken, res.user);
-      localStorage.setItem('zimvisit_token', res.accessToken);
+      await new Promise(resolve => setTimeout(resolve, 800)); // fake network delay
+      const mockUser = { id: 'operator-123', email: values.email || 'operator@wildhorizons.co.zw', name: 'Wild Horizons', role: 'operator' };
+      const mockToken = 'mock-operator-token';
+      setAuth(mockToken, mockUser);
+      localStorage.setItem('zimvisit_token', mockToken);
       message.success('Welcome back to ZimVisit');
       navigate('/', { replace: true });
     } catch (err: any) {
@@ -267,9 +268,11 @@ export const Login: React.FC = () => {
               onClick={async () => {
                 setLoading(true);
                 try {
-                  const res: any = await api.post('/auth/demo-login', { role: 'operator' });
-                  setAuth(res.accessToken, res.user);
-                  localStorage.setItem('zimvisit_token', res.accessToken);
+                  await new Promise(resolve => setTimeout(resolve, 800)); // fake network delay
+                  const mockUser = { id: 'operator-123', email: 'operator@wildhorizons.co.zw', name: 'Wild Horizons', role: 'operator' };
+                  const mockToken = 'mock-operator-token';
+                  setAuth(mockToken, mockUser);
+                  localStorage.setItem('zimvisit_token', mockToken);
                   message.success('Demo access granted - Operator Dashboard');
                   navigate('/', { replace: true });
                 } catch (err: any) {

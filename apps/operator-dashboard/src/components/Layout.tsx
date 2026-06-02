@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import {
-  Layout, Menu, Avatar, Dropdown, Badge, Typography, Space, Button, theme, Tooltip, Divider,
+  Layout, Menu, Avatar, Dropdown, Badge, Typography, Space, Button, Tooltip, Divider,
 } from 'antd';
 import {
   DashboardOutlined, CalendarOutlined, ShopOutlined, SafetyOutlined,
@@ -54,7 +54,6 @@ export const AppLayout: React.FC = () => {
   const location = useLocation();
   const user = useAuthStore((s) => s.user);
   const logout = useAuthStore((s) => s.logout);
-  const { token: { colorBgContainer } } = theme.useToken();
 
   useEffect(() => {
     const fetchCount = async () => {

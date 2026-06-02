@@ -3,7 +3,6 @@
 // Real images for Zimbabwe tourism destinations
 // ============================================================
 
-// ---- Destination Images (Unsplash - Free to use) ----
 export const DESTINATION_IMAGES: Record<string, string> = {
   'Victoria Falls': '/images/victoria-falls.png',
   'Hwange National Park': '/images/hwange-elephants.png',
@@ -12,38 +11,32 @@ export const DESTINATION_IMAGES: Record<string, string> = {
   'Lake Kariba': '/images/lake-kariba.png',
   'Nyanga': '/images/eastern-highlands.png',
   'Matobo Hills': '/images/matobo-rhino.png',
-  'Chimanimani': 'https://images.unsplash.com/photo-1551632811-561732d1e306?w=800&q=80',
+  'Harare': '/images/harare_skyline.png',
+  'Bulawayo': '/images/bulawayo_city.png',
 };
 
-// ---- Category Images ----
 export const CATEGORY_IMAGES: Record<string, string> = {
-  'victoria-falls': '/images/victoria-falls.png',
-  safari: '/images/safari-vehicle.png',
-  hiking: '/images/eastern-highlands.png',
-  cultural: '/images/great-zimbabwe.png',
-  lake: '/images/lake-kariba.png',
-  wildlife: '/images/lions-savanna.png',
-  adventure: '/images/zambezi-rafting.png',
+  'Safari & Wildlife': '/images/lions-savanna.png',
+  'Culture & Heritage': '/images/great-zimbabwe.png',
+  'Adventure & Sports': '/images/zambezi-rafting.png',
+  'Nature & Landscapes': '/images/eastern-highlands.png',
+  'City Tours': '/images/great-zimbabwe.png',
+  'Luxury Stays': '/images/victoria-falls.png',
 };
 
-// ---- Tour Specific Images ----
-export const TOUR_IMAGES: Record<string, string> = {
-  'victoria-falls': '/images/victoria-falls.png',
-  'hwange-safari': '/images/safari-vehicle.png',
-  'mana-pools': '/images/mana-pools.png',
-  'great-zimbabwe': '/images/great-zimbabwe.png',
-  'lake-kariba': '/images/lake-kariba.png',
-  'nyanga-hiking': '/images/eastern-highlands.png',
-  'matobo-hills': '/images/matobo-rhino.png',
-  'chimanimani': 'https://images.unsplash.com/photo-1551632811-561732d1e306?w=1200&q=80',
+export const FALLBACK_IMAGES = {
+  tour: '/images/safari-vehicle.png',
+  hotel: '/images/victoria-falls.png',
+  destination: '/images/victoria-falls.png',
+  userAvatar: '/zim-bird-logo.png',
+  operatorAvatar: '/zim-bird-logo.png',
 };
 
-// ---- Hero Background Images ----
 export const HERO_IMAGES = {
   landing: '/images/victoria-falls.png',
   explore: '/images/hwange-elephants.png',
-  bookings: '/images/zambezi-rafting.png',
-  profile: '/images/lions-savanna.png',
+  zimpass: '/images/great-zimbabwe.png',
+  impact: '/images/lake-kariba.png',
 };
 
 // ---- Government Branding ----

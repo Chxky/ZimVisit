@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Form, Input, Button, Typography, message, Space, Checkbox } from 'antd';
 import { MailOutlined, LockOutlined, SafetyCertificateOutlined, ArrowRightOutlined } from '@ant-design/icons';
-import api from '../services/api';
 import { useAuthStore } from '../store/authStore';
 
 const { Title, Text } = Typography;
@@ -126,9 +125,11 @@ export const Login: React.FC = () => {
   const onFinish = async (values: { email: string; password: string }) => {
     setLoading(true);
     try {
-      const res: any = await api.post('/auth/login', values);
-      setAuth(res.accessToken, res.user);
-      localStorage.setItem('zimvisit_gov_token', res.accessToken);
+      await new Promise(resolve => setTimeout(resolve, 800)); // fake network delay
+      const mockUser = { id: 'gov-123', email: values.email || 'admin@gov.zw', name: 'Gov Admin', role: 'government' };
+      const mockToken = 'mock-gov-token';
+      setAuth(mockToken, mockUser);
+      localStorage.setItem('zimvisit_gov_token', mockToken);
       message.success('Welcome to the ZimVisit Government Portal');
       navigate('/', { replace: true });
     } catch (err: any) {
@@ -347,9 +348,11 @@ export const Login: React.FC = () => {
               onClick={async () => {
                 setLoading(true);
                 try {
-                  const res: any = await api.post('/auth/demo-login', { role: 'government' });
-                  setAuth(res.accessToken, res.user);
-                  localStorage.setItem('zimvisit_gov_token', res.accessToken);
+                  await new Promise(resolve => setTimeout(resolve, 800)); // fake network delay
+                  const mockUser = { id: 'gov-123', email: 'admin@gov.zw', name: 'Gov Admin', role: 'government' };
+                  const mockToken = 'mock-gov-token';
+                  setAuth(mockToken, mockUser);
+                  localStorage.setItem('zimvisit_gov_token', mockToken);
                   message.success('Demo access granted - Government Portal');
                   navigate('/', { replace: true });
                 } catch (err: any) {
