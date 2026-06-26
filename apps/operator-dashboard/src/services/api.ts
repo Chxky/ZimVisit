@@ -17,8 +17,11 @@ api.interceptors.response.use(
   (response) => response.data?.data ?? response.data,
   (error) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem('zimvisit_token');
-      window.location.href = '/login';
+      const token = localStorage.getItem('zimvisit_token');
+      if (!token || !token.startsWith('mock-')) {
+        localStorage.removeItem('zimvisit_token');
+        window.location.href = '/login';
+      }
     }
     return Promise.reject(error.response?.data || error);
   },

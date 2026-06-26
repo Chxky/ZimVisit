@@ -128,7 +128,8 @@ export const Bookings: React.FC = () => {
           confirmed: 'green', pending: 'orange', pending_payment: 'gold',
           cancelled: 'red', completed: 'blue', in_progress: 'purple',
         };
-        return <Tag color={colors[s] || 'default'}>{s.replace('_', ' ').toUpperCase()}</Tag>;
+        const statusText = s ? s.replace('_', ' ').toUpperCase() : 'UNKNOWN';
+        return <Tag color={colors[s] || 'default'}>{statusText}</Tag>;
       },
     },
     {

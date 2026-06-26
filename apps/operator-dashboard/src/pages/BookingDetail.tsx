@@ -82,7 +82,7 @@ export const BookingDetail: React.FC = () => {
         const typeColors: Record<string, string> = {
           tour: 'green', hotel: 'blue', activity: 'purple', transfer: 'orange',
         };
-        return <Tag color={typeColors[v] || 'default'}>{v.toUpperCase()}</Tag>;
+        return <Tag color={typeColors[v] || 'default'}>{v ? v.toUpperCase() : 'UNKNOWN'}</Tag>;
       },
     },
     { title: 'Name', dataIndex: 'itemName', key: 'name', render: (v: string) => <Text strong>{v}</Text> },
@@ -144,7 +144,7 @@ export const BookingDetail: React.FC = () => {
                 color={statusColors[booking.status]}
                 style={{ fontSize: 13, padding: '2px 12px', borderRadius: 6 }}
               >
-                {booking.status.replace('_', ' ').toUpperCase()}
+                {booking.status ? booking.status.replace('_', ' ').toUpperCase() : 'UNKNOWN'}
               </Tag>
               <Tag
                 color={booking.isCompliant ? 'green' : 'red'}
@@ -212,7 +212,7 @@ export const BookingDetail: React.FC = () => {
                 <Text copyable strong>{booking.bookingReference}</Text>
               </Descriptions.Item>
               <Descriptions.Item label="Status">
-                <Tag color={statusColors[booking.status]}>{booking.status.replace('_', ' ').toUpperCase()}</Tag>
+                <Tag color={statusColors[booking.status]}>{booking.status ? booking.status.replace('_', ' ').toUpperCase() : 'UNKNOWN'}</Tag>
               </Descriptions.Item>
               <Descriptions.Item label="Total Amount">
                 <Text style={{ fontSize: 18, fontWeight: 700, color: '#166534' }}>

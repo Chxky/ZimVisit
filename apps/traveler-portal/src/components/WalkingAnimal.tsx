@@ -8,8 +8,8 @@ const WalkingAnimal: React.FC = () => {
   const [facingRight, setFacingRight] = useState(true);
 
   useEffect(() => {
-    let timeout: NodeJS.Timeout;
-    let flyTimeout: NodeJS.Timeout;
+    let timeout: ReturnType<typeof setTimeout>;
+    let flyTimeout: ReturnType<typeof setTimeout>;
     let lastScrollY = window.scrollY;
     let lastMouseX = 0;
 

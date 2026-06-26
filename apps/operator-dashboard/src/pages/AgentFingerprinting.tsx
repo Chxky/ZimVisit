@@ -132,9 +132,10 @@ export const AgentFingerprinting: React.FC = () => {
           suspicious: { color: 'orange', icon: <WarningOutlined /> },
           flagged: { color: 'red', icon: <ExclamationCircleOutlined /> },
         };
+        const st = s || 'normal';
         return (
-          <Tag color={config[s].color} icon={config[s].icon}>
-            {s.toUpperCase()}
+          <Tag color={config[st].color} icon={config[st].icon}>
+            {st.toUpperCase()}
           </Tag>
         );
       },

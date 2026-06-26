@@ -53,7 +53,7 @@ export const Inventory: React.FC = () => {
   // Stats
   const activeTours = tours.filter(t => t.isActive).length;
   const avgTourRating = tours.length > 0
-    ? (tours.reduce((sum, t) => sum + t.rating, 0) / tours.length).toFixed(1)
+    ? (tours.reduce((sum, t) => sum + (t.rating || 0), 0) / tours.length).toFixed(1)
     : '0';
 
   const tourColumns = [
@@ -88,9 +88,9 @@ export const Inventory: React.FC = () => {
       title: 'Price',
       dataIndex: 'price',
       key: 'price',
-      sorter: (a: Tour, b: Tour) => a.price - b.price,
+      sorter: (a: Tour, b: Tour) => (a.price || 0) - (b.price || 0),
       render: (v: number) => (
-        <Text style={{ fontWeight: 700, color: '#166534' }}>${v.toLocaleString()}</Text>
+        <Text style={{ fontWeight: 700, color: '#166534' }}>${(v || 0).toLocaleString()}</Text>
       ),
     },
     {
@@ -144,8 +144,8 @@ export const Inventory: React.FC = () => {
       render: (_: any, r: Tour) => (
         <Space size={6}>
           <StarFilled style={{ color: '#f59e0b', fontSize: 13 }} />
-          <Text style={{ fontWeight: 600 }}>{r.rating.toFixed(1)}</Text>
-          <Text type="secondary" style={{ fontSize: 11 }}>({r.reviewCount})</Text>
+          <Text style={{ fontWeight: 600 }}>{(r.rating || 0).toFixed(1)}</Text>
+          <Text type="secondary" style={{ fontSize: 11 }}>({r.reviewCount || 0})</Text>
         </Space>
       ),
     },
@@ -230,7 +230,7 @@ export const Inventory: React.FC = () => {
       render: (_: any, r: Hotel) => (
         <Space size={6}>
           <StarFilled style={{ color: '#f59e0b', fontSize: 13 }} />
-          <Text style={{ fontWeight: 600 }}>{r.rating.toFixed(1)}</Text>
+          <Text style={{ fontWeight: 600 }}>{(r.rating || 0).toFixed(1)}</Text>
         </Space>
       ),
     },
@@ -296,7 +296,7 @@ export const Inventory: React.FC = () => {
                 </Text>
                 <Space size={4}>
                   <StarFilled style={{ color: '#f59e0b', fontSize: 12 }} />
-                  <Text style={{ fontSize: 12, fontWeight: 600 }}>{tour.rating.toFixed(1)}</Text>
+                  <Text style={{ fontSize: 12, fontWeight: 600 }}>{(tour.rating || 0).toFixed(1)}</Text>
                 </Space>
               </div>
             </div>

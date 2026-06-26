@@ -14,8 +14,7 @@ export const Login: React.FC = () => {
   const onFinish = async (values: { email: string; password: string }) => {
     setLoading(true);
     try {
-      await new Promise(resolve => setTimeout(resolve, 800)); // fake network delay
-      const mockUser = { id: 'operator-123', email: values.email || 'operator@wildhorizons.co.zw', name: 'Wild Horizons', role: 'operator' };
+      const mockUser = { id: 'operator-123', operatorId: 'operator-123', email: values.email || 'operator@wildhorizons.co.zw', name: 'Wild Horizons', fullName: 'Wild Horizons', role: 'operator' };
       const mockToken = 'mock-operator-token';
       setAuth(mockToken, mockUser);
       localStorage.setItem('zimvisit_token', mockToken);
@@ -268,8 +267,7 @@ export const Login: React.FC = () => {
               onClick={async () => {
                 setLoading(true);
                 try {
-                  await new Promise(resolve => setTimeout(resolve, 800)); // fake network delay
-                  const mockUser = { id: 'operator-123', email: 'operator@wildhorizons.co.zw', name: 'Wild Horizons', role: 'operator' };
+                  const mockUser = { id: 'operator-123', operatorId: 'operator-123', email: 'operator@wildhorizons.co.zw', name: 'Wild Horizons', fullName: 'Wild Horizons', role: 'operator' };
                   const mockToken = 'mock-operator-token';
                   setAuth(mockToken, mockUser);
                   localStorage.setItem('zimvisit_token', mockToken);

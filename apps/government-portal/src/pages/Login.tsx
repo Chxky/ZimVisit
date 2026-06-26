@@ -126,7 +126,7 @@ export const Login: React.FC = () => {
     setLoading(true);
     try {
       await new Promise(resolve => setTimeout(resolve, 800)); // fake network delay
-      const mockUser = { id: 'gov-123', email: values.email || 'admin@gov.zw', name: 'Gov Admin', role: 'government' };
+      const mockUser = { id: 'gov-123', email: values.email || 'admin@gov.zw', name: 'Gov Admin', fullName: 'Gov Admin', role: 'government' };
       const mockToken = 'mock-gov-token';
       setAuth(mockToken, mockUser);
       localStorage.setItem('zimvisit_gov_token', mockToken);
@@ -349,7 +349,7 @@ export const Login: React.FC = () => {
                 setLoading(true);
                 try {
                   await new Promise(resolve => setTimeout(resolve, 800)); // fake network delay
-                  const mockUser = { id: 'gov-123', email: 'admin@gov.zw', name: 'Gov Admin', role: 'government' };
+                  const mockUser = { id: 'gov-123', email: 'admin@gov.zw', name: 'Gov Admin', fullName: 'Gov Admin', role: 'government' };
                   const mockToken = 'mock-gov-token';
                   setAuth(mockToken, mockUser);
                   localStorage.setItem('zimvisit_gov_token', mockToken);

@@ -76,9 +76,10 @@ export const Compliance: React.FC = () => {
           pending_review: <ClockCircleOutlined />,
           flagged: <ExclamationCircleOutlined />,
         };
+        const statusText = s ? s.replace('_', ' ').toUpperCase() : 'UNKNOWN';
         return (
           <Tag color={colors[s] || 'default'} icon={icons[s]}>
-            {s?.replace('_', ' ').toUpperCase()}
+            {statusText}
           </Tag>
         );
       },
@@ -155,7 +156,7 @@ export const Compliance: React.FC = () => {
       title: 'Status',
       dataIndex: 'status',
       key: 'status',
-      render: (v: string) => <Badge status={v === 'completed' ? 'success' : 'processing'} text={v.toUpperCase()} />,
+      render: (v: string) => <Badge status={v === 'completed' ? 'success' : 'processing'} text={v ? v.toUpperCase() : 'UNKNOWN'} />,
     },
     {
       title: 'Date',
