@@ -1,6 +1,15 @@
-# ZimVisit - National Tourism Digitization & Compliance Platform
+# 🇿🇼 ZimVisit - National Tourism Digitization & Compliance Platform
 
-**Copyright (c) 2026 Pardon Mahara, Nextlytech (nextly@zohomail.com)**
+![NestJS](https://img.shields.io/badge/Backend-NestJS-E0234E?logo=nestjs&style=flat)
+![React](https://img.shields.io/badge/Frontend-React-61DAFB?logo=react&style=flat)
+![Flutter](https://img.shields.io/badge/Mobile-Flutter-02569B?logo=flutter&style=flat)
+![Python](https://img.shields.io/badge/AI-FastAPI-009688?logo=fastapi&style=flat)
+![PostgreSQL](https://img.shields.io/badge/DB-PostgreSQL-4169E1?logo=postgresql&style=flat)
+![Tests](https://img.shields.io/badge/Tests-19/19%20Passing-success?style=flat)
+![Flutter](https://img.shields.io/badge/Flutter-0%20Issues-success?style=flat)
+![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&style=flat)
+
+**Copyright (c) 2026 Pardon Mahara, Nextlytech — nextly@zohomail.com**
 
 ---
 

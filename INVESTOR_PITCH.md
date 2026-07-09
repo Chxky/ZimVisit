@@ -1,8 +1,22 @@
-# ZimVisit
+# 🇿🇼 ZimVisit
 
-## Zimbabwe's National Tourism Booking & Compliance Platform
+## Zimbabwe's National Tourism Digitization & Compliance Platform
 
 ### Executive Summary for Investors
+
+---
+
+## Project Health
+
+![NestJS](https://img.shields.io/badge/Backend-NestJS-E0234E?logo=nestjs)
+![React](https://img.shields.io/badge/Frontend-React-61DAFB?logo=react)
+![Flutter](https://img.shields.io/badge/Mobile-Flutter-02569B?logo=flutter)
+![Python](https://img.shields.io/badge/AI-FastAPI-009688?logo=fastapi)
+![PostgreSQL](https://img.shields.io/badge/Database-PostgreSQL-4169E1?logo=postgresql)
+![Docker](https://img.shields.io/badge/Container-Docker-2496ED?logo=docker)
+![Tests](https://img.shields.io/badge/Tests-19/19%20Passing-success)
+![Code](https://img.shields.io/badge/Flutter%20Analyze-0%20Issues-success)
+![License](https://img.shields.io/badge/License-MIT-yellow)
 
 ---
 
@@ -22,7 +36,7 @@ ZimVisit is a **three-sided marketplace** that makes compliance the path of leas
 |--------|--------------|-------------|
 | Revenue capture rate | **28%** (IATA BSP only) | **95%** |
 | Tax/Levy collection | **US$30M** | **US$80M** |
-| Audit cycle | **12-18 months** (manual) | **Real-time** |
+| Audit cycle | **12–18 months** (manual) | **Real-time** |
 | Agencies outside BSP | **72%** | **<5%** |
 | Annual leakage | **US$150M+** | **US$8M** |
 
@@ -56,7 +70,7 @@ ZimVisit is a **three-sided marketplace** that makes compliance the path of leas
 │  (Flutter)   │◄───►│   (React/AntD)   │◄───►│   (React/AntD)  │
 │              │     │                  │     │                  │
 │ • ZimPass QR │     │ • BSP Compliance │     │ • Revenue Dashboard│
-│ • Name Budget│     │ • AI Fingerprint │     │ • Compliance Grid │
+│ • Name Your Budget│ │ • AI Fingerprint │     │ • Compliance Grid │
 │ • Offline    │     │ • Inventory Mgmt │     │ • AI Forecaster   │
 │ • EcoCash    │     │ • QR Generation  │     │ • Risk Analytics  │
 └──────┬───────┘     └────────┬─────────┘     └────────┬─────────┘
@@ -268,10 +282,11 @@ A full-stack engineering team with expertise in:
 
 For investment inquiries, partnership discussions, or a live demo:
 
-- **Platform:** http://localhost:3001 (Operator Dashboard)
-- **Government Portal:** http://localhost:3002
-- **API Docs:** http://localhost:3005/api/docs
-- **Demo Credentials:** admin@zimvisit.com / Test@1234
+- **🌍 Traveler Portal:** https://traveler-portal-ebon.vercel.app
+- **💼 Operator Dashboard:** https://operator-dashboard-two.vercel.app
+- **🏢 Government Portal:** https://government-portal-omega.vercel.app
+- **👤 Demo Credentials:** `admin@zimvisit.com` / `Test@1234`
+- **📧 Email:** nextly@zohomail.com
 
 ---
 

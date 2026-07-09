@@ -122,7 +122,6 @@ Browser ──► Frontend (Nginx) ──proxy──► API (NestJS :3000)
 zimvisit/
 ├── demo.ps1              # One-command demo script
 ├── docker-compose.yml    # All service definitions
-├── docker-compose.yml    # All service definitions
 ├── nginx.conf            # Main gateway config (SSL, uses self-signed certs)
 ├── certs/                # Generated SSL certificates (gitignored)
 ├── scripts/

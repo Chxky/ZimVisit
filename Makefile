@@ -1,4 +1,4 @@
-.PHONY: help install dev build test lint format clean docker-up docker-down docker-build reset-db
+.PHONY: help install dev build test lint format clean docker-up docker-down docker-build reset-db demo
 
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
@@ -57,6 +57,9 @@ migration-generate: ## Generate a new TypeORM migration
 
 migration-run: ## Run pending migrations
 	cd apps/backend/nestjs && npm run migration:run
+
+demo: ## Launch investor demo suite (backend + all 3 frontends)
+	powershell -ExecutionPolicy Bypass -File start-presentation.ps1
 
 reset-db: ## Wipe and recreate the database
 	docker compose down -v

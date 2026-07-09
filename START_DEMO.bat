@@ -1,23 +1,14 @@
 @echo off
-title Zimbabwe Tourism Platform - Presidential Demo
-color 0E
+title ZimVisit - Investor Demo Suite
+color 0A
 
 echo =========================================================
-echo       ZIMBABWE TOURISM PLATFORM - PRESIDENTIAL DEMO
-echo                     GOLDEN EDITION
+echo          ZimVisit Investor Demo Suite
+echo      Zimbabwe's Tourism Digitization Platform
 echo =========================================================
 echo.
-echo Launching the Microservices Presentation Suite...
-echo.
 
-echo Starting services via Docker...
-powershell -ExecutionPolicy Bypass -File "%~dp0demo.ps1"
-
-echo Opening browsers...
-start http://localhost:3003
-start http://localhost:3002
-start http://localhost:3001
+powershell -ExecutionPolicy Bypass -File "%~dp0start-presentation.ps1"
 
 echo.
-echo Servers started successfully. Press any key to close this window...
-pause >nul
+pause
