@@ -52,7 +52,7 @@ class ZimPassScreen extends StatelessWidget {
             const Divider(),
             _buildItineraryItem(context, Icons.hotel, 'Hotel', 'Meikles Hotel', 'Harare', 'Jun 15-17'),
             const Divider(),
-            _buildItineraryItem(context, Icons.safari, 'Tour', 'Victoria Falls Tour', 'Victoria Falls', 'Jun 16, 08:00'),
+            _buildItineraryItem(context, Icons.directions_car, 'Tour', 'Victoria Falls Tour', 'Victoria Falls', 'Jun 16, 08:00'),
             const Divider(),
             _buildItineraryItem(context, Icons.flight, 'Flight', 'FN 8221', 'Harare → VFA', 'Jun 16, 06:00'),
             const Divider(),
@@ -83,7 +83,7 @@ class ZimPassScreen extends StatelessWidget {
     return ListTile(
       leading: Container(
         width: 44, height: 44,
-        decoration: BoxDecoration(color: const Color(0xFF166534).withOpacity(0.1), borderRadius: BorderRadius.circular(12)),
+        decoration: BoxDecoration(color: const Color(0xFF166534).withValues(alpha: 0.1), borderRadius: BorderRadius.circular(12)),
         child: Icon(icon, color: const Color(0xFF166534), size: 22),
       ),
       title: Text('$type: $title', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),

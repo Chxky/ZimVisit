@@ -1,0 +1,33 @@
+{
+  "name": "zimvisit-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ZimVisit - Zimbabwe's National Tourism Digitization & Compliance Platform",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:operator\" \"npm run dev:gov\" \"npm run dev:traveler\"",
+    "dev:backend": "cd apps/backend/nestjs && npm run start:dev",
+    "dev:operator": "cd apps/operator-dashboard && npm run dev",
+    "dev:gov": "cd apps/government-portal && npm run dev",
+    "dev:traveler": "cd apps/traveler-portal && npm run dev",
+    "build": "npm run build:backend && npm run build:operator && npm run build:gov && npm run build:traveler",
+    "build:backend": "cd apps/backend/nestjs && npm run build",
+    "build:operator": "cd apps/operator-dashboard && npm run build",
+    "build:gov": "cd apps/government-portal && npm run build",
+    "build:traveler": "cd apps/traveler-portal && npm run build",
+    "test": "cd apps/backend/nestjs && npm test",
+    "lint": "npm run lint:backend && npm run lint:operator && npm run lint:gov",
+    "lint:backend": "cd apps/backend/nestjs && npm run lint",
+    "lint:operator": "cd apps/operator-dashboard && npm run lint",
+    "lint:gov": "cd apps/government-portal && npm run lint",
+    "install:all": "cd apps/backend/nestjs && npm install && cd ../../operator-dashboard && npm install && cd ../../government-portal && npm install && cd ../../traveler-portal && npm install",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
+    "docker:build": "docker compose build",
+    "format": "prettier --write \"**/*.{ts,tsx,js,json,md,yml,yaml}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,json,md,yml,yaml}\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0",
+    "prettier": "^3.2.0"
+  }
+}

@@ -23,7 +23,7 @@ test-backend: ## Run backend tests only
 	cd apps/backend/nestjs && npm test
 
 test-ai: ## Run AI service tests only
-	cd apps/backend/ai-service && python -m pytest tests/ -v
+	cd apps/backend/ai-service && uv run python -m pytest tests/ -v
 
 lint: ## Run linting across all projects
 	npm run lint

@@ -46,7 +46,7 @@ class PaymentScreen extends StatelessWidget {
       child: ListTile(
         leading: Container(
           width: 44, height: 44,
-          decoration: BoxDecoration(color: const Color(0xFF166534).withOpacity(0.1), borderRadius: BorderRadius.circular(12)),
+          decoration: BoxDecoration(color: const Color(0xFF166534).withValues(alpha: 0.1), borderRadius: BorderRadius.circular(12)),
           child: Icon(icon, color: const Color(0xFF166534)),
         ),
         title: Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),

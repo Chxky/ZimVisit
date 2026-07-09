@@ -42,7 +42,7 @@ class MyBookingsScreen extends StatelessWidget {
                     children: [
                       Container(
                         width: 48, height: 48,
-                        decoration: BoxDecoration(color: const Color(0xFF166534).withOpacity(0.1), borderRadius: BorderRadius.circular(12)),
+                        decoration: BoxDecoration(color: const Color(0xFF166534).withValues(alpha: 0.1), borderRadius: BorderRadius.circular(12)),
                         child: const Icon(Icons.confirmation_number, color: Color(0xFF166534)),
                       ),
                       const SizedBox(width: 12),
@@ -62,7 +62,7 @@ class MyBookingsScreen extends StatelessWidget {
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                             decoration: BoxDecoration(
-                              color: (statusColors[b['status']] as Color).withOpacity(0.1),
+                              color: (statusColors[b['status']] as Color).withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Text(

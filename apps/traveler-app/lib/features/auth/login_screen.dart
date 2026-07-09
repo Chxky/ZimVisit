@@ -68,9 +68,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     colors: [
-                      _deepGreen.withOpacity(0.85),
-                      _deepGreen.withOpacity(0.7),
-                      _deepGreen.withOpacity(0.9),
+                      _deepGreen.withValues(alpha: 0.85),
+                      _deepGreen.withValues(alpha: 0.7),
+                      _deepGreen.withValues(alpha: 0.9),
                     ],
                   ),
                 ),
@@ -87,8 +87,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   shape: BoxShape.circle,
                   gradient: RadialGradient(
                     colors: [
-                      _vibrantGold.withOpacity(0.15),
-                      _vibrantGold.withOpacity(0),
+                      _vibrantGold.withValues(alpha: 0.15),
+                      _vibrantGold.withValues(alpha: 0),
                     ],
                   ),
                 ),
@@ -112,7 +112,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           border: Border.all(color: _vibrantGold, width: 2.5),
                           boxShadow: [
                             BoxShadow(
-                              color: _vibrantGold.withOpacity(0.3),
+                              color: _vibrantGold.withValues(alpha: 0.3),
                               blurRadius: 20,
                               spreadRadius: 2,
                             ),
@@ -122,7 +122,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: Image.asset(
                             'assets/images/zim-bird-logo.png',
                             fit: BoxFit.contain,
-                            errorBuilder: (_, __, ___) => Icon(
+                            errorBuilder: (_, __, ___) => const Icon(
                               Icons.explore,
                               size: 44,
                               color: _vibrantGold,
@@ -140,14 +140,14 @@ class _LoginScreenState extends State<LoginScreen> {
                           letterSpacing: -0.5,
                           shadows: [
                             Shadow(
-                              color: _vibrantGold.withOpacity(0.3),
+                              color: _vibrantGold.withValues(alpha: 0.3),
                               blurRadius: 12,
                             ),
                           ],
                         ),
                       ),
                       const SizedBox(height: 4),
-                      Text(
+                      const Text(
                         'Discover Zimbabwe',
                         style: TextStyle(
                           fontSize: 15,
@@ -161,14 +161,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       Container(
                         padding: const EdgeInsets.all(28),
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.08),
+                          color: Colors.white.withValues(alpha: 0.08),
                           borderRadius: BorderRadius.circular(24),
                           border: Border.all(
-                            color: Colors.white.withOpacity(0.15),
+                            color: Colors.white.withValues(alpha: 0.15),
                           ),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
+                              color: Colors.black.withValues(alpha: 0.2),
                               blurRadius: 40,
                               offset: const Offset(0, 8),
                             ),
@@ -188,17 +188,17 @@ class _LoginScreenState extends State<LoginScreen> {
                                     style: const TextStyle(color: Colors.white, fontSize: 15),
                                     decoration: InputDecoration(
                                       labelText: 'Email',
-                                      labelStyle: TextStyle(color: Colors.white.withOpacity(0.6)),
-                                      prefixIcon: Icon(Icons.email_outlined, color: Colors.white.withOpacity(0.6)),
+                                      labelStyle: TextStyle(color: Colors.white.withValues(alpha: 0.6)),
+                                      prefixIcon: Icon(Icons.email_outlined, color: Colors.white.withValues(alpha: 0.6)),
                                       filled: true,
-                                      fillColor: Colors.white.withOpacity(0.08),
+                                      fillColor: Colors.white.withValues(alpha: 0.08),
                                       border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(14),
                                         borderSide: BorderSide.none,
                                       ),
                                       enabledBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(14),
-                                        borderSide: BorderSide(color: Colors.white.withOpacity(0.1)),
+                                        borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
                                       ),
                                       focusedBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(14),
@@ -215,24 +215,24 @@ class _LoginScreenState extends State<LoginScreen> {
                                     style: const TextStyle(color: Colors.white, fontSize: 15),
                                     decoration: InputDecoration(
                                       labelText: 'Password',
-                                      labelStyle: TextStyle(color: Colors.white.withOpacity(0.6)),
-                                      prefixIcon: Icon(Icons.lock_outlined, color: Colors.white.withOpacity(0.6)),
+                                      labelStyle: TextStyle(color: Colors.white.withValues(alpha: 0.6)),
+                                      prefixIcon: Icon(Icons.lock_outlined, color: Colors.white.withValues(alpha: 0.6)),
                                       suffixIcon: IconButton(
                                         icon: Icon(
                                           _obscure ? Icons.visibility_off : Icons.visibility,
-                                          color: Colors.white.withOpacity(0.6),
+                                          color: Colors.white.withValues(alpha: 0.6),
                                         ),
                                         onPressed: () => setState(() => _obscure = !_obscure),
                                       ),
                                       filled: true,
-                                      fillColor: Colors.white.withOpacity(0.08),
+                                      fillColor: Colors.white.withValues(alpha: 0.08),
                                       border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(14),
                                         borderSide: BorderSide.none,
                                       ),
                                       enabledBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(14),
-                                        borderSide: BorderSide(color: Colors.white.withOpacity(0.1)),
+                                        borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
                                       ),
                                       focusedBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(14),
@@ -254,7 +254,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         borderRadius: BorderRadius.circular(14),
                                       ),
                                       elevation: 8,
-                                      shadowColor: _vibrantGold.withOpacity(0.4),
+                                      shadowColor: _vibrantGold.withValues(alpha: 0.4),
                                     ),
                                     child: _loading
                                       ? const SizedBox(
@@ -287,7 +287,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           MaterialPageRoute(builder: (_) => const RegisterScreen()),
                         ),
                         style: TextButton.styleFrom(
-                          foregroundColor: Colors.white.withOpacity(0.8),
+                          foregroundColor: Colors.white.withValues(alpha: 0.8),
                           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                         ),
                         child: RichText(
@@ -296,9 +296,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             children: [
                               TextSpan(
                                 text: "Don't have an account? ",
-                                style: TextStyle(color: Colors.white.withOpacity(0.6)),
+                                style: TextStyle(color: Colors.white.withValues(alpha: 0.6)),
                               ),
-                              TextSpan(
+                              const TextSpan(
                                 text: 'Register',
                                 style: TextStyle(
                                   color: _vibrantGold,

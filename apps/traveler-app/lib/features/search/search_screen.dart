@@ -13,21 +13,21 @@ class _SearchScreenState extends State<SearchScreen> {
   bool _showBudgetInput = false;
 
   final _categories = [
-    {'icon': Icons.safari, 'name': 'Safari', 'color': const Color(0xFF166534)},
+    {'icon': Icons.directions_car, 'name': 'Safari', 'color': const Color(0xFF166534)},
     {'icon': Icons.water_drop, 'name': 'Victoria Falls', 'color': const Color(0xFF0284c7)},
     {'icon': Icons.landscape, 'name': 'Hiking', 'color': const Color(0xFF65a30d)},
     {'icon': Icons.museum, 'name': 'Cultural', 'color': const Color(0xFF9333ea)},
     {'icon': Icons.beach_access, 'name': 'Lake', 'color': const Color(0xFF0d9488)},
-    {'icon': Icons.wildlife, 'name': 'Wildlife', 'color': const Color(0xFFe11d48)},
+    {'icon': Icons.pets, 'name': 'Wildlife', 'color': const Color(0xFFe11d48)},
   ];
 
   final _featuredTours = [
     {'name': 'Victoria Falls Tour', 'location': 'Victoria Falls', 'price': 85, 'rating': 4.8, 'image': Icons.water_drop, 'duration': '3 hours'},
-    {'name': 'Hwange Safari Drive', 'location': 'Hwange', 'price': 150, 'rating': 4.9, 'image': Icons.safari, 'duration': 'Full day'},
+    {'name': 'Hwange Safari Drive', 'location': 'Hwange', 'price': 150, 'rating': 4.9, 'image': Icons.directions_car, 'duration': 'Full day'},
     {'name': 'Great Zimbabwe Ruins', 'location': 'Masvingo', 'price': 45, 'rating': 4.6, 'image': Icons.museum, 'duration': '2 hours'},
     {'name': 'Eastern Highlands Trek', 'location': 'Mutare', 'price': 120, 'rating': 4.7, 'image': Icons.landscape, 'duration': '6 hours'},
     {'name': 'Lake Kariba Houseboat', 'location': 'Kariba', 'price': 200, 'rating': 4.5, 'image': Icons.beach_access, 'duration': 'Overnight'},
-    {'name': 'Mana Pools Canoe Safari', 'location': 'Mana Pools', 'price': 180, 'rating': 4.9, 'image': Icons.wildlife, 'duration': '2 days'},
+    {'name': 'Mana Pools Canoe Safari', 'location': 'Mana Pools', 'price': 180, 'rating': 4.9, 'image': Icons.pets, 'duration': '2 days'},
   ];
 
   @override
@@ -73,7 +73,7 @@ class _SearchScreenState extends State<SearchScreen> {
             // Name Your Budget
             if (_showBudgetInput) ...[
               Card(
-                color: const Color(0xFF166534).withOpacity(0.05),
+                color: const Color(0xFF166534).withValues(alpha: 0.05),
                 child: Padding(
                   padding: const EdgeInsets.all(16),
                   child: Column(
@@ -132,7 +132,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     child: Container(
                       width: 80,
                       decoration: BoxDecoration(
-                        color: (cat['color'] as Color).withOpacity(0.1),
+                        color: (cat['color'] as Color).withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(16),
                       ),
                       child: Column(
@@ -174,7 +174,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     leading: Container(
                       width: 60, height: 60,
                       decoration: BoxDecoration(
-                        color: const Color(0xFF166534).withOpacity(0.1),
+                        color: const Color(0xFF166534).withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Icon(tour['image'] as IconData, color: const Color(0xFF166534)),

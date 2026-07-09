@@ -51,7 +51,7 @@ class ZimVisitApp extends StatelessWidget {
               borderRadius: BorderRadius.circular(14),
             ),
             elevation: 4,
-            shadowColor: _vibrantGold.withOpacity(0.3),
+            shadowColor: _vibrantGold.withValues(alpha: 0.3),
             textStyle: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w700,
@@ -86,7 +86,7 @@ class ZimVisitApp extends StatelessWidget {
         ),
         navigationBarTheme: NavigationBarThemeData(
           backgroundColor: Colors.white,
-          indicatorColor: _forestGreen.withOpacity(0.1),
+          indicatorColor: _forestGreen.withValues(alpha: 0.1),
           labelTextStyle: WidgetStateProperty.resolveWith((states) {
             if (states.contains(WidgetState.selected)) {
               return GoogleFonts.inter(
@@ -139,7 +139,7 @@ class _SplashScreen extends StatelessWidget {
                 border: Border.all(color: _vibrantGold, width: 2),
                 boxShadow: [
                   BoxShadow(
-                    color: _vibrantGold.withOpacity(0.3),
+                    color: _vibrantGold.withValues(alpha: 0.3),
                     blurRadius: 20,
                   ),
                 ],
@@ -166,14 +166,14 @@ class _SplashScreen extends StatelessWidget {
                 letterSpacing: -0.5,
                 shadows: [
                   Shadow(
-                    color: _vibrantGold.withOpacity(0.3),
+                    color: _vibrantGold.withValues(alpha: 0.3),
                     blurRadius: 12,
                   ),
                 ],
               ),
             ),
             const SizedBox(height: 8),
-            Text(
+            const Text(
               'Discover Zimbabwe',
               style: TextStyle(
                 fontSize: 14,
@@ -183,7 +183,7 @@ class _SplashScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 48),
-            SizedBox(
+            const SizedBox(
               width: 28,
               height: 28,
               child: CircularProgressIndicator(
@@ -280,7 +280,7 @@ class ProfileScreen extends StatelessWidget {
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: _vibrantGold.withOpacity(0.3),
+                    color: _vibrantGold.withValues(alpha: 0.3),
                     blurRadius: 12,
                   ),
                 ],

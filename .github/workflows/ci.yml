@@ -210,9 +210,6 @@ jobs:
           - name: traveler-portal
             context: apps/traveler-portal
             dockerfile: apps/traveler-portal/Dockerfile
-          - name: traveler-portal
-            context: apps/traveler-portal
-            dockerfile: apps/traveler-portal/Dockerfile
     steps:
       - uses: actions/checkout@v4
       - name: Set up Docker Buildx
