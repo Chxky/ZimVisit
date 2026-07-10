@@ -159,18 +159,18 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-      - name: Check npm audit (backend)
+      - name: Install & audit (backend)
         working-directory: apps/backend/nestjs
-        run: npm audit --audit-level=high || true
-      - name: Check npm audit (operator)
+        run: npm ci --ignore-scripts && npm audit --audit-level=high || true
+      - name: Install & audit (operator)
         working-directory: apps/operator-dashboard
-        run: npm audit --audit-level=high || true
-      - name: Check npm audit (government)
+        run: npm ci --ignore-scripts && npm audit --audit-level=high || true
+      - name: Install & audit (government)
         working-directory: apps/government-portal
-        run: npm audit --audit-level=high || true
-      - name: Check npm audit (traveler)
+        run: npm ci --ignore-scripts && npm audit --audit-level=high || true
+      - name: Install & audit (traveler)
         working-directory: apps/traveler-portal
-        run: npm audit --audit-level=high || true
+        run: npm ci --ignore-scripts && npm audit --audit-level=high || true
 
   sast-scan:
     name: SAST - Static Application Security Testing
@@ -185,12 +185,27 @@ jobs:
         run: npm ci
       - name: Run ESLint security scan (backend)
         working-directory: apps/backend/nestjs
-        run: npx eslint src/ --ext .ts --plugin security --rule 'security/detect-object-injection: warn' --rule 'security/detect-non-literal-regexp: warn' --rule 'security/detect-unsafe-regex: warn' --rule 'security/detect-buffer-noassert: warn' --rule 'security/detect-eval-with-expression: warn' --rule 'security/detect-no-csrf-before-method-override: warn' --rule 'security/detect-possible-timing-attacks: warn' || true
+        run: >-
+          npx eslint src/ --ext .ts --plugin security
+          --rule 'security/detect-object-injection: warn'
+          --rule 'security/detect-non-literal-regexp: warn'
+          --rule 'security/detect-unsafe-regex: warn'
+          --rule 'security/detect-buffer-noassert: warn'
+          --rule 'security/detect-eval-with-expression: warn'
+          --rule 'security/detect-no-csrf-before-method-override: warn'
+          --rule 'security/detect-possible-timing-attacks: warn' || true
 
   docker-build:
     name: Build Docker Images
     if: github.ref == 'refs/heads/main'
-    needs: [lint-and-test-backend, test-ai-service, lint-operator-dashboard, lint-government-portal, lint-traveler-portal]
+    needs:
+      [
+        lint-and-test-backend,
+        test-ai-service,
+        lint-operator-dashboard,
+        lint-government-portal,
+        lint-traveler-portal,
+      ]
     runs-on: ubuntu-latest
     strategy:
       matrix:
