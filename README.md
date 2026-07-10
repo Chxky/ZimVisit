@@ -25,9 +25,9 @@ Zimbabwe's tourism sector generates **US$500M+ annually** — yet an estimated *
 
 ZimVisit is deployed and live across three distinct micro-frontends:
 
-* 🏢 **Government Portal (ZTA Command Center):** [https://government-portal-omega.vercel.app](https://government-portal-omega.vercel.app)
-* 💼 **Operator Dashboard:** [https://operator-dashboard-two.vercel.app](https://operator-dashboard-two.vercel.app)
-* 🌍 **Traveler Portal:** [https://traveler-portal-ebon.vercel.app](https://traveler-portal-ebon.vercel.app)
+- 🏢 **Government Portal (ZTA Command Center):** [https://government-portal-mauve.vercel.app](https://government-portal-mauve.vercel.app)
+- 💼 **Operator Dashboard:** [https://operator-dashboard-pink.vercel.app](https://operator-dashboard-pink.vercel.app)
+- 🌍 **Traveler Portal:** [https://traveler-portal-teal.vercel.app](https://traveler-portal-teal.vercel.app)
 
 ---
 
@@ -75,32 +75,38 @@ ZimVisit is deployed and live across three distinct micro-frontends:
 ## ⚙️ Key Components
 
 ### 1. Traveler Portal
+
 A frictionless public-facing application where tourists browse, plan, and book certified lodges, flights, and activities across Zimbabwe. All transactions processed here are automatically compliant, capturing levies exactly at the point of sale.
 
 ### 2. Operator Dashboard
+
 A dedicated interface for registered tourism operators (lodges, helicopter flights, charter airlines).
-* **Automated Compliance:** Integration with payment gateways (Paynow, ecoCash, GDS) executes an automated 2% levy split at the source, sending remittances directly to Reserve Bank of Zimbabwe (RBZ) custody accounts.
-* **Dynamic Inventory:** Real-time tour and hotel availability management.
+
+- **Automated Compliance:** Integration with payment gateways (Paynow, ecoCash, GDS) executes an automated 2% levy split at the source, sending remittances directly to Reserve Bank of Zimbabwe (RBZ) custody accounts.
+- **Dynamic Inventory:** Real-time tour and hotel availability management.
 
 ### 3. Government Portal (ZTA Oversight)
+
 A command center for the Zimbabwe Tourism Authority to enforce regulations in real time.
-* **National Analytics:** Live revenue dashboards with drill-down capabilities.
-* **Compliance Grid:** Color-coded operator compliance monitoring.
+
+- **National Analytics:** Live revenue dashboards with drill-down capabilities.
+- **Compliance Grid:** Color-coded operator compliance monitoring.
 
 ### 4. AI-Powered Intelligence
-* **Behavioral Trust Rating ("Agent Fingerprint"):** Detects shell accounts and offshore ticket splitting using Isolation Forest anomaly detection.
-* **BSP Delta Gap Analysis & Forecasting:** LSTM time-series forecasting predicts national tourism revenue and flags leakage risks before manual audits.
+
+- **Behavioral Trust Rating ("Agent Fingerprint"):** Detects shell accounts and offshore ticket splitting using Isolation Forest anomaly detection.
+- **BSP Delta Gap Analysis & Forecasting:** LSTM time-series forecasting predicts national tourism revenue and flags leakage risks before manual audits.
 
 ---
 
 ## 🛠 Technology Stack
 
-* **Frontend Portals:** React, Vite, TailwindCSS, Ant Design
-* **Mobile App:** Flutter (Dart) for offline-capable traveler apps
-* **Backend:** NestJS (Node.js/TypeScript) REST APIs
-* **Database & Caching:** PostgreSQL 15 and Redis
-* **AI Engine:** FastAPI (Python) running scikit-learn models
-* **Orchestration:** Docker, Docker Compose, NGINX
+- **Frontend Portals:** React, Vite, TailwindCSS, Ant Design
+- **Mobile App:** Flutter (Dart) for offline-capable traveler apps
+- **Backend:** NestJS (Node.js/TypeScript) REST APIs
+- **Database & Caching:** PostgreSQL 15 and Redis
+- **AI Engine:** FastAPI (Python) running scikit-learn models
+- **Orchestration:** Docker, Docker Compose, NGINX
 
 ---
 
@@ -114,7 +120,7 @@ The entire ZimVisit ecosystem is fully containerized. You can spin up the comple
    ```powershell
    .\demo.ps1
    ```
-4. The script will automatically build all local containers, seed the database, and spin up the backend APIs. 
+4. The script will automatically build all local containers, seed the database, and spin up the backend APIs.
 
 ---
 
