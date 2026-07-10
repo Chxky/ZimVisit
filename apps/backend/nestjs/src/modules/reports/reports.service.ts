@@ -8,6 +8,7 @@ import { Operator } from '../operators/entities/operator.entity';
 import { Tour } from '../inventory/entities/tour.entity';
 import { Payment } from '../payments/entities/payment.entity';
 import { AuditService } from '../audit/audit.service';
+import { User } from '../users/entities/user.entity';
 
 export interface ReportFilters {
   startDate?: Date;
@@ -30,6 +31,8 @@ export class ReportsService {
     private readonly tourRepo: Repository<Tour>,
     @InjectRepository(Payment)
     private readonly paymentRepo: Repository<Payment>,
+    @InjectRepository(User)
+    private readonly userRepo: Repository<User>,
     private readonly auditService: AuditService,
   ) {}
 
@@ -38,7 +41,10 @@ export class ReportsService {
 
     const complianceQuery = this.complianceRepo.createQueryBuilder('report');
     if (startDate && endDate) {
-      complianceQuery.andWhere('report.createdAt BETWEEN :start AND :end', { start: startDate, end: endDate });
+      complianceQuery.andWhere('report.createdAt BETWEEN :start AND :end', {
+        start: startDate,
+        end: endDate,
+      });
     }
     if (operatorId) {
       complianceQuery.andWhere('report.operatorId = :operatorId', { operatorId });
@@ -99,7 +105,8 @@ export class ReportsService {
   async generateRevenueReport(filters: ReportFilters) {
     const { startDate, endDate } = filters;
 
-    const bookingQuery = this.bookingRepo.createQueryBuilder('booking')
+    const bookingQuery = this.bookingRepo
+      .createQueryBuilder('booking')
       .where('booking.status != :cancelled', { cancelled: BookingStatus.CANCELLED });
 
     if (startDate && endDate) {
@@ -156,11 +163,15 @@ export class ReportsService {
 
     const riskOperators = [];
     for (const operator of operators) {
-      const complianceQuery = this.complianceRepo.createQueryBuilder('report')
+      const complianceQuery = this.complianceRepo
+        .createQueryBuilder('report')
         .where('report.operatorId = :operatorId', { operatorId: operator.id });
 
       if (startDate && endDate) {
-        complianceQuery.andWhere('report.createdAt BETWEEN :start AND :end', { start: startDate, end: endDate });
+        complianceQuery.andWhere('report.createdAt BETWEEN :start AND :end', {
+          start: startDate,
+          end: endDate,
+        });
       }
 
       const reports = await complianceQuery.getMany();
@@ -294,11 +305,12 @@ export class ReportsService {
     const tourCount = await this.tourRepo.count();
     const operatorCount = await this.operatorRepo.count();
     const bookingCount = await this.bookingRepo.count();
+    const userCount = await this.userRepo.count();
     return {
       totalTours: tourCount,
       totalOperators: operatorCount,
       totalBookings: bookingCount,
-      totalUsers: 1,
+      totalUsers: userCount,
       activeTours: tourCount,
       featuredTours: Math.round(tourCount * 0.3),
       averageTourPrice: 185,
@@ -308,9 +320,9 @@ export class ReportsService {
   private async exportComplianceCsv(filters: ReportFilters): Promise<string> {
     const report = await this.generateComplianceSummary(filters);
     const header = 'OperatorId,TotalReviews,Compliant,Flagged,ComplianceRate\n';
-    const rows = report.operatorComplianceRates.map((o) =>
-      `"${o.operatorId}",${o.totalReviews},${o.compliant},${o.flagged},${o.complianceRate}`,
-    ).join('\n');
+    const rows = report.operatorComplianceRates
+      .map((o) => `"${o.operatorId}",${o.totalReviews},${o.compliant},${o.flagged},${o.complianceRate}`)
+      .join('\n');
     return header + rows;
   }
 
@@ -323,19 +335,23 @@ export class ReportsService {
 
   private async exportRiskCsv(filters: ReportFilters): Promise<string> {
     const report = await this.generateRiskReport(filters);
-    const header = 'OperatorId,OperatorName,RiskScore,ComplianceRate,FlaggedReviews,PredictedLeakage,Status\n';
-    const rows = report.operators.map((o) =>
-      `"${o.operatorId}","${o.operatorName}",${o.riskScore},${o.complianceRate},${o.flaggedReviews},${o.predictedLeakage},"${o.status}"`,
-    ).join('\n');
+    const header =
+      'OperatorId,OperatorName,RiskScore,ComplianceRate,FlaggedReviews,PredictedLeakage,Status\n';
+    const rows = report.operators
+      .map(
+        (o) =>
+          `"${o.operatorId}","${o.operatorName}",${o.riskScore},${o.complianceRate},${o.flaggedReviews},${o.predictedLeakage},"${o.status}"`,
+      )
+      .join('\n');
     return header + rows;
   }
 
   private async exportAuditTrailCsv(filters: ReportFilters): Promise<string> {
     const report = await this.generateAuditTrailReport(filters);
     const header = 'Action,EntityType,UserEmail,Count\n';
-    const rows = report.topUsers.flatMap((user) =>
-      user.actions.map((action) => `"${action}","-","${user.email}",${user.count}`),
-    ).join('\n');
+    const rows = report.topUsers
+      .flatMap((user) => user.actions.map((action) => `"${action}","-","${user.email}",${user.count}`))
+      .join('\n');
     return header + rows;
   }
 }

@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Payment, PaymentStatus } from '../entities/payment.entity';
+import { Payment } from '../entities/payment.entity';
 
 @Injectable()
 export class StripeProvider {
@@ -8,8 +8,9 @@ export class StripeProvider {
 
   constructor(private readonly config: ConfigService) {}
 
-  async initiate(payment: Payment, booking: any): Promise<any> {
-    const isSimulationMode = this.config.get('NODE_ENV') !== 'production' || !this.config.get('STRIPE_SECRET_KEY');
+  async initiate(payment: Payment, _booking: any): Promise<any> {
+    const isSimulationMode =
+      this.config.get('NODE_ENV') !== 'production' || !this.config.get('STRIPE_SECRET_KEY');
 
     if (isSimulationMode) {
       return {
@@ -24,7 +25,7 @@ export class StripeProvider {
     };
   }
 
-  async handleWebhook(payload: any, payment: Payment): Promise<any> {
+  async handleWebhook(payload: any, _payment: Payment): Promise<any> {
     const eventType = payload.type || 'checkout.session.completed';
     if (eventType !== 'checkout.session.completed') {
       return { success: false, error: `Unhandled Stripe event type: ${eventType}` };
@@ -36,6 +37,10 @@ export class StripeProvider {
     }
 
     // Stripe specifies amounts in cents
+    if (session.amount_total === null || session.amount_total === undefined) {
+      this.logger.error('Stripe session missing amount_total');
+      return { success: false, error: 'Stripe session missing amount_total' };
+    }
     const stripeAmountUSD = parseFloat((session.amount_total / 100).toFixed(2));
     const expectedAmount = parseFloat(payment.amount.toString());
 

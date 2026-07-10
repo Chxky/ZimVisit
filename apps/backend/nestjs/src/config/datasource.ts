@@ -14,7 +14,7 @@ export const AppDataSource = new DataSource({
   password: process.env.DB_PASSWORD || 'zimvisit_secret',
   database: process.env.DB_DATABASE || 'zimvisit',
   entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-  migrations: [__dirname + '/../../database/migrations/*{.ts,.js}'],
+  migrations: [__dirname + '/../database/migrations/*{.ts,.js}'],
   logging: !isProduction,
   ssl: isProduction ? { rejectUnauthorized: false } : false,
 });

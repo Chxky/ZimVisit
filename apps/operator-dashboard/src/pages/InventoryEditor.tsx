@@ -1,13 +1,32 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
-  Form, Input, InputNumber, Button, Card, Typography, Select, message,
-  Spin, Row, Col, Switch, Space,
+  Form,
+  Input,
+  InputNumber,
+  Button,
+  Card,
+  Typography,
+  Select,
+  message,
+  Spin,
+  Row,
+  Col,
+  Switch,
+  Space,
 } from 'antd';
 import {
-  ArrowLeftOutlined, SaveOutlined, PlusOutlined, UploadOutlined,
-  PictureOutlined, ShopOutlined, DollarOutlined, TeamOutlined,
-  EnvironmentOutlined, ClockCircleOutlined, InfoCircleOutlined,
+  ArrowLeftOutlined,
+  SaveOutlined,
+  PlusOutlined,
+  UploadOutlined,
+  PictureOutlined,
+  ShopOutlined,
+  DollarOutlined,
+  TeamOutlined,
+  EnvironmentOutlined,
+  ClockCircleOutlined,
+  InfoCircleOutlined,
 } from '@ant-design/icons';
 import { inventoryApi } from '../services/api';
 
@@ -25,10 +44,23 @@ export const InventoryEditor: React.FC = () => {
 
   useEffect(() => {
     if (id) {
-      inventoryApi.getTour(id).then((res: any) => {
-        form.setFieldsValue(res);
-        if (res.type) setItemType(res.type);
-      }).catch(console.error).finally(() => setLoading(false));
+      // Try fetching as tour first, then as hotel if that fails
+      inventoryApi
+        .getTour(id)
+        .then((res: any) => {
+          form.setFieldsValue(res);
+          setItemType('tour');
+        })
+        .catch(() => {
+          inventoryApi
+            .getHotel(id)
+            .then((res: any) => {
+              form.setFieldsValue(res);
+              setItemType('hotel');
+            })
+            .catch(console.error);
+        })
+        .finally(() => setLoading(false));
     }
   }, [id]);
 
@@ -36,10 +68,18 @@ export const InventoryEditor: React.FC = () => {
     setSubmitting(true);
     try {
       if (isEdit) {
-        await inventoryApi.updateTour(id!, values);
+        if (itemType === 'hotel') {
+          await inventoryApi.updateHotel(id!, values);
+        } else {
+          await inventoryApi.updateTour(id!, values);
+        }
         message.success('Listing updated successfully');
       } else {
-        await inventoryApi.createTour(values);
+        if (itemType === 'hotel') {
+          await inventoryApi.createHotel(values);
+        } else {
+          await inventoryApi.createTour(values);
+        }
         message.success('Listing created successfully');
       }
       navigate('/inventory');
@@ -61,12 +101,14 @@ export const InventoryEditor: React.FC = () => {
   return (
     <div style={{ maxWidth: 960, margin: '0 auto' }}>
       {/* Header */}
-      <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'flex-start',
-        marginBottom: 24,
-      }}>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'flex-start',
+          marginBottom: 24,
+        }}
+      >
         <Space align="start">
           <Button
             icon={<ArrowLeftOutlined />}
@@ -79,7 +121,9 @@ export const InventoryEditor: React.FC = () => {
               {isEdit ? 'Edit Listing' : 'Create New Listing'}
             </Title>
             <Text type="secondary">
-              {isEdit ? 'Update your tourism listing details' : 'Add a new tour, activity, or hotel to your inventory'}
+              {isEdit
+                ? 'Update your tourism listing details'
+                : 'Add a new tour, activity, or hotel to your inventory'}
             </Text>
           </div>
         </Space>
@@ -109,8 +153,22 @@ export const InventoryEditor: React.FC = () => {
                 </Title>
                 <div style={{ display: 'flex', gap: 12 }}>
                   {[
-                    { key: 'tour', label: 'Tour / Activity', icon: <EnvironmentOutlined />, color: '#166534', bg: '#f0fdf4', border: '#166534' },
-                    { key: 'hotel', label: 'Hotel / Lodging', icon: <ShopOutlined />, color: '#0369a1', bg: '#f0f9ff', border: '#0369a1' },
+                    {
+                      key: 'tour',
+                      label: 'Tour / Activity',
+                      icon: <EnvironmentOutlined />,
+                      color: '#166534',
+                      bg: '#f0fdf4',
+                      border: '#166534',
+                    },
+                    {
+                      key: 'hotel',
+                      label: 'Hotel / Lodging',
+                      icon: <ShopOutlined />,
+                      color: '#0369a1',
+                      bg: '#f0f9ff',
+                      border: '#0369a1',
+                    },
                   ].map((type) => (
                     <div
                       key={type.key}
@@ -128,23 +186,27 @@ export const InventoryEditor: React.FC = () => {
                         gap: 12,
                       }}
                     >
-                      <div style={{
-                        width: 40,
-                        height: 40,
-                        borderRadius: 10,
-                        background: itemType === type.key ? type.color : '#f1f5f9',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        color: itemType === type.key ? '#fff' : '#64748b',
-                        fontSize: 16,
-                      }}>
+                      <div
+                        style={{
+                          width: 40,
+                          height: 40,
+                          borderRadius: 10,
+                          background: itemType === type.key ? type.color : '#f1f5f9',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          color: itemType === type.key ? '#fff' : '#64748b',
+                          fontSize: 16,
+                        }}
+                      >
                         {type.icon}
                       </div>
-                      <Text style={{
-                        fontWeight: itemType === type.key ? 700 : 500,
-                        color: itemType === type.key ? type.color : '#475569',
-                      }}>
+                      <Text
+                        style={{
+                          fontWeight: itemType === type.key ? 700 : 500,
+                          color: itemType === type.key ? type.color : '#475569',
+                        }}
+                      >
                         {type.label}
                       </Text>
                     </div>
@@ -188,15 +250,18 @@ export const InventoryEditor: React.FC = () => {
                     label="Location"
                     rules={[{ required: true, message: 'Location is required' }]}
                   >
-                    <Input prefix={<EnvironmentOutlined style={{ color: '#94a3b8' }} />} placeholder="e.g. Victoria Falls" />
+                    <Input
+                      prefix={<EnvironmentOutlined style={{ color: '#94a3b8' }} />}
+                      placeholder="e.g. Victoria Falls"
+                    />
                   </Form.Item>
                 </Col>
                 <Col span={12}>
-                  <Form.Item
-                    name="duration"
-                    label="Duration"
-                  >
-                    <Input prefix={<ClockCircleOutlined style={{ color: '#94a3b8' }} />} placeholder="e.g. 3 hours, Full day" />
+                  <Form.Item name="duration" label="Duration">
+                    <Input
+                      prefix={<ClockCircleOutlined style={{ color: '#94a3b8' }} />}
+                      placeholder="e.g. 3 hours, Full day"
+                    />
                   </Form.Item>
                 </Col>
               </Row>
@@ -312,19 +377,25 @@ export const InventoryEditor: React.FC = () => {
           <Col xs={24} lg={8}>
             {/* Status */}
             <Card bordered={false} style={{ borderRadius: 12, marginBottom: 20 }}>
-              <Title level={5} style={{ margin: '0 0 16px 0' }}>Status</Title>
+              <Title level={5} style={{ margin: '0 0 16px 0' }}>
+                Status
+              </Title>
               <Form.Item name="isActive" valuePropName="checked" style={{ marginBottom: 0 }}>
-                <div style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  padding: '12px 16px',
-                  borderRadius: 10,
-                  background: '#f8fafc',
-                }}>
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    padding: '12px 16px',
+                    borderRadius: 10,
+                    background: '#f8fafc',
+                  }}
+                >
                   <div>
                     <Text style={{ fontWeight: 600, display: 'block' }}>Active Listing</Text>
-                    <Text type="secondary" style={{ fontSize: 12 }}>Visible to travelers</Text>
+                    <Text type="secondary" style={{ fontSize: 12 }}>
+                      Visible to travelers
+                    </Text>
                   </div>
                   <Switch />
                 </div>
@@ -337,15 +408,16 @@ export const InventoryEditor: React.FC = () => {
                 <PictureOutlined style={{ marginRight: 8, color: '#166534' }} />
                 Images
               </Title>
-              <div style={{
-                border: '2px dashed #e2e8f0',
-                borderRadius: 10,
-                padding: '32px 20px',
-                textAlign: 'center',
-                background: '#fafbfc',
-                cursor: 'pointer',
-                transition: 'all 0.2s',
-              }}
+              <div
+                style={{
+                  border: '2px dashed #e2e8f0',
+                  borderRadius: 10,
+                  padding: '32px 20px',
+                  textAlign: 'center',
+                  background: '#fafbfc',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s',
+                }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.borderColor = '#166534';
                   e.currentTarget.style.background = '#f0fdf4';
@@ -365,17 +437,20 @@ export const InventoryEditor: React.FC = () => {
               </div>
               <div style={{ marginTop: 12 }}>
                 <Space wrap>
-                  {[1, 2, 3].map(i => (
-                    <div key={i} style={{
-                      width: 60,
-                      height: 60,
-                      borderRadius: 8,
-                      background: '#f1f5f9',
-                      border: '1px dashed #cbd5e1',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}>
+                  {[1, 2, 3].map((i) => (
+                    <div
+                      key={i}
+                      style={{
+                        width: 60,
+                        height: 60,
+                        borderRadius: 8,
+                        background: '#f1f5f9',
+                        border: '1px dashed #cbd5e1',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
                       <PlusOutlined style={{ color: '#94a3b8' }} />
                     </div>
                   ))}
@@ -388,15 +463,17 @@ export const InventoryEditor: React.FC = () => {
               <Title level={5} style={{ margin: '0 0 12px 0' }}>
                 Compliance Notes
               </Title>
-              <div style={{
-                padding: '12px 14px',
-                borderRadius: 10,
-                background: '#f0fdf4',
-                border: '1px solid #d1fae5',
-              }}>
+              <div
+                style={{
+                  padding: '12px 14px',
+                  borderRadius: 10,
+                  background: '#f0fdf4',
+                  border: '1px solid #d1fae5',
+                }}
+              >
                 <Text style={{ fontSize: 12, color: '#166534', lineHeight: 1.7 }}>
-                  All listings are automatically checked for compliance with Zimbabwe Tourism Authority standards.
-                  Ensure pricing is in USD and includes applicable levies.
+                  All listings are automatically checked for compliance with Zimbabwe Tourism Authority
+                  standards. Ensure pricing is in USD and includes applicable levies.
                 </Text>
               </div>
             </Card>
@@ -420,11 +497,7 @@ export const InventoryEditor: React.FC = () => {
                 >
                   {isEdit ? 'Update Listing' : 'Create Listing'}
                 </Button>
-                <Button
-                  block
-                  onClick={() => navigate('/inventory')}
-                  style={{ height: 40, borderRadius: 10 }}
-                >
+                <Button block onClick={() => navigate('/inventory')} style={{ height: 40, borderRadius: 10 }}>
                   Cancel
                 </Button>
               </Space>

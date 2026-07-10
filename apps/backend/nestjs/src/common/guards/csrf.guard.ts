@@ -1,10 +1,4 @@
-import {
-  Injectable,
-  CanActivate,
-  ExecutionContext,
-  ForbiddenException,
-  Logger,
-} from '@nestjs/common';
+import { Injectable, CanActivate, ExecutionContext, ForbiddenException, Logger } from '@nestjs/common';
 
 /**
  * CSRF guard for state-changing operations (POST/PUT/DELETE/PATCH).
@@ -36,6 +30,12 @@ export class CsrfGuard implements CanActivate {
 
     // Only apply to state-changing methods
     if (!['POST', 'PUT', 'DELETE', 'PATCH'].includes(method)) {
+      return true;
+    }
+
+    // Skip CSRF for payment provider webhooks (they don't send browser headers)
+    const url: string = req.url || '';
+    if (url.includes('/payments/callback/') || url.includes('/payments/webhook')) {
       return true;
     }
 

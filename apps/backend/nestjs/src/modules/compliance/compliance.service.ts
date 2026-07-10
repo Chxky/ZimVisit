@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Between } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
@@ -99,7 +99,7 @@ export class ComplianceService {
 
   async reviewReport(id: string, reviewerId: string, notes: string) {
     const report = await this.reportRepo.findOne({ where: { id } });
-    if (!report) throw new Error('Report not found');
+    if (!report) throw new NotFoundException('Report not found');
 
     report.reviewedAt = new Date();
     report.reviewedBy = reviewerId;

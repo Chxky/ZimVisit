@@ -28,36 +28,49 @@ const LiveAuditDemo: React.FC<{ portalName: string }> = ({ portalName }) => {
     if (!isModalOpen) return;
 
     let interval: any;
-    
+
     const runAudit = async () => {
       try {
         const opId = user?.operatorId || 'OP-DEMO-1';
         let data: any;
         try {
           const res = await complianceApi.getOperatorCompliance(opId);
-          data = res.data?.data || res.data || { totalReports: 12, compliant: 12, flagged: 0, complianceRate: 100 };
+          data = res || { totalReports: 12, compliant: 12, flagged: 0, complianceRate: 100 };
         } catch (e) {
           // Fallback if no real data
           data = { totalReports: 12, compliant: 12, flagged: 0, complianceRate: 100 };
         }
-        
+
         const isActuallyCompliant = data.complianceRate > 80;
-        
+
         const stages = [
           { progress: 15, msg: 'Connecting to operator database nodes...' },
           { progress: 30, msg: `Fetched ${data.totalReports} recent bookings...` },
-          { progress: 45, msg: `Validating compliance: ${data.compliant} compliant, ${data.flagged} flagged...` },
+          {
+            progress: 45,
+            msg: `Validating compliance: ${data.compliant} compliant, ${data.flagged} flagged...`,
+          },
           { progress: 60, msg: `Calculating compliance rate: ${Math.round(data.complianceRate)}%...` },
-          { progress: 85, msg: isActuallyCompliant ? 'No major vulnerabilities detected.' : 'Warning: High risk patterns detected in recent bookings.' },
-          { progress: 100, msg: isActuallyCompliant ? 'Audit complete. Zero threats detected.' : 'Audit complete. COMPLIANCE ISSUES FOUND.' },
+          {
+            progress: 85,
+            msg: isActuallyCompliant
+              ? 'No major vulnerabilities detected.'
+              : 'Warning: High risk patterns detected in recent bookings.',
+          },
+          {
+            progress: 100,
+            msg: isActuallyCompliant
+              ? 'Audit complete. Zero threats detected.'
+              : 'Audit complete. COMPLIANCE ISSUES FOUND.',
+          },
         ];
-        
+
         let currentStage = 0;
         interval = setInterval(() => {
           if (currentStage < stages.length) {
             setScanProgress(stages[currentStage].progress);
             setScanStatus(stages[currentStage].msg);
-            setLogs(prev => [...prev, `[${new Date().toLocaleTimeString()}] ${stages[currentStage].msg}`]);
+            setLogs((prev) => [...prev, `[${new Date().toLocaleTimeString()}] ${stages[currentStage].msg}`]);
             currentStage++;
           } else {
             clearInterval(interval);
@@ -65,11 +78,11 @@ const LiveAuditDemo: React.FC<{ portalName: string }> = ({ portalName }) => {
           }
         }, 1200);
       } catch (err) {
-         setScanStatus('Audit failed to initialize.');
-         setIsComplete(true);
+        setScanStatus('Audit failed to initialize.');
+        setIsComplete(true);
       }
     };
-    
+
     runAudit();
 
     return () => {
@@ -122,7 +135,9 @@ const LiveAuditDemo: React.FC<{ portalName: string }> = ({ portalName }) => {
           <Space align="center">
             <ScanOutlined style={{ color: '#22c55e', fontSize: 28 }} />
             <div>
-              <Title level={4} style={{ color: '#f8fafc', margin: 0 }}>Live Compliance Audit</Title>
+              <Title level={4} style={{ color: '#f8fafc', margin: 0 }}>
+                Live Compliance Audit
+              </Title>
               <Text style={{ color: '#94a3b8', fontSize: 13 }}>{portalName}</Text>
             </div>
           </Space>
@@ -130,9 +145,9 @@ const LiveAuditDemo: React.FC<{ portalName: string }> = ({ portalName }) => {
 
         {/* Scan Status Area */}
         <div style={{ padding: '32px 24px', textAlign: 'center' }}>
-          <Progress 
-            type="dashboard" 
-            percent={scanProgress} 
+          <Progress
+            type="dashboard"
+            percent={scanProgress}
             strokeColor={{ '0%': '#3b82f6', '100%': '#22c55e' }}
             trailColor="#1e293b"
             format={(percent) => <span style={{ color: '#f8fafc' }}>{percent}%</span>}
@@ -145,16 +160,18 @@ const LiveAuditDemo: React.FC<{ portalName: string }> = ({ portalName }) => {
         </div>
 
         {/* Terminal Logs */}
-        <div style={{ 
-          background: '#000', 
-          margin: '0 24px 24px', 
-          padding: '16px', 
-          borderRadius: 8, 
-          border: '1px solid #1e293b',
-          height: 180,
-          overflowY: 'auto',
-          fontFamily: 'monospace'
-        }}>
+        <div
+          style={{
+            background: '#000',
+            margin: '0 24px 24px',
+            padding: '16px',
+            borderRadius: 8,
+            border: '1px solid #1e293b',
+            height: 180,
+            overflowY: 'auto',
+            fontFamily: 'monospace',
+          }}
+        >
           {logs.map((log, index) => (
             <div key={index} style={{ color: '#4ade80', fontSize: 12, marginBottom: 4 }}>
               <span style={{ color: '#64748b' }}>{'>'}</span> {log}
@@ -164,14 +181,31 @@ const LiveAuditDemo: React.FC<{ portalName: string }> = ({ portalName }) => {
 
         {/* Footer Summary */}
         {isComplete && (
-          <div style={{ padding: '16px 24px', background: scanStatus.includes('ISSUES') ? 'rgba(239, 68, 68, 0.1)' : 'rgba(34, 197, 94, 0.1)', borderTop: scanStatus.includes('ISSUES') ? '1px solid rgba(239, 68, 68, 0.2)' : '1px solid rgba(34, 197, 94, 0.2)', display: 'flex', justifyContent: 'space-between' }}>
+          <div
+            style={{
+              padding: '16px 24px',
+              background: scanStatus.includes('ISSUES') ? 'rgba(239, 68, 68, 0.1)' : 'rgba(34, 197, 94, 0.1)',
+              borderTop: scanStatus.includes('ISSUES')
+                ? '1px solid rgba(239, 68, 68, 0.2)'
+                : '1px solid rgba(34, 197, 94, 0.2)',
+              display: 'flex',
+              justifyContent: 'space-between',
+            }}
+          >
             <Space>
-              {scanStatus.includes('ISSUES') ? <WarningOutlined style={{ color: '#ef4444' }} /> : <LockOutlined style={{ color: '#22c55e' }} />}
+              {scanStatus.includes('ISSUES') ? (
+                <WarningOutlined style={{ color: '#ef4444' }} />
+              ) : (
+                <LockOutlined style={{ color: '#22c55e' }} />
+              )}
               <Text style={{ color: scanStatus.includes('ISSUES') ? '#ef4444' : '#22c55e', fontWeight: 600 }}>
                 {scanStatus.includes('ISSUES') ? 'Action Required' : 'System Fully Compliant'}
               </Text>
             </Space>
-            <Tag color={scanStatus.includes('ISSUES') ? 'error' : 'success'} style={{ margin: 0, border: 'none' }}>
+            <Tag
+              color={scanStatus.includes('ISSUES') ? 'error' : 'success'}
+              style={{ margin: 0, border: 'none' }}
+            >
               {scanStatus.includes('ISSUES') ? 'FLAGGED' : 'PASSED'}
             </Tag>
           </div>

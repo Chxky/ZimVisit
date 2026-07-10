@@ -125,15 +125,21 @@ export const Login: React.FC = () => {
   const onFinish = async (values: { email: string; password: string }) => {
     setLoading(true);
     try {
-      await new Promise(resolve => setTimeout(resolve, 800)); // fake network delay
-      const mockUser = { id: 'gov-123', email: values.email || 'admin@gov.zw', name: 'Gov Admin', fullName: 'Gov Admin', role: 'government' };
+      await new Promise((resolve) => setTimeout(resolve, 800)); // fake network delay
+      const mockUser = {
+        id: 'gov-123',
+        email: values.email || 'admin@gov.zw',
+        name: 'Gov Admin',
+        fullName: 'Gov Admin',
+        role: 'government',
+      };
       const mockToken = 'mock-gov-token';
       setAuth(mockToken, mockUser);
       localStorage.setItem('zimvisit_gov_token', mockToken);
       message.success('Welcome to the ZimVisit Government Portal');
       navigate('/', { replace: true });
     } catch (err: any) {
-      message.error(err?.message?.[0] || 'Access denied');
+      message.error(err?.message || 'Access denied');
     } finally {
       setLoading(false);
     }
@@ -141,123 +147,145 @@ export const Login: React.FC = () => {
 
   return (
     <div className="login-bg">
-      <img src="/gov-login-bg.png" alt=""
+      <img
+        src="/gov-login-bg.png"
+        alt=""
         style={{
-          position: 'absolute', inset: 0, width: '100%', height: '100%',
-          objectFit: 'cover', pointerEvents: 'none',
+          position: 'absolute',
+          inset: 0,
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          pointerEvents: 'none',
         }}
       />
       <ParticleCanvas />
 
       {/* Decorative circles */}
-      <div style={{
-        position: 'absolute',
-        top: '10%',
-        right: '15%',
-        width: 300,
-        height: 300,
-        borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(217,119,6,0.08) 0%, transparent 70%)',
-        animation: 'float 8s ease-in-out infinite',
-        pointerEvents: 'none',
-      }} />
-      <div style={{
-        position: 'absolute',
-        bottom: '15%',
-        left: '10%',
-        width: 200,
-        height: 200,
-        borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(49,46,129,0.08) 0%, transparent 70%)',
-        animation: 'float 12s ease-in-out infinite reverse',
-        pointerEvents: 'none',
-      }} />
+      <div
+        style={{
+          position: 'absolute',
+          top: '10%',
+          right: '15%',
+          width: 300,
+          height: 300,
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(217,119,6,0.08) 0%, transparent 70%)',
+          animation: 'float 8s ease-in-out infinite',
+          pointerEvents: 'none',
+        }}
+      />
+      <div
+        style={{
+          position: 'absolute',
+          bottom: '15%',
+          left: '10%',
+          width: 200,
+          height: 200,
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(49,46,129,0.08) 0%, transparent 70%)',
+          animation: 'float 12s ease-in-out infinite reverse',
+          pointerEvents: 'none',
+        }}
+      />
 
       {/* Login Card */}
-      <div style={{
-        position: 'relative',
-        zIndex: 10,
-        width: 460,
-        opacity: mounted ? 1 : 0,
-        transform: mounted ? 'translateY(0)' : 'translateY(30px)',
-        transition: 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
-      }}>
+      <div
+        style={{
+          position: 'relative',
+          zIndex: 10,
+          width: 460,
+          opacity: mounted ? 1 : 0,
+          transform: mounted ? 'translateY(0)' : 'translateY(30px)',
+          transition: 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
+        }}
+      >
         {/* Government Seal */}
-        <div style={{
-          textAlign: 'center',
-          marginBottom: 32,
-          animation: mounted ? 'fadeInUp 0.6s ease-out 0.2s both' : 'none',
-        }}>
-          <div style={{
-            width: 80,
-            height: 80,
-            margin: '0 auto 16px',
-            borderRadius: '50%',
-            background: 'linear-gradient(135deg, rgba(245,158,11,0.25), rgba(30,27,75,0.25))',
-            border: '2px solid rgba(245,158,11,0.5)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            backdropFilter: 'blur(10px)',
-            boxShadow: '0 0 20px rgba(245,158,11,0.3)',
-          }}>
-            <img src="/zim-bird-logo.png" alt="ZimVisit" style={{ width: 64, height: 64, objectFit: 'contain' }} />
+        <div
+          style={{
+            textAlign: 'center',
+            marginBottom: 32,
+            animation: mounted ? 'fadeInUp 0.6s ease-out 0.2s both' : 'none',
+          }}
+        >
+          <div
+            style={{
+              width: 80,
+              height: 80,
+              margin: '0 auto 16px',
+              borderRadius: '50%',
+              background: 'linear-gradient(135deg, rgba(245,158,11,0.25), rgba(30,27,75,0.25))',
+              border: '2px solid rgba(245,158,11,0.5)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              backdropFilter: 'blur(10px)',
+              boxShadow: '0 0 20px rgba(245,158,11,0.3)',
+            }}
+          >
+            <img
+              src="/zim-bird-logo.png"
+              alt="ZimVisit"
+              style={{ width: 64, height: 64, objectFit: 'contain' }}
+            />
           </div>
-          <Title level={2} style={{
-            color: '#f8fafc',
-            margin: 0,
-            fontWeight: 800,
-            letterSpacing: '-0.5px',
-          }}>
+          <Title
+            level={2}
+            style={{
+              color: '#f8fafc',
+              margin: 0,
+              fontWeight: 800,
+              letterSpacing: '-0.5px',
+            }}
+          >
             ZimVisit
           </Title>
-          <Text style={{
-            color: 'rgba(248,250,252,0.6)',
-            fontSize: 14,
-            fontWeight: 500,
-            letterSpacing: '2px',
-            textTransform: 'uppercase',
-          }}>
+          <Text
+            style={{
+              color: 'rgba(248,250,252,0.6)',
+              fontSize: 14,
+              fontWeight: 500,
+              letterSpacing: '2px',
+              textTransform: 'uppercase',
+            }}
+          >
             Government Oversight Portal
           </Text>
         </div>
 
         {/* Form Card */}
-        <div style={{
-          background: 'rgba(255,255,255,0.97)',
-          backdropFilter: 'blur(20px)',
-          borderRadius: 16,
-          padding: '40px 36px',
-          boxShadow: '0 25px 60px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.1)',
-          animation: mounted ? 'fadeInUp 0.6s ease-out 0.4s both' : 'none',
-        }}>
+        <div
+          style={{
+            background: 'rgba(255,255,255,0.97)',
+            backdropFilter: 'blur(20px)',
+            borderRadius: 16,
+            padding: '40px 36px',
+            boxShadow: '0 25px 60px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.1)',
+            animation: mounted ? 'fadeInUp 0.6s ease-out 0.4s both' : 'none',
+          }}
+        >
           <div style={{ textAlign: 'center', marginBottom: 28 }}>
             <Space direction="vertical" size={4}>
               <Text style={{ fontSize: 13, color: '#64748b', fontWeight: 500 }}>
                 Authorized personnel only
               </Text>
-              <div style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 6,
-                padding: '4px 12px',
-                background: 'rgba(30,27,75,0.06)',
-                borderRadius: 20,
-              }}>
+              <div
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 6,
+                  padding: '4px 12px',
+                  background: 'rgba(30,27,75,0.06)',
+                  borderRadius: 20,
+                }}
+              >
                 <SafetyCertificateOutlined style={{ fontSize: 12, color: '#1e1b4b' }} />
-                <Text style={{ fontSize: 11, color: '#1e1b4b', fontWeight: 600 }}>
-                  ZTA | ZIMRA SECURED
-                </Text>
+                <Text style={{ fontSize: 11, color: '#1e1b4b', fontWeight: 600 }}>ZTA | ZIMRA SECURED</Text>
               </div>
             </Space>
           </div>
 
-          <Form
-            layout="vertical"
-            onFinish={onFinish}
-            size="large"
-            requiredMark={false}
-          >
+          <Form layout="vertical" onFinish={onFinish} size="large" requiredMark={false}>
             <Form.Item
               name="email"
               rules={[
@@ -277,10 +305,7 @@ export const Login: React.FC = () => {
               />
             </Form.Item>
 
-            <Form.Item
-              name="password"
-              rules={[{ required: true, message: 'Please enter your password' }]}
-            >
+            <Form.Item name="password" rules={[{ required: true, message: 'Please enter your password' }]}>
               <Input.Password
                 prefix={<LockOutlined style={{ color: '#64748b' }} />}
                 placeholder="Password"
@@ -293,14 +318,22 @@ export const Login: React.FC = () => {
               />
             </Form.Item>
 
-            <div style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              marginBottom: 24,
-            }}>
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginBottom: 24,
+              }}
+            >
               <Checkbox>Remember me</Checkbox>
-              <a onClick={(e) => { e.preventDefault(); message.info('Contact system administrator for password resets.'); }} style={{ fontSize: 13, color: '#312e81', fontWeight: 500, cursor: 'pointer' }}>
+              <a
+                onClick={(e) => {
+                  e.preventDefault();
+                  message.info('Contact system administrator for password resets.');
+                }}
+                style={{ fontSize: 13, color: '#312e81', fontWeight: 500, cursor: 'pointer' }}
+              >
                 Forgot password?
               </a>
             </div>
@@ -329,11 +362,13 @@ export const Login: React.FC = () => {
           </Form>
 
           {/* Footer */}
-          <div style={{
-            textAlign: 'center',
-            paddingTop: 16,
-            borderTop: '1px solid #f1f5f9',
-          }}>
+          <div
+            style={{
+              textAlign: 'center',
+              paddingTop: 16,
+              borderTop: '1px solid #f1f5f9',
+            }}
+          >
             <Text style={{ fontSize: 11, color: '#64748b' }}>
               Protected by 256-bit encryption | Zimbabwe Tourism Authority
             </Text>
@@ -348,8 +383,14 @@ export const Login: React.FC = () => {
               onClick={async () => {
                 setLoading(true);
                 try {
-                  await new Promise(resolve => setTimeout(resolve, 800)); // fake network delay
-                  const mockUser = { id: 'gov-123', email: 'admin@gov.zw', name: 'Gov Admin', fullName: 'Gov Admin', role: 'government' };
+                  await new Promise((resolve) => setTimeout(resolve, 800)); // fake network delay
+                  const mockUser = {
+                    id: 'gov-123',
+                    email: 'admin@gov.zw',
+                    name: 'Gov Admin',
+                    fullName: 'Gov Admin',
+                    role: 'government',
+                  };
                   const mockToken = 'mock-gov-token';
                   setAuth(mockToken, mockUser);
                   localStorage.setItem('zimvisit_gov_token', mockToken);
@@ -374,18 +415,22 @@ export const Login: React.FC = () => {
             >
               Quick Demo Access
             </Button>
-            <Text style={{ display: 'block', textAlign: 'center', marginTop: 8, fontSize: 11, color: '#64748b' }}>
+            <Text
+              style={{ display: 'block', textAlign: 'center', marginTop: 8, fontSize: 11, color: '#64748b' }}
+            >
               Authorized government personnel only
             </Text>
           </div>
         </div>
 
         {/* Bottom Badge */}
-        <div style={{
-          textAlign: 'center',
-          marginTop: 24,
-          animation: mounted ? 'fadeInUp 0.6s ease-out 0.6s both' : 'none',
-        }}>
+        <div
+          style={{
+            textAlign: 'center',
+            marginTop: 24,
+            animation: mounted ? 'fadeInUp 0.6s ease-out 0.6s both' : 'none',
+          }}
+        >
           <Text style={{ fontSize: 11, color: 'rgba(248,250,252,0.4)' }}>
             Republic of Zimbabwe | Ministry of Environment, Climate, Tourism & Hospitality Industry
           </Text>

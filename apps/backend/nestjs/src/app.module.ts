@@ -53,7 +53,7 @@ import { validateEnv } from './config/env.validation';
             password: config.get('DB_PASSWORD', 'zimvisit_secret'),
             database: config.get('DB_DATABASE', 'zimvisit'),
             entities: [__dirname + '/**/*.entity{.ts,.js}'],
-            migrations: [__dirname + '/../../database/migrations/*{.ts,.js}'],
+            migrations: [__dirname + '/database/migrations/*{.ts,.js}'],
             migrationsRun: config.get('NODE_ENV') === 'production',
             namingStrategy: new SnakeNamingStrategy(),
             synchronize: false, // Use migrations in all environments

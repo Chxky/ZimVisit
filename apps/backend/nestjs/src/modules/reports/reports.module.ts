@@ -7,11 +7,12 @@ import { Booking } from '../bookings/entities/booking.entity';
 import { Operator } from '../operators/entities/operator.entity';
 import { Tour } from '../inventory/entities/tour.entity';
 import { Payment } from '../payments/entities/payment.entity';
+import { User } from '../users/entities/user.entity';
 import { AuditModule } from '../audit/audit.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([ComplianceReport, Booking, Operator, Tour, Payment]),
+    TypeOrmModule.forFeature([ComplianceReport, Booking, Operator, Tour, Payment, User]),
     AuditModule,
   ],
   controllers: [ReportsController],
