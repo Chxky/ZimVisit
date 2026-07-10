@@ -25,7 +25,7 @@ export class StripeProvider {
     };
   }
 
-  async handleWebhook(payload: any, _payment: Payment): Promise<any> {
+  async handleWebhook(payload: any, payment: Payment): Promise<any> {
     const eventType = payload.type || 'checkout.session.completed';
     if (eventType !== 'checkout.session.completed') {
       return { success: false, error: `Unhandled Stripe event type: ${eventType}` };
