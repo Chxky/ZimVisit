@@ -27,7 +27,7 @@
     "format:check": "prettier --check \"**/*.{ts,tsx,js,json,md,yml,yaml}\""
   },
   "devDependencies": {
-    "concurrently": "^8.2.0",
+    "concurrently": "^10.0.3",
     "prettier": "^3.2.0"
   }
 }
