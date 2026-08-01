@@ -1,4 +1,4 @@
-FROM node:20-alpine AS builder
+FROM node:25-alpine AS builder
 RUN apk add --no-cache python3 make g++
 WORKDIR /app
 COPY package*.json ./
@@ -6,7 +6,7 @@ RUN npm install && npm cache clean --force
 COPY . .
 RUN npm run build
 
-FROM node:20-alpine AS runner
+FROM node:25-alpine AS runner
 RUN apk add --no-cache python3 make g++
 WORKDIR /app
 RUN addgroup --system --gid 1001 nodejs && adduser --system --uid 1001 nestjs
